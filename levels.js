@@ -125,7 +125,7 @@ var gauntlet = [
 	  "  =           o        o               | |     o           v     o              | |  ooo         v  v  v         o o o ",
 	  " =                                                                      x     =x=|          x                    o o o ",
 	  "=        1    o                o               o                 o      x                   x      o  o  o       o o o ",
-	  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx!!!xxxxxxxxxx"
+	  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx!!xxxxxxxxxxx"
 	  ];
 var lavaWorld = [
 	"                                                          ",
@@ -139,8 +139,8 @@ var lavaWorld = [
 	"       x             x      x            x           x    ",
 	"       x             |      |                        x    ",
 	"       x      x                   x                  x    ",
-	" x     x      |          1        |      o           xo  =",
-	" |    ox               xxxxx             |           |    ",
+	" x     x      |          1        |      o           xo  x",
+	" |    ox               xxxxx             |           |   v",
 	" o                                       xx          o   o",
 	" o     |      o      |      |                o           o",
 	" o     o      x   xxxx      xxxx  x          x       |   o",
@@ -312,9 +312,9 @@ var elevator = [
 var ALL_LEVELS = [unitTest, introLevel, simpleAbyss, bombsGalore, intermediateLevel, abyssRevisited, bombsGalore, gauntlet,
 		bunnyWorld, lavaWorld, straightforward, toTheSky, intoTheMines, foolsGold, chase, iceWorld, elevator];
 
-var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {}, {"B": 2.5}, {"=": 3}, 
+var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {"=": 3}, 
 		{}, {"=": 4}, {"|": 2, "v": 2}, {"=": 3}, {"=": 4, "2": 0.5}, {}, {}, {"=": 4, "-": 3}, {"+": 3, "-":3}];
 
-var ALL_NAMES = ["Unit Test World", "Intro", "Simple Abyss", "Bombs Galore", "Intermediate", "Abyss Revisted", "Bombs Galore 2", 
+var ALL_NAMES = ["Unit Test World", "Intro", "Simple Abyss", "Intermediate", "Abyss Revisted", 
 				"Gauntlet", "Bunny World", "Lava World", "Straightforward?", "To the Sky", "Into the Mines", "Fool's Gold", "Chase", 
 				"Ice World", "Elevator"];
