@@ -1224,7 +1224,7 @@ playerSprite0.src = "img/player0.png";
 playerWaterPowerupSprite.src = "img/playerWaterPowerup.png";
 playerWonSprite.src = "img/playerWon.png";
 
-wallSprite.src = "img/wall.png";
+wallSprite.src = "img/lava.png";
 waterPowerupSprite.src = "img/waterPowerup.png";
 waterSprite.src = "img/water.png";
 
