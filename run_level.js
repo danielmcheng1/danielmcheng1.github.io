@@ -582,7 +582,8 @@ function runGame(plans, names, speedMultipliers, Display) {
 		//Display.clear();
 		clearExistingGames();
 		var currentLevel = new Level(plans[n], speedMultipliers[n], n, numLivesLeft, checkpoint);
-		if (n == 13 || n == 14) maxStep = 0.005; //TBD for more accurate movement on ice blocks
+		if (names[n] == "Ice World" || names[n] == "Elevator") maxStep = 0.005; //TBD for more accurate movement on ice blocks
+		else maxStep = defaultMaxStep;
 		runLevel(currentLevel, Display, function(status) {
 			/*if (numLivesLeft == 0) startLevel(0, startingLives);*/
 			if (status == "lost")
