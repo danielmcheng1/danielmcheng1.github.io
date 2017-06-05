@@ -77,7 +77,7 @@ var bombsGalore = [
 ];
 
 var bungeeJump = [
-	  "                         x                    x                   ",
+	  "                         x                                        ",
 	  "                         v                                  o     ",
 	  "                                                            o     ",
 	  "                             x                              o     ",
