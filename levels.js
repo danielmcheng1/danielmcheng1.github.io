@@ -309,7 +309,7 @@ var elevator = [
 
 ];
 
-var ALL_LEVELS = [unitTest, introLevel, simpleAbyss, bombsGalore, intermediateLevel, abyssRevisited, bombsGalore, gauntlet,
+var ALL_LEVELS = [unitTest, introLevel, simpleAbyss, intermediateLevel, abyssRevisited, gauntlet,
 		bunnyWorld, lavaWorld, straightforward, toTheSky, foolsGold, chase, iceWorld, elevator, intoTheMines];
 
 var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {"=": 3}, 
