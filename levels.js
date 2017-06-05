@@ -178,7 +178,7 @@ var toTheSky =[
 	"       x                                          x x     ",
 	"       x            x@oooooooo@x                          ",
 	"       x            xxxxxxxxxxxx                          ",
-	"       x                                                  ",
+	"       x                                      p           ",
 	"       x                                      x           ",
 	"       x                                                  ",
 	"       x     xxx                 xxx                      ",
