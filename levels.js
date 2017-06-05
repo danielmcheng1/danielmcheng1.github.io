@@ -91,7 +91,7 @@ var intermediateLevel = [
 	  "  x         o o    x           o                                  ",
 	  "  x 1      xxxxx   x                        xxxxx                 ",
 	  "  xxxxx            x     x     =                 x                ",
-	  "      x!!!!!!!!!!!!x                             x2               ",
+	  "      x!!!!!!!!!!!!x                             x                ",
 	  "      xxxxxxxxxxxxxx       xx x xx xxx xxx       xxxxx xxxxxxxxxxx",
 	  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	];
@@ -310,11 +310,11 @@ var elevator = [
 ];
 
 var ALL_LEVELS = [unitTest, introLevel, simpleAbyss, bombsGalore, intermediateLevel, abyssRevisited, bombsGalore, gauntlet,
-		bunnyWorld, lavaWorld, straightforward, toTheSky, intoTheMines, foolsGold, chase, iceWorld, elevator];
+		bunnyWorld, lavaWorld, straightforward, toTheSky, foolsGold, chase, iceWorld, elevator, intoTheMines];
 
 var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {"=": 3}, 
-		{}, {"=": 4}, {"|": 2, "v": 2}, {"=": 3}, {"=": 4, "2": 0.5}, {}, {}, {"=": 4, "-": 3}, {"+": 3, "-":3}];
+		{}, {"=": 4}, {"|": 2, "v": 2}, {"=": 3}, {}, {}, {"=": 4, "-": 3}, {"+": 3, "-":3}, {"=": 4}];
 
 var ALL_NAMES = ["Unit Test World", "Intro", "Simple Abyss", "Intermediate", "Abyss Revisted", 
-				"Gauntlet", "Bunny World", "Lava World", "Straightforward?", "To the Sky", "Into the Mines", "Fool's Gold", "Chase", 
-				"Ice World", "Elevator"];
+				"Gauntlet", "Bunny World", "Lava World", "Straightforward?", "To the Sky", "Fool's Gold", "Chase", 
+				"Ice World", "Elevator", "Into the Mines"];
