@@ -39,8 +39,8 @@ function Level(plan, speedMultipliers, levelId, livesRemaining, checkpoint) {
 	
 	this.livesRemaining = livesRemaining;
 	if (checkpoint) {			
-		this.saveState(); //again, deep copy the state because the checkpoint actors are now the current actors;
 		this.restoreState(checkpoint);
+		this.saveState(checkpoint["checkpointPos"]); //again, deep copy the state because the checkpoint actors are now the current actors;
 	}
 	else {
 		for(var y = 0; y < this.height; y++) {
@@ -254,10 +254,6 @@ function Player(pos, options) {
 	this.weapons = this.options["weapons"] || [];
 	this.currentWeaponIndex = this.options["currentWeaponIndex"] || NaN;
 	this.allowWeaponSwitch = this.options["allowWeaponSwitch"] || true;	
-	//TBD update options obj with the most recent values for these so that they are passed through in the saveState function 
-	//["onMovingActor", "weapons", "currentWeaponIndex", "allowWeaponSwitch"].forEach(function (property) {
-	//	this.options[property] = this[property];//[property];
-	//}, this); //Learning: this context must be specific for forEach prototype
 };
 Player.prototype.type = "player";
 
@@ -1095,27 +1091,30 @@ Level.prototype.actorsFight = function(attacker, defender) {
 			this.finishDelay = 2;
 			playMusic("sound/burning.mp3", 0.2);
 		}
-		else if (defenderType == "coin") {
-			//remove this coin from the list of actors 
-			playMusic("sound/smb_coin.wav", 0.2);
-			this.removeActor(defenderObj);
-			this.coinsRemaining--;
-			
-			//see if any coins are remaining
-			if (this.coinsRemaining == 0) {
-				this.status = "won";
-				this.finishDelay = 1;
+		else if (this.status == null) { //ensure that no actions happen after player has lost
+			if (defenderType == "coin") {
+				//remove this coin from the list of actors 
+				playMusic("sound/smb_coin.wav", 0.2);
+				this.removeActor(defenderObj);
+				this.coinsRemaining--;
+				
+				//see if any coins are remaining
+				if (this.coinsRemaining == 0) {
+					this.status = "won";
+					this.finishDelay = 1;
+				};
+			}
+			else if (playerPowerups.indexOf(defenderType) >= 0) {
+				playMusic("sound/smb_1up.wav", 0.45);
+				this.removeActor(defenderObj);
+				attacker.weapons.push(defenderType);
+				attacker.currentWeaponIndex = attacker.weapons.length - 1;
+			}
+			else if (defenderType == "checkpoint") {
+				var defenderPos = defender.pos;
+				this.removeActor(defender);
+				this.saveState(defenderPos);
 			};
-		}
-		else if (playerPowerups.indexOf(defenderType) >= 0) {
-			playMusic("sound/smb_1up.wav", 0.45);
-			this.removeActor(defenderObj);
-			attacker.weapons.push(defenderType);
-			attacker.currentWeaponIndex = attacker.weapons.length - 1;
-		}
-		else if (defenderType == "checkpoint") {
-			this.removeActor(defender);
-			this.saveState();
 		};
 	}
 	else if (attacker.type == "water") {
@@ -1129,9 +1128,10 @@ Level.prototype.actorsFight = function(attacker, defender) {
 
 /*************************/
 //Saving and restoring snapshots
-Level.prototype.saveState = function () {
+Level.prototype.saveState = function (checkpointPos) {	
 	currentCheckpoint = {};
 	
+	currentCheckpoint["checkpointPos"] = checkpointPos;
 	currentCheckpoint["grid"] = [];
 	currentCheckpoint["gridHiddenActors"] = []
 	for(var y = 0; y < this.height; y++) {
@@ -1151,10 +1151,21 @@ Level.prototype.saveState = function () {
 		var Actor = actorChars[actor.options["subtype"]];			
 		var actorObj = new Actor(new Vector(actor.pos.x, actor.pos.y), actor.options);
 		currentCheckpoint["actors"].push(actorObj);
+		
 	}, this); //Learning: Pass in the this object for forEach because this references the array otherwise
 	
 	var checkpointPlayer = findPlayerFromActors(currentCheckpoint["actors"]);
 	var levelPlayer = this.findPlayer(); //explicitly search the actors in case the level attribute ".player" has not be initialized yet
+	
+	//TBD update options obj with the most recent values for these so that they are passed through in the saveState function 
+	//["onMovingActor", "weapons", "currentWeaponIndex", "allowWeaponSwitch"].forEach(function (property) {
+	//	this.options[property] = this[property];//[property];
+	//}, this); //Learning: this context must be specific for forEach prototype
+	checkpointPlayer.pos = new Vector(checkpointPos.x, checkpointPos.y); //lock the player to the checkpoint spot
+	checkpointPlayer.onMovingActor = levelPlayer.onMovingActor;
+	checkpointPlayer.weapons = levelPlayer.weapons.slice(0);
+	checkpointPlayer.currentWeaponIndex = levelPlayer.currentWeaponIndex;
+	checkpointPlayer.allowWeaponSwitch = levelPlayer.allowWeaponSwitch;	
 	checkpointPlayer.size = new Vector(levelPlayer.size.x, levelPlayer.size.y);
 };
 
@@ -1429,7 +1440,6 @@ CanvasDisplay.prototype.drawPlayer = function(x, y, width, height) {
 	else {
 		player.direction = new Vector(1, 0);
 	};
-	
 	/*
 	if (player.smallSize) {
 		this.cx.drawImage(whichSprite, 
