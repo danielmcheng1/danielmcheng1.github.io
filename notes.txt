@@ -1,0 +1,52 @@
+/*
+need to print ID with the object so yo uknow what's killed...e.g with lava and trig bug
+and <= 0 boundary with indexing
+how to save the weapons--similar to size.
+getting killed too soon by the lava...
+switch size midair
+checkpoint 
+turn off enter
+bombs crumble walls--either destroy or make them fall hmm....
+  maybe everything is an actor? one array to prioritize. instead of obstacles
+globals --e.g. actor chars could be attribute of leve. or maybe of game. -->might help wtih saving the state
+two players or computer. one pushes the other in
+  bombs--will have to make actor functions more generic for multiplayer
+     e.g. two actors--then mapping/dict to determine how they interact
+  and some way to count time--or to trigger when player is in purview
+
+map from level ID to all the names, optoins, etc. in one obj
+clean up everything
+bomb animation not changing for the random bomb 
+why has it become more sensitive in the bombs stage?
+ride on moving wall
+change background color
+clear games
+fieldtypes and actorat need to prioritize overlapping approrpaitely
+freefalling stage?
+bonuses--invincibility, water latency, etc.
+   use fifo queue!!
+double jump
+host on own website server?
+
+mind reading teleportation game
+tell eloquent javascript about the bug
+fix navigation
+  #2 why null property
+  #3 pause button--can use .view property
+unit tests
+multiply speed in 1/2
+padding for only lava
+
+example jump
+http://jsfiddle.net/LyM87/
+https://gamedev.stackexchange.com/questions/29617/how-to-make-a-character-jump
+
+Images
+   https://www.getpaint.net/ 
+   https://www.gimp.org/
+   https://opengameart.org/content/spinning-gold-coin
+Audio
+https://ia800403.us.archive.org/35/items/ill_make_a_man_out_o/Ill_Make_A_Man_Out_Of_You.mp3.mp3
+http://themushroomkingdom.net/media/smb/wav
+
+/
