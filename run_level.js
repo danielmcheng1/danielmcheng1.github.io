@@ -608,7 +608,7 @@ function runGame(plans, names, speedMultipliers, Display) {
 			
 			var musicNode = document.getElementById("music");
 			musicNode.volume = 0.6;
-			musicNode.src = "sound/chestnuts.mp3";
+			musicNode.src = "sound/aladdin.mp3";
 			musicNode.play();
 			musicNode.addEventListener('ended', function() {
 				var rand = Math.random();
@@ -617,7 +617,7 @@ function runGame(plans, names, speedMultipliers, Display) {
 				} else if (rand < 0.6) {
 					musicNode.src = "sound/mulan.mp3";
 				} else {
-					musicNode.src = "sound/aladdin.mp3";
+					musicNode.src = "sound/chestnuts.mp3";
 				};
 				musicNode.play();
 			});
