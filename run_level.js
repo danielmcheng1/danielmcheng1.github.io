@@ -1110,6 +1110,7 @@ Level.prototype.actorsFight = function(attacker, defender) {
 				attacker.currentWeaponIndex = attacker.weapons.length - 1;
 			}
 			else if (defenderType == "checkpoint") {
+				playMusic("sound/smb_1up.wav", 0.45);
 				var defenderPos = defender.pos;
 				this.removeActor(defender);
 				this.saveState(defenderPos);
