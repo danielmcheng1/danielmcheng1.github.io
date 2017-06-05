@@ -263,7 +263,7 @@ var foolsGold = [
 	];
 
 var chase = [
-	  "                   o 2",
+	  "2                  o 2",
 	  "o                     ",
 	  "x        o            ",
 	  "         x         o  ",
@@ -317,4 +317,4 @@ var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {"=": 3},
 
 var ALL_NAMES = ["Unit Test World", "Intro", "Simple Abyss", "Intermediate", "Abyss Revisted", 
 				"Gauntlet", "Bunny World", "Lava World", "Straightforward?", "To the Sky", "Fool's Gold", "Chase", 
-				"Ice World", "Elevator", "Into the Mines"];;
+				"Ice World", "Elevator", "Into the Mines"];
