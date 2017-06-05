@@ -39,8 +39,8 @@ function Level(plan, speedMultipliers, levelId, livesRemaining, checkpoint) {
 	
 	this.livesRemaining = livesRemaining;
 	if (checkpoint) {		
-		this.restoreState(checkpoint);
 		this.saveState(); //again, deep copy the state because the checkpoint actors are now the current actors;	
+		this.restoreState(checkpoint);
 	}
 	else {
 		for(var y = 0; y < this.height; y++) {
