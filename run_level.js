@@ -23,7 +23,7 @@ var moveOnTopOfActors = ["ice"];
 /*constructor that builds a level,
 given the imput array of strings defining a level
 */
-function Level(plan, speedMultipliers, levelId, livesRemaining, checkpoint) {
+function Level(levelId, levelName, plan, speedMultipliers, livesUsed, checkpoint) {
 	this.width = plan[0].length;
 	this.height = plan.length;
 	this.grid = [];
@@ -32,12 +32,12 @@ function Level(plan, speedMultipliers, levelId, livesRemaining, checkpoint) {
 	
 	this.speedMultipliers = speedMultipliers;
 	this.levelId = levelId; //0 based indexing
-	this.levelNum = this.levelId; //in case we want to increment 1 above 0 based indexing
+	this.levelName = levelName;
 	
 	this.coinsTotal = 0;
 	this.coinsRemaining = 0;
 	
-	this.livesRemaining = livesRemaining;
+	this.livesUsed = livesUsed;
 	if (checkpoint) {			
 		this.restoreState(checkpoint);
 		this.saveState(checkpoint["checkpointPos"]); //again, deep copy the state because the checkpoint actors are now the current actors;
@@ -90,14 +90,14 @@ Level.prototype.isFinished = function() {
 
 //update statistics
 Level.prototype.updateStatus = function() {
-	var livesStatusNode = document.getElementById("liveStatus");
-	livesStatusNode.innerText = this.livesRemaining + " lives";
-	
 	var levelStatus = document.getElementById("levelStatus");
-	levelStatus.innerText = this.levelNum;
+	levelStatus.innerText = "Level " + this.levelId + ": " + this.levelName;
+	
+	var livesStatusNode = document.getElementById("liveStatus");
+	livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives");
 	
 	var coinStatus = document.getElementById("coinStatus");
-	coinStatus.innerText = this.coinsRemaining + " out of " + this.coinsTotal + " coins";
+	coinStatus.innerText = "Coins Remaining: " + this.coinsRemaining + " out of " + this.coinsTotal + " " + (this.coinsTotal == 1? "coin" : "coins");
 };
 
 //other level utility functions
@@ -543,8 +543,9 @@ function runAnimation(frameFunc) {
 //Display object passed in -- e.g. DOMDisplay -- an encapsulated display/draw object
 function runLevel(level, Display, andThen) {
 	var display = new Display(document.body, level);
+	level.updateStatus();
 	document.body.onkeyup = function (e) {
-		if (e.keyCode == 13) { //space bar
+		if (e.keyCode == 13) { //enter key
 			runAnimation(function(step) {
 				level.animate(step, arrows);
 				display.drawFrame(step);
@@ -561,35 +562,21 @@ function runLevel(level, Display, andThen) {
 };
 
 //TBD how is status reset each time?--don't quite get these final steps
-var startingLives = 3;
 var startingCheckpoint = null;
 var currentCheckpoint = null;
 function runGame(plans, names, speedMultipliers, Display) {
-	/*
-	Learning: As James said, the DOM does not support removing an object directly. You have to go to its parent and remove it from there. 
-	Javascript won't let an element commit suicide, but it does permit infanticide...
-	*/
-	function clearExistingGames() {
-		//Display.clearDisplay();
-		var existingGames = document.getElementsByClassName("game");
-		for (var i = 0; i < existingGames.length; i++) {
-			existingGames[i].remove();
-		};
-	};
-	
 	/*running a level*/
-	function startLevel(n, numLivesLeft, checkpoint) {
-		//Display.clear();
+	function startLevel(n, livesUsed, checkpoint) {
 		clearExistingGames();
-		var currentLevel = new Level(plans[n], speedMultipliers[n], n, numLivesLeft, checkpoint);
-		if (names[n] == "Ice World" || names[n] == "Elevator") maxStep = 0.005; //TBD for more accurate movement on ice blocks
+		var currentLevel = new Level(n, names[n], plans[n], speedMultipliers[n], livesUsed, checkpoint);
+		//TBD for more accurate movement on ice blocks
+		if (names[n] == "Ice World" || names[n] == "Elevator") maxStep = 0.005; 
 		else maxStep = defaultMaxStep;
 		runLevel(currentLevel, Display, function(status) {
-			/*if (numLivesLeft == 0) startLevel(0, startingLives);*/
 			if (status == "lost")
-				startLevel(n, numLivesLeft - 1, currentCheckpoint);
+				startLevel(n, livesUsed + 1, currentCheckpoint);
 			else if (n < plans.length - 1) {
-				startLevel(n + 1, startingLives, startingCheckpoint);
+				startLevel(n + 1, 1, startingCheckpoint);
 			}
 			else {
 				playMusic("sound/applause.wav");
@@ -601,7 +588,7 @@ function runGame(plans, names, speedMultipliers, Display) {
 	/*let user select which level to jump to*/
 	function createLevelListener(v, levelElt) {
 		return function() {
-			startLevel(v, startingLives, startingCheckpoint);
+			startLevel(v, 1, startingCheckpoint);
 			
 			var musicNode = document.getElementById("music");
 			musicNode.volume = 0.6;
@@ -613,8 +600,10 @@ function runGame(plans, names, speedMultipliers, Display) {
 					musicNode.src = "sound/trump.mp3";
 				} else if (rand < 0.6) {
 					musicNode.src = "sound/mulan.mp3";
-				} else {
+				} else if (rand < 0.9) {
 					musicNode.src = "sound/chestnuts.mp3";
+				} else {
+					musicNode.src = "sound/aladdin.mp3";
 				};
 				musicNode.play();
 			});
@@ -627,6 +616,15 @@ function runGame(plans, names, speedMultipliers, Display) {
 		levelElt.addEventListener("click", createLevelListener(i, levelElt));
 		levelElt.innerText = "Level " + i + ": " + names[i];
 	};
+	
+	/*clear out existing games whenever a level is selected*/
+	/*Learning: As James said, the DOM does not support removing an object directly. You have to go to its parent and remove it from there. 
+	Javascript won't let an element commit suicide, but it does permit infanticide...*/
+	function clearExistingGames() {
+		var existingGames = document.getElementById("game");
+		if (existingGames) existingGames.remove();
+	};
+	
 };
 
 	
@@ -1269,6 +1267,7 @@ var sprites = {
 
 function CanvasDisplay(parent, level) {
 	this.canvas = document.createElement("canvas");
+	this.canvas.setAttribute("id", "game");
 	this.canvas.width = Math.min(600, level.width * scale);
 	this.canvas.height = Math.min(450, level.height * scale);
 	parent.appendChild(this.canvas);
