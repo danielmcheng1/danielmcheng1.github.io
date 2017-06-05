@@ -80,8 +80,8 @@ var bungeeJump = [
 	  "                         x                    x                   ",
 	  "                         v                                  o     ",
 	  "                                                            o     ",
-	  "                             x                         x    o     ",
-	  "                xo    =      x                              o     ",
+	  "                             x                              o     ",
+	  "                xo    =      x                          x   o     ",
 	  "                xxx   x  o   x                      x       o     ",
 	  "                 |    x  o                                  o     ",
 	  "                    xxx  o                    x        o          ",
@@ -92,7 +92,7 @@ var bungeeJump = [
 	  "  x 1      xxxxx   x                        xxxxxx                ",
 	  "  xxxxx            x     x     =                 x                ",
 	  "      x!!!!!!!!!!!!x                             x                ",
-	  "      xxxxxxxxxxxxxx       xx x xx xxx xxx       xxxxxxx          ",
+	  "      xxxxxxxxxxxxxx       xx x xx xxx xxx       xxxxxxx    x     ",
 	  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	];
 	
