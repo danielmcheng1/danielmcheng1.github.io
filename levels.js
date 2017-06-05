@@ -78,21 +78,21 @@ var bombsGalore = [
 
 var bungeeJump = [
 	  "                         x                    x                   ",
-	  "                         v                                       ",
-	  "                                                                  ",
-	  "                             x                                    ",
-	  "                xo    =      x                                    ",
-	  "                xxx   x  o   x                                    ",
-	  "                 |    x  o                                        ",
-	  "                    xxx  o                    x                   ",
+	  "                         v                                  o     ",
+	  "                                                            o     ",
+	  "                             x                         x    o     ",
+	  "                xo    =      x                              o     ",
+	  "                xxx   x  o   x                      x       o     ",
+	  "                 |    x  o                                  o     ",
+	  "                    xxx  o                    x        o          ",
 	  "                 |  x    o     x        =     o        x          ",
 	  "                    x    o     x      =       =        x          ",
 	  "  x                xx          x  =      =    =        x          ",
 	  "  x         o o    x           o                                  ",
-	  "  x 1      xxxxx   x                        xxxxx                 ",
+	  "  x 1      xxxxx   x                        xxxxxx                ",
 	  "  xxxxx            x     x     =                 x                ",
 	  "      x!!!!!!!!!!!!x                             x                ",
-	  "      xxxxxxxxxxxxxx       xx x xx xxx xxx       xxxxx xxxxxxxxxxx",
+	  "      xxxxxxxxxxxxxx       xx x xx xxx xxx       xxxxxxx          ",
 	  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	];
 	
