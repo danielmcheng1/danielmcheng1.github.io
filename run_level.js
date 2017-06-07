@@ -573,10 +573,12 @@ function runGame(plans, names, speedMultipliers, Display) {
 		if (names[n] == "Ice World" || names[n] == "Elevator") maxStep = 0.005; 
 		else maxStep = defaultMaxStep;
 		runLevel(currentLevel, Display, function(status) {
-			if (status == "lost")
+			if (status == "lost") {
 				startLevel(n, livesUsed + 1, currentCheckpoint);
+			}
 			else if (n < plans.length - 1) {
-				startLevel(n + 1, 1, startingCheckpoint);
+				currentCheckpoint = startingCheckpoint;
+				startLevel(n + 1, 1, currentCheckpoint);
 			}
 			else {
 				playMusic("sound/applause.wav");
