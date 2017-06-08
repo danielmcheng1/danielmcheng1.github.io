@@ -42,6 +42,9 @@ $(document).ready(function() {
     //speech recognition--only works in Google Chrome!
     function startRecognition() {
         recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
         recognition.onstart = function(event) {
             respond(messageRecording); //let user know you're listening
             updateRec(); //switch text of recording button from Stop to Speak
@@ -50,7 +53,8 @@ $(document).ready(function() {
         recognition.onresult = function(event) { //received result from voice recongition
             recognition.onend = null; //so that .onend knows we've successfully heard the user
             var text = "";
-            for (var i = event.resultIndex; i < event.reuslts.length; ++i) {
+            console.log(event);
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
                 text += event.results[i][0].transcript;
             };
             setInput(text); //apply text to the regular input field before sending
