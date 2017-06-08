@@ -148,6 +148,7 @@ $(document).ready(function() {
                 utterance.text = val;
                 utterance.lang = "en-US";
                 window.speechSynthesis.speak(utterance);
+                window.speechSynthesis.onvoiceschanged = null;
             };
         };
         $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html(val); 
