@@ -139,6 +139,11 @@ $(document).ready(function() {
         if (val !== messageRecording) { //don't have the page speak that the page is "recording/listening to the user"
             var msg = new SpeechSynthesisUtterance();
             var voices = window.speechSynthesis.getVoices();
+            $.each(voices, function(index, value) {
+                if (value === "Alex") {
+                    msg.voice = value;
+                };
+            });
             msg.voiceURI = "native";
             msg.text = val;
             msg.lang = "en-US";
