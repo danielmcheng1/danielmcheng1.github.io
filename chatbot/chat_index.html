@@ -1,0 +1,28 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Chatbot</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="js/run_chat.js"></script>
+    <link rel=stylesheet href="css/style-chat.css">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200" rel="stylesheet" type="text/css">
+</head>
+<body>
+Chatbot
+    <div class = "container">
+        <input id = "speech" type = "text">
+        <button id = "rec" class = "btn">Speak!</button>
+        <div id = "spokenResponse" class = "spoken-response">
+            <div class = spoken-response__text"></div>
+        </div>
+     </div>
+     <div class = "debug">
+        <div class = "debug__btn btn">
+            Debug JSON Results
+        </div>
+        <div class = "debug__content">
+            <textarea id = "response" cols = "40" rows = "20"></textarea>
+        </div>
+     </div>
+</body>
+</html>
