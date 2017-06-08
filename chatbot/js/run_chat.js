@@ -144,7 +144,7 @@ $(document).ready(function() {
                     msg.voice = value;
                 };
             });
-            msg.voiceURI = "native";
+            console.log(msg);//msg.voiceURI = "native";
             msg.text = val;
             msg.lang = "en-US";
             window.speechSynthesis.speak(msg);
