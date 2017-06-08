@@ -53,7 +53,6 @@ $(document).ready(function() {
         recognition.onresult = function(event) { //received result from voice recongition
             recognition.onend = null; //so that .onend knows we've successfully heard the user
             var text = "";
-            console.log(event);
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 text += event.results[i][0].transcript;
             };
@@ -150,6 +149,18 @@ $(document).ready(function() {
             window.speechSynthesis.speak(msg);
         };
         $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html(val);
+        
+        event.preventDefault();
+        var voices = synth.getVoices();
+        var utterThis = new SpeechSynthesisUtterance("This is a test");
+        var selectedOption = "Alex";
+        console.log(voices);
+        for(i = 0; i < voices.length ; i++) {
+            if(voices[i].name === selectedOption) {
+              utterThis.voice = voices[i];
+            }
+        }
+        synth.speak(utterThis);    
     };
 
 
