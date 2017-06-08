@@ -12,17 +12,7 @@ var accessToken = "86bbaa261369454894e364da26cbebe1",
     messageInternalError = "Uh oh--internal server error",
     messageSorry = "Apologies, I don't have an answer"
     botName = "protoBot";
-  
-        var voices = synth.getVoices();
-        var utterThis = new SpeechSynthesisUtterance("This is a test");
-        var selectedOption = "Alex";
-        console.log(voices);
-        for(i = 0; i < voices.length ; i++) {
-            if(voices[i].name === selectedOption) {
-              utterThis.voice = voices[i];
-            }
-        }
-        synth.speak(utterThis);   
+   
         
 $(document).ready(function() {
     $speechInput = $("#speech");
@@ -147,17 +137,18 @@ $(document).ready(function() {
         };
         //
         if (val !== messageRecording) { //don't have the page speak that the page is "recording/listening to the user"
-            var msg = new SpeechSynthesisUtterance();
-            var voices = window.speechSynthesis.getVoices();
-            $.each(voices, function(index, value) {
-                if (value === "Alex") {
-                    msg.voice = value;
-                };
-            });
-            console.log(msg);//msg.voiceURI = "native";
-            msg.text = val;
-            msg.lang = "en-US";
-            window.speechSynthesis.speak(msg);
+            //Learning: speech synthesis voices loaded asynchronously so trigger this event once loaded;
+            window.speechSynthesis.onvoiceschanged = function() {
+                var utterance = new SpeechSynthesisUtterance('Hello Treehouse');
+                var voices = window.speechSynthesis.getVoices();
+                voices.forEach(function(elem) {
+                    console.log(elem.name, elem);
+                    });
+                utterance.voice = voices.filter(function(voice) { return voice.name === 'Google UK English Male'; })[0];
+                utterance.text = val;
+                utterance.lang = "en-US";
+                window.speechSynthesis.speak(utterance);
+            };
         };
         $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html(val); 
     };
