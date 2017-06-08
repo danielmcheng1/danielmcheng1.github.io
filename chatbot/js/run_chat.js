@@ -13,6 +13,17 @@ var accessToken = "86bbaa261369454894e364da26cbebe1",
     messageSorry = "Apologies, I don't have an answer"
     botName = "protoBot";
   
+        var voices = synth.getVoices();
+        var utterThis = new SpeechSynthesisUtterance("This is a test");
+        var selectedOption = "Alex";
+        console.log(voices);
+        for(i = 0; i < voices.length ; i++) {
+            if(voices[i].name === selectedOption) {
+              utterThis.voice = voices[i];
+            }
+        }
+        synth.speak(utterThis);   
+        
 $(document).ready(function() {
     $speechInput = $("#speech");
     $recBtn = $("#rec");
@@ -148,19 +159,7 @@ $(document).ready(function() {
             msg.lang = "en-US";
             window.speechSynthesis.speak(msg);
         };
-        $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html(val);
-        
-        event.preventDefault();
-        var voices = synth.getVoices();
-        var utterThis = new SpeechSynthesisUtterance("This is a test");
-        var selectedOption = "Alex";
-        console.log(voices);
-        for(i = 0; i < voices.length ; i++) {
-            if(voices[i].name === selectedOption) {
-              utterThis.voice = voices[i];
-            }
-        }
-        synth.speak(utterThis);    
+        $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html(val); 
     };
 
 
