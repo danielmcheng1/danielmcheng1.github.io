@@ -4,6 +4,7 @@
 var actorChars = {
 	"1": Player,
 	"2": Computer,
+    "3": Computer,
 	"p": Checkpoint,
 	"o": Coin,
 	"=": Lava, "|": Lava, "v": Lava,
@@ -260,9 +261,17 @@ Player.prototype.type = "player";
 function Computer(pos, options) {
 	this.pos = pos.plus(new Vector(0.05, 0)); //center the computer with 0.1 padding on either side so that it doesn't run into obstacles as easily
 	this.options = options || {};
-	
+    this.subtype = options.subtype;
 	this.size = new Vector(0.9, 0.5);
+    
 	this.speedMultiplier = options["speedMultiplier"] || 1;
+    this.pauseWithPlayer = false;
+    this.paused = false;
+    if (this.subtype == "3") {
+        this.speedMultiplier = 2 * this.speedMultiplier;
+        this.pauseWithPlayer = true;
+        this.paused = true;
+    };
 	this.speed = new Vector(3, 3).times(this.speedMultiplier);
 	
 };
@@ -723,6 +732,16 @@ Computer.prototype.act = function(step, level) {
 	var targetPos = new Vector(player.pos.x, player.pos.y);
 	var xDist = targetPos.x - this.pos.x;
 	var yDist = targetPos.y - this.pos.y;
+    
+    if (this.pauseWithPlayer) {
+        if (player.speed.x == 0 && player.speed.y == 0) {
+            this.paused = true;
+            return;
+        }
+        else {
+            this.paused = false;
+        };
+    };
 	//flip direction based on where the player is
 	if (Math.sign(this.speed.x) != Math.sign(xDist)) this.speed.x *= -1;
 	if (Math.sign(this.speed.y) != Math.sign(yDist)) this.speed.y *= -1;
@@ -1199,6 +1218,7 @@ var cartesianBombSprite = document.createElement("img");
 var checkpointSprite = document.createElement("img");
 var coinSprite = document.createElement("img");
 var computerSprite = document.createElement("img");
+var computerPausedSprite = document.createElement("img");
 
 var iceSprite = document.createElement("img");
 var lavaSprite = document.createElement("img");
@@ -1227,6 +1247,7 @@ cartesianBombSprite.src = "img/cartesianBomb.png";
 checkpointSprite.src = "img/checkpoint.png";
 coinSprite.src = "img/coin.png";
 computerSprite.src = "img/computer.png";
+computerPausedSprite.src = "img/computerPaused.png";
 
 iceSprite.src = "img/ice.png";
 lavaSprite.src = "img/lava.png";
@@ -1249,7 +1270,8 @@ var sprites = {
 		"playercartesianBombPowerup": playerCartesianBombPowerupSprite,
 		"playerwaterPowerup": playerWaterPowerupSprite,
 		"computer": computerSprite, 
-		
+		"computerPaused": computerPausedSprite, 
+        
 		"wall": wallSprite, 
 		"lava": lavaSprite, 
 		"coin": coinSprite,
@@ -1392,9 +1414,15 @@ CanvasDisplay.prototype.drawActors = function() {
 					factor = 0.5;
 				else
 					factor = 1;
-				if ((actor.type == "cartesianBomb" || actor.type == "bomb") && actor.aboutToExplode)
-					actor.type = actor.type + "AboutToExplode";
-				this.cx.drawImage(sprites[actor.type],
+				var drawingType = actor.type;
+                if ((actor.type == "cartesianBomb" || actor.type == "bomb") && actor.aboutToExplode)
+					drawingType = actor.type + "AboutToExplode";
+                else if (actor.type == "computer") {
+                    if (actor.subtype == "3" && !actor.paused && this.level.status == null) {
+                        drawingType = actor.type + "Paused";
+                    }
+                };
+				 this.cx.drawImage(sprites[drawingType],
 								0, 0, width, height,
 								x, y, width * factor, height * factor);
 			}

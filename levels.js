@@ -219,7 +219,7 @@ var intoTheMines = [
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx      |xxx xxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   xox xxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo  xox xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   y|    x",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   x|    x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    =x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   = x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx     x",
@@ -275,6 +275,21 @@ var chase = [
 	  "!xxxxxxxxxxxxxxxxxxxx!",
 	  "!!!!!!!!!!!!!!!!!!!!!!",
 ];
+
+var weepingAngel = [
+	  "                                                                      x   ",
+	  "                                                                    2  x  ",
+	  "                                                                   o    x ",
+	  "                                                                   xo |  x",
+	  "                                                               o    xo |  ",
+	  "                                                               x     xo | ",
+	  "                                                           o          xo  ",
+	  "                                                           x           xo ",
+	  "  ooooooooooooooooooooooooooooooooooooooooooooooooooooo                 xo",
+	  " 1oooooooooooooooooooooooooooooooooooooooooooooooooooo3                  x",
+	  "!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx!!!!!!!!!!!!!!!!!!!",
+	  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+];
 var iceWorld = [
 	" @     o                           ",
 	" xxxxxxxxxxxx    =    ox-      !  o",
@@ -310,11 +325,11 @@ var elevator = [
 ];
 
 var ALL_LEVELS = [unitTest, introLevel, simpleAbyss, bungeeJump, abyssRevisited, gauntlet,
-		bunnyWorld, lavaWorld, bombAway, toTheSky, foolsGold, chase, iceWorld, elevator, intoTheMines];
+		bunnyWorld, lavaWorld, bombAway, toTheSky, foolsGold, chase, iceWorld, elevator, weepingAngel, intoTheMines];
 
 var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {"=": 3}, 
-		{}, {"=": 4}, {"|": 2, "v": 2}, {"=": 3}, {}, {}, {"=": 4, "-": 3}, {"+": 3, "-":3}, {"=": 4}];
+		{}, {"=": 4}, {"|": 2, "v": 2}, {"=": 3}, {}, {}, {"=": 4, "-": 3}, {"+": 3, "-":3}, {}, {"=": 4}];
 
 var ALL_NAMES = ["Unit Test World", "Intro", "Simple Abyss", "Bungee Jump", "Abyss Revisted", 
-				"Gauntlet", "Bunny World", "Lava World", "Bomb Away", "To the Sky", "Fool's Gold", "Chase", 
-				"Ice World", "Elevator", "Into the Mines"];
+				"Gauntlet", "Bunny World", "Lava World", "Bomb Away", "To the Sky", "Fool's Gold", "Chase",
+				"Ice World", "Elevator", "Weeping Angel", "Into the Mines"];
