@@ -21,7 +21,7 @@ var unitTest = [
 	  "!  y   y#@         Bx                     ",
 	  "!!!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 	];
-var introLevel = [
+var easy = [
 	  "                   x  ",
 	  "             o     |  ",
 	  "             o        ",
@@ -86,9 +86,9 @@ var bungeeJump = [
 	  "                 |    x  o                    o             o     ",
 	  "                    xxx  o                    o        o          ",
 	  "                 |  x    o     x        =     o        x          ",
-	  "                    x    o     x      =       =        x          ",
-	  "  x                xx          x  =      =    =        x          ",
-	  "  x         o o    x           o                                  ",
+	  "                    x    o     x     =     =           x          ",
+	  "  x                xx          x  =           =        x          ",
+	  "  x         o o    x           o      o       o                   ",
 	  "  x 1      xxxxx   x                        xxxxxx                ",
 	  "  xxxxx            x     x     =                 x                ",
 	  "      x!!!!!!!!!!!!x                             x                ",
@@ -324,12 +324,26 @@ var elevator = [
 
 ];
 
-var ALL_LEVELS = [unitTest, introLevel, simpleAbyss, bungeeJump, abyssRevisited, gauntlet,
-		bunnyWorld, lavaWorld, bombAway, toTheSky, foolsGold, chase, iceWorld, elevator, weepingAngel, intoTheMines];
+var ALL_LEVELS = [
+        unitTest, 
+        easy, simpleAbyss, bungeeJump, 
+        lavaWorld, abyssRevisited, gauntlet, 
+        bunnyWorld, bombAway, toTheSky, 
+        foolsGold, chase, iceWorld, 
+        elevator, weepingAngel, intoTheMines];
 
-var ALL_SPEED_MULTIPLIERS = [{}, {}, {}, {}, {}, {"=": 3}, 
-		{}, {"=": 4}, {"|": 2, "v": 2}, {"=": 3}, {}, {}, {"=": 4, "-": 3}, {"+": 3, "-":3}, {}, {"=": 4}];
+var ALL_SPEED_MULTIPLIERS = [
+        {}, 
+        {}, {}, {}, 
+        {"=": 4}, {}, {"=": 3}, 
+        {}, {"|": 2, "v": 2}, {"=": 3}, 
+        {}, {}, {"=": 4, "-": 3}, 
+        {"+": 3, "-":3}, {}, {"=": 4}];
 
-var ALL_NAMES = ["Unit Test World", "Intro", "Simple Abyss", "Bungee Jump", "Abyss Revisted", 
-				"Gauntlet", "Bunny World", "Lava World", "Bomb Away", "To the Sky", "Fool's Gold", "Chase",
-				"Ice World", "Elevator", "Weeping Angel", "Into the Mines"];
+var ALL_NAMES = [
+        "Unit Test World", 
+        "Easy", "Simple Abyss", "Bungee Jump", 
+        "Lava World", "Abyss Revisted", "Gauntlet", 
+        "Bunny World", "Bomb Away", "To the Sky", 
+        "Fool's Gold", "Chase", "Ice World",
+        "Elevator", "Weeping Angel", "Into the Mines"];

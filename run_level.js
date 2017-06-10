@@ -95,7 +95,7 @@ Level.prototype.updateStatus = function() {
 	levelStatus.innerText = "Level " + this.levelId + ": " + this.levelName;
 	
 	var livesStatusNode = document.getElementById("liveStatus");
-	livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives");
+	livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives") + " (" + globalLivesUsed + " " + (globalLivesUsed == 1 ? "life" : "lives") + " across all levels)";
 	
 	var coinStatus = document.getElementById("coinStatus");
 	coinStatus.innerText = "Coins Remaining: " + this.coinsRemaining + " out of " + this.coinsTotal + " " + (this.coinsTotal == 1? "coin" : "coins");
@@ -571,6 +571,7 @@ function runLevel(level, Display, andThen) {
 };
 
 //TBD how is status reset each time?--don't quite get these final steps
+var globalLivesUsed = 1;
 var startingCheckpoint = null;
 var currentCheckpoint = null;
 function runGame(plans, names, speedMultipliers, Display) {
@@ -583,7 +584,9 @@ function runGame(plans, names, speedMultipliers, Display) {
 		else maxStep = defaultMaxStep;
 		runLevel(currentLevel, Display, function(status) {
 			if (status == "lost") {
-				startLevel(n, livesUsed + 1, currentCheckpoint);
+                globalLivesUsed++;
+                livesUsed++;
+				startLevel(n, livesUsed, currentCheckpoint);
 			}
 			else if (n < plans.length - 1) {
 				currentCheckpoint = startingCheckpoint;
