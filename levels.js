@@ -217,8 +217,8 @@ var intoTheMines = [
 	"xxx!xxx!xx!xx!xx!xx!xo  xx!x!x!    xx |xxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxx   xx!x!x!xp  xx  |xxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx      |xxx xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   xox xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo  xox xxxxx",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   xxx xxxxx",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo  xxx xxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   x|    x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    =x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   = x",
@@ -328,7 +328,7 @@ var ALL_LEVELS = [
         unitTest, 
         easy, simpleAbyss, bungeeJump, 
         lavaWorld, abyssRevisited, gauntlet, 
-        bunnyWorld, bombAway, toTheSky, 
+        bombAway, bunnyWorld, toTheSky, 
         foolsGold, chase, iceWorld, 
         elevator, weepingAngel, intoTheMines];
 
@@ -336,7 +336,7 @@ var ALL_SPEED_MULTIPLIERS = [
         {}, 
         {}, {}, {}, 
         {"=": 4}, {}, {"=": 3}, 
-        {}, {"|": 2, "v": 2}, {"=": 3}, 
+        {"|": 2, "v": 2}, {}, {"=": 3}, 
         {}, {}, {"=": 4, "-": 3}, 
         {"+": 3, "-":3}, {}, {"=": 4}];
 
@@ -344,6 +344,6 @@ var ALL_NAMES = [
         "Unit Test World", 
         "Easy", "Simple Abyss", "Bungee Jump", 
         "Lava World", "Abyss Revisted", "Gauntlet", 
-        "Bunny World", "Bomb Away", "To the Sky", 
+        "Bomb Away", "Bunny World", "To the Sky", 
         "Fool's Gold", "Chase", "Ice World",
         "Elevator", "Weeping Angel", "Into the Mines"];

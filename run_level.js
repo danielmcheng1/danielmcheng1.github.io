@@ -229,7 +229,10 @@ Vector.prototype.times = function(factor) {
 Vector.prototype.minus = function(other) {
 	return new Vector(this.x - other.x, this.y - other.y);
 };
-
+//distance 
+Vector.prototype.distanceTo = function(other) {
+    return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+};
 
 
 /************************************************/
@@ -362,7 +365,7 @@ function CartesianBombSpray(pos, options) {
 	this.speed = options["speed"];
 	
 	this.size = new Vector(1, 1);
-	this.timeElapsed = 0;
+	this.distanceTraveled = 0;
 };
 CartesianBombSpray.prototype.type = "cartesianBombSpray";
 
@@ -374,6 +377,7 @@ function Water(pos, options) {
 	this.speed = options["speed"];
 	
 	this.size = new Vector(1, 0.5);
+    this.distanceTraveled = 0;
 };
 Water.prototype.type = "water";
 
@@ -895,17 +899,19 @@ CartesianBombSpray.prototype.act = function(step, level) {
 			};
 		};
 	}
-	//move the bomb but slow down the next step 
-	this.pos = newPos;
+    //max distance bomb spray can travel
+	if (this.distanceTraveled > 1.5)
+		level.removeActor(this);
+	else 
+		this.distanceTraveled += Math.abs(this.pos.distanceTo(newPos));
+	
+    //move the bomb but slow down the next step 
+    this.pos = newPos;
 	if (this.speed.x != 0)
-		this.speed.x = this.speed.x * 0.999999; //TBD slowdown depends on powerups
+		this.speed.x = this.speed.x * 0.999999;
 	if (this.speed.y != 0)
 		this.speed.y = this.speed.y * 0.999999;
 	
-	if (this.timeElapsed > 50)
-		level.removeActor(this);
-	else 
-		this.timeElapsed++;
 };
 
 Water.prototype.act = function(step, level) {
@@ -918,9 +924,16 @@ Water.prototype.act = function(step, level) {
 		var otherActor = level.actorAt(this);
 		if (otherActor)
 			level.actorsFight(this, otherActor);
-		//TBD if water hasn't been removed 
-		if(this)
+		//TBD if water hasn't been removed after fighting with actor... 
+		if(this) { 
+            //allow infinite distance for now before powerups 
+            //max distance water can travel
+            //if (this.distanceTraveled > 7.5)
+            //    level.removeActor(this);
+            //else 
+                this.distanceTraveled += Math.abs(this.pos.distanceTo(newPos));
 			this.pos = newPos;
+        }
 	};
 };
 
