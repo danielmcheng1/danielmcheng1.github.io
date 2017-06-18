@@ -53,20 +53,24 @@ def findYouAreJJ(message_pos):
     tokenIndex = 0 
     posIndex = 1
     
-    foundYou = False 
-    foundYouAre = False 
-    for p in message_pos:
-        if p[tokenIndex].lower() == "you":
-            foundYou = True 
-        elif p[tokenIndex].lower() == "are":
-            foundYouAre = True 
-        if foundYou and foundYouAre and p[posIndex] == "JJ":
-             return p[tokenIndex]
+    if len(message_pos) >= 2:
+        if (" ".join([x[tokenIndex] for x in message_pos][:2]).lower() == "you are"):
+            if message_pos[1][posIndex] == "JJ":
+                return message_pos[1][tokenIndex]
+    
+    if len(message_pos) >= 3:
+        if (message_pos[0][tokenIndex].lower() in ["you're", "youre"]):
+            if message_pos[2][posIndex] == "JJ":
+                return message_pos[2][tokenIndex]
+        
     return False 
- 
+   
+  
 '''
 Testing 
 print(respondToSentiment("I hate you"))
+'''
+
 print(generateReply("You are smart"))
 print(generateReply("You are crass"))
-'''
+print(generateReply("You're smart"))
