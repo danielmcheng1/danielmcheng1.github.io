@@ -69,8 +69,7 @@ def findYouAreJJ(message_pos):
 '''
 Testing 
 print(respondToSentiment("I hate you"))
-'''
-
 print(generateReply("You are smart"))
 print(generateReply("You are crass"))
 print(generateReply("You're smart"))
+'''
