@@ -29,4 +29,4 @@ def getSentiment(message):
         print(e)
         return 0.5;
 
-getSentiment("I hate you")
+#print(getSentiment("I hate you"))
