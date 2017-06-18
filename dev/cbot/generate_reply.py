@@ -1,10 +1,15 @@
 #built-in modules 
 import random 
 import traceback 
+import yaml 
 
 #api modules 
 import indicoio 
-indicoio.config.api_key = '47a6e83e29fe009ede41eaa013dd6922'
+f = open('cbot_hidden.conf', 'r')
+config = yaml.safe_load(f)
+indicoio.config.api_key = config["INDICOIO_API_KEY"]
+f.close()
+
 
 #own modules 
 from sentiment import getSentiment

@@ -186,7 +186,7 @@ if __name__ == "__main__":
                                 directory
                                 ))
 
-    config = yaml.load(open('rtmbot.conf', 'r')) #Python 3--use open instead of file
+    config = yaml.load(open('rtmbot_hidden.conf', 'r')) #Python 3--use open instead of file
     debug = config["DEBUG"]
     bot = RtmBot(os.getenv("SLACK_TOKEN", config["SLACK_TOKEN"]))
     site_plugins = []

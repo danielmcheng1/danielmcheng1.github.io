@@ -1,11 +1,17 @@
-import http.client, json, nltk, api_key
+import http.client, json, nltk
+import yaml
 from nltk.draw.tree import draw_trees
 
+
+f = open('cbot_hidden.conf', 'r')
+config = yaml.safe_load(f)
 headers = {
     # Request headers
     'Content-Type': 'application/json',
-    'Ocp-Apim-Subscription-Key': api_key.LINGUISTIC,
+    'Ocp-Apim-Subscription-Key': config["MICROSOFT_LINGUISTIC_TOKEN"],
 }
+f.close()
+
 
 # Returns a POS tagged & tokenised version of the message input
 def getPOS(message):

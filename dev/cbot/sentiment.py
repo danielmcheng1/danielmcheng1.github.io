@@ -1,9 +1,12 @@
-import http.client, json, api_key
+import http.client, json
 
+f = open('cbot_hidden.conf', 'r')
+config = yaml.safe_load(f)
 headers = {
     'Content-Type': 'application/json',
-    'Ocp-Apim-Subscription-Key': api_key.TEXT_ANALYSIS,
+    'Ocp-Apim-Subscription-Key': config["MICROSOFT_TEXTANALYSIS_TOKEN"],
 }
+f.close()
 
 # Returns sentiment between 0 and 1, 1 indicating a positive sentence, 0 indicating negative
 def getSentiment(message):
