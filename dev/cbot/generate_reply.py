@@ -23,9 +23,7 @@ def generateReply(message):
             return "Yes, I know I'm " + youAreJJ
         else:
             return "How dare you call me " + youAreJJ
-    return respondToSentiment(message)
-    # Otherwise the bot doesn't understand what the user said
-    #return "I don't understand." 
+    return respondToSentiment(sentiment, message)
     
 def respondToGreeting(message):
     return random.choice(BOT_GREETINGS)
