@@ -2,6 +2,10 @@
 import random 
 import traceback 
 
+#api modules 
+import indicoio 
+indicoio.config.api_key = '47a6e83e29fe009ede41eaa013dd6922'
+
 #own modules 
 from sentiment import getSentiment
 from linguistic import getPOS 
@@ -9,9 +13,46 @@ from linguistic import getPOS
 USER_GREETINGS = ["greetings", "hi", "hello", "hey", "howdy", "whatsup", "sup"]
 BOT_GREETINGS = ["Greetings, my friend", "Hello, sir"]
 
+def getNRankedKey(dict, n):
+    if n < 1 or n > len(dict):
+        raise ValueError("Invalid trait {n} requested, only {l} keys available".format(n = n, l = len(dict)))
+    orderedDict = sorted(dict.items(), key = lambda x: x[1], reverse = True)
+    return orderedDict[n - 1]
+
+    
+def getPersonalities(message):
+    return indicoio.personality(message) 
+    
+def getEmotions(message):
+    return indicoio.emotion(message)
+        
+def reflectEmotion(emotions):
+    first = getNRankedKey(emotions, 1)
+    second = getNRankedKey(emotions, 2)
+    response = "You seem {firstEmotion} ({firstProb}), or maybe {secondEmotion} ({secondProb}).".format(
+        firstEmotion = first[0], firstProb = toPercent(first[1]), secondEmotion = second[0], secondProb = toPercent(second[1]))
+    return response 
+
+def questionPersonality(personalities):
+    first = getNRankedKey(personalities, 1)
+    last = getNRankedKey(personalities, len(personalities))
+    response = "Personality wise, you strike me as {firstPers} ({firstProb}), but have you tried {lastPers} ({lastProb})?".format(
+        firstPers = first[0], firstProb = toPercent(first[1]), lastPers = last[0], lastProb = toPercent(last[1]))
+    return response 
+
+def toPercent(num, digits = 0):
+    #default floating point representation includes .0 
+    if digits == 0:
+        return str(round(num * 100)) + "%"
+    return str(round(num * 100, digits)) + "%"
+    
 # Generates a bot response from a user message
 def generateReply(message):
     tokens = message.split(" ")
+    personalities = getPersonalities(message)
+    emotions = getEmotions(message) 
+    return "{0} {1}".format(reflectEmotion(emotions), questionPersonality(personalities))
+    
     message_pos = getPOS(message) 
     sentiment = getSentiment(message)
     if len(tokens) > 0 and tokens[0].lower() in USER_GREETINGS:
@@ -71,5 +112,6 @@ Testing
 print(respondToSentiment("I hate you"))
 print(generateReply("You are smart"))
 print(generateReply("You are crass"))
-print(generateReply("You're smart"))
+
+print(generateReply("You're smart, I wish I were like you"))
 '''
