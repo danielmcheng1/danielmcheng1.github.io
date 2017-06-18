@@ -1,7 +1,7 @@
 import random 
 
 USER_GREETINGS = ["greetings", "hi", "hello", "hey", "howdy", "whatsup", "sup"]
-BOT_GREETINGS = ["greetings my friend", "hello, sir"]
+BOT_GREETINGS = ["Greetings, my friend", "Hello, sir"]
 
 # Generates a bot response from a user message
 def generateReply(message):
