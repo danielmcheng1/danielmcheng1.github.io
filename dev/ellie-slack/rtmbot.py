@@ -186,9 +186,12 @@ if __name__ == "__main__":
                                 directory
                                 ))
 
-    config = yaml.load(open('rtmbot_hidden.conf', 'r')) #Python 3--use open instead of file
+    f = open('rtmbot_hidden.conf', 'r')  #Python 3--use open instead of file
+    config = yaml.safe_load(f)
     debug = config["DEBUG"]
     bot = RtmBot(os.getenv("SLACK_TOKEN", config["SLACK_TOKEN"]))
+    f.close()
+    
     site_plugins = []
     files_currently_downloading = []
     job_hash = {}

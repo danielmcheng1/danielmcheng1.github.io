@@ -14,6 +14,7 @@ f.close()
 #own modules 
 from sentiment import getSentiment
 from linguistic import getPOS 
+import ellie 
 
 USER_GREETINGS = ["greetings", "hi", "hello", "hey", "howdy", "whatsup", "sup"]
 BOT_GREETINGS = ["Greetings, my friend", "Hello, sir"]
@@ -51,26 +52,8 @@ def toPercent(num, digits = 0):
         return str(round(num * 100)) + "%"
     return str(round(num * 100, digits)) + "%"
     
-# Generates a bot response from a user message
-def generateReply(message):
-    tokens = message.split(" ")
-    personalities = getPersonalities(message)
-    emotions = getEmotions(message) 
-    return "{0} {1}".format(reflectEmotion(emotions), questionPersonality(personalities))
-    
-    message_pos = getPOS(message) 
-    sentiment = getSentiment(message)
-    if len(tokens) > 0 and tokens[0].lower() in USER_GREETINGS:
-        return respondToGreeting(message)
-    
-    youAreJJ = findYouAreJJ(message_pos)
-    if (youAreJJ != False):
-        if sentiment > 0.5:
-            return "Yes, I know I'm " + youAreJJ
-        else:
-            return "How dare you call me " + youAreJJ
-    return respondToSentiment(sentiment, message)
-    
+
+#-------------------------------------------#
 def respondToGreeting(message):
     return random.choice(BOT_GREETINGS)
     
@@ -110,7 +93,32 @@ def findYouAreJJ(message_pos):
                 return message_pos[2][tokenIndex]
         
     return False 
-   
+ 
+#------------------------------------------------------#
+
+# Generates a bot response from a user message
+def generateReply(message):
+    tokens = message.split(" ")
+    #ellieRespond = getattr(ellie, 'respond') 
+    ellieResponse = ellie.respond(message)
+    return ellieResponse
+    personalities = getPersonalities(message)
+    emotions = getEmotions(message) 
+    return "{0} {1}".format(reflectEmotion(emotions), questionPersonality(personalities))
+    
+    message_pos = getPOS(message) 
+    sentiment = getSentiment(message)
+    if len(tokens) > 0 and tokens[0].lower() in USER_GREETINGS:
+        return respondToGreeting(message)
+    
+    youAreJJ = findYouAreJJ(message_pos)
+    if (youAreJJ != False):
+        if sentiment > 0.5:
+            return "Yes, I know I'm " + youAreJJ
+        else:
+            return "How dare you call me " + youAreJJ
+    return respondToSentiment(sentiment, message)
+     
   
 '''
 Testing 
