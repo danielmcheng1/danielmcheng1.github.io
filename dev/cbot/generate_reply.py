@@ -28,9 +28,13 @@ def getNRankedKey(dict, n):
 
     
 def getPersonalities(message):
-    return indicoio.personality(message) 
+    '''extraversion, openness, agreeableness, conscientiousness'''
+    #return indicoio.personality(message) 
+    '''16 Myers Briggs personality types'''
+    return indicoio.personas(message)
     
 def getEmotions(message):
+    '''anger, fear, sadness, surprise, joy'''
     return indicoio.emotion(message)
     
 #-------------------------------------------#    
@@ -121,7 +125,7 @@ def generateReply(message):
     reflectedEmotion = reflectEmotion(emotions)
     reflectedPersonality = reflectPersonality(personalities)
     
-    return "{0}\n\n{1}\n\n{2}".format(ellieResponse, reflectedEmotion, reflectedPersonality) 
+    return "Ellie: {0}    Emotion: {1}    Personality: {2}".format(ellieResponse, reflectedEmotion, reflectedPersonality) 
     
     message_pos = getPOS(message) 
     sentiment = getSentiment(message)
