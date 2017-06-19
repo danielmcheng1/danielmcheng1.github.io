@@ -118,5 +118,5 @@ print(respondToSentiment("I hate you"))
 print(generateReply("You are smart"))
 print(generateReply("You are crass"))
 
-print(generateReply("You're smart, I wish I were like you"))
 '''
+print(generateReply("You're smart, I wish I were like you"))

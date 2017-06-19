@@ -1,4 +1,4 @@
-import http.client, json
+import http.client, json, yaml
 
 f = open('cbot_hidden.conf', 'r')
 config = yaml.safe_load(f)

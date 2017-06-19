@@ -1,5 +1,4 @@
-import http.client, json, nltk
-import yaml
+import http.client, json, nltk, yaml
 from nltk.draw.tree import draw_trees
 
 
