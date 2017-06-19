@@ -15,6 +15,7 @@ f.close()
 from sentiment import getSentiment
 from linguistic import getPOS 
 import ellie 
+import nltk_other
 
 USER_GREETINGS = ["greetings", "hi", "hello", "hey", "howdy", "whatsup", "sup"]
 BOT_GREETINGS = ["Greetings, my friend", "Hello, sir"]
@@ -31,26 +32,39 @@ def getPersonalities(message):
     
 def getEmotions(message):
     return indicoio.emotion(message)
-        
-def reflectEmotion(emotions):
-    first = getNRankedKey(emotions, 1)
-    second = getNRankedKey(emotions, 2)
-    response = "You seem {firstEmotion} ({firstProb}), or maybe {secondEmotion} ({secondProb}).".format(
-        firstEmotion = first[0], firstProb = toPercent(first[1]), secondEmotion = second[0], secondProb = toPercent(second[1]))
-    return response 
-
-def questionPersonality(personalities):
-    first = getNRankedKey(personalities, 1)
-    last = getNRankedKey(personalities, len(personalities))
-    response = "Personality wise, you strike me as {firstPers} ({firstProb}), but have you tried {lastPers} ({lastProb})?".format(
-        firstPers = first[0], firstProb = toPercent(first[1]), lastPers = last[0], lastProb = toPercent(last[1]))
-    return response 
+    
+#-------------------------------------------#    
+def cleanTraitAndProbability(tuple):
+    return (nounToAdj(tuple[0]), toPercent(tuple[1]))
+    
+def nounToAdj(token):
+    candidates = nltk_other.convertPOS(token, nltk_other.WN_NOUN, nltk_other.WN_ADJECTIVE)
+    return " / ".join([c[0] for c in candidates])
 
 def toPercent(num, digits = 0):
     #default floating point representation includes .0 
     if digits == 0:
         return str(round(num * 100)) + "%"
     return str(round(num * 100, digits)) + "%"
+    
+
+#-------------------------------------------#
+def reflectEmotion(emotions):
+    return reflectWrapper(emotions, "You seem", "; or")
+    
+def reflectPersonality(personalities):
+    return reflectWrapper(personalities, "Personality wise, you strike me as", "; or perhaps more like")
+    
+def reflectWrapper(traits, start, connector):
+    response = ""
+    for i, v in enumerate(traits.keys()):
+        #TBD can make this better 
+        (trait, prob) = getNRankedKey(traits, i + 1) 
+        if response == "":
+            response = "{start} {trait} ({prob})".format(start = start, trait = nounToAdj(trait), prob = toPercent(prob))
+        else:
+            response = "{prev}{connector} {trait} ({prob})".format(prev = response, connector = connector, trait = nounToAdj(trait), prob = toPercent(prob))    
+    return response 
     
 
 #-------------------------------------------#
@@ -99,12 +113,15 @@ def findYouAreJJ(message_pos):
 # Generates a bot response from a user message
 def generateReply(message):
     tokens = message.split(" ")
-    #ellieRespond = getattr(ellie, 'respond') 
     ellieResponse = ellie.respond(message)
-    return ellieResponse
+    
     personalities = getPersonalities(message)
     emotions = getEmotions(message) 
-    return "{0} {1}".format(reflectEmotion(emotions), questionPersonality(personalities))
+    
+    reflectedEmotion = reflectEmotion(emotions)
+    reflectedPersonality = reflectPersonality(personalities)
+    
+    return "{0}\n\n{1}\n\n{2}".format(ellieResponse, reflectedEmotion, reflectedPersonality) 
     
     message_pos = getPOS(message) 
     sentiment = getSentiment(message)
@@ -119,12 +136,11 @@ def generateReply(message):
             return "How dare you call me " + youAreJJ
     return respondToSentiment(sentiment, message)
      
-  
-'''
-Testing 
-print(respondToSentiment("I hate you"))
-print(generateReply("You are smart"))
-print(generateReply("You are crass"))
-
-'''
-print(generateReply("You're smart, I wish I were like you"))
+def runTests():  
+    '''
+    print(generateReply("You are smart"))
+    print(generateReply("You are crass"))
+    print(generateReply("You're smart, I wish I were like you"))
+    '''
+    print(generateReply("I've been feeling rather down lately. Can you help?"))
+#runTests()
