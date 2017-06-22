@@ -2,16 +2,20 @@ from twilio.rest import Client
 from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 
+import random 
+
 app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_monkey():
     """Respond to incoming calls with a simple text message."""
 
-    resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
-    for sms in client.messages.list():
-        resp = MessagingResponse().message(sms.to)
-    return str(resp)
+    #resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
+    choices = ["Whats-app?", "Hey there, my friend", "Greetings and felicitations"]
+    resp = MessagingResponse().message(random.choice(choices))
+    #for sms in client.messages.list():
+    #    resp = MessagingResponse().message(sms.to)
+    resp = return str(resp)
 
 def send_message(message, to_number):    
     # Find these values at https://twilio.com/user/account
