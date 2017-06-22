@@ -13,8 +13,8 @@ def hello_monkey():
 
     #resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
     
-    account_sid = "AC50c2f1517cb7744e5a71b56e9bdd013b"
-    auth_token = "4a5718f69a6fe0f4da633ecd073674f0"
+    account_sid = "YOUR ACCOUNT"
+    auth_token = "YOUR TOKEN"
     client = Client(account_sid, auth_token)    
     all_messages = []
     for sms in client.messages.list():
@@ -28,8 +28,8 @@ def hello_monkey():
 
 def send_message(message, to_number):    
     # Find these values at https://twilio.com/user/account
-    account_sid = "AC50c2f1517cb7744e5a71b56e9bdd013b"
-    auth_token = "4a5718f69a6fe0f4da633ecd073674f0"
+    account_sid = "YOUR ACCOUNT"
+    auth_token = "YOUR TOKEN"
     client = Client(account_sid, auth_token)
     from_twilio = "+12175744267"
     message = client.api.account.messages.create(to=to_number,
