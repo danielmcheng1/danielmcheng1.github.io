@@ -9,6 +9,8 @@ def hello_monkey():
     """Respond to incoming calls with a simple text message."""
 
     resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
+    for sms in client.messages.list():
+        resp = MessagingResponse().message(sms.to)
     return str(resp)
 
 def send_message(message, to_number):    
