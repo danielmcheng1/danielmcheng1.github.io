@@ -39,9 +39,10 @@ def send_message(message, to_number):
 if __name__ == "__main__":
     app.run(debug=True)
     
-    #print(*all_messages, sep = '\n')
-#why do the field names/attributes not line up at all witih the api?
-#good tutorials / links to other resources to set everythign up
-        
-        
     #send_message("hello again", "+12177227216")
+    
+    #why do the field names/attributes not line up at all witih the api?
+    #good tutorials / links to other resources to set everythign up
+        
+        
+    
