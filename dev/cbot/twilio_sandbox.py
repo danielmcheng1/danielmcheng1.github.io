@@ -1,6 +1,6 @@
-#from twilio.rest import Client
+from twilio.rest import Client
 from flask import Flask, request, redirect
-#from twilio.twiml.messaging_response import MessagingResponse
+from twilio.twiml.messaging_response import MessagingResponse
 
 app = Flask(__name__)
 
@@ -23,5 +23,4 @@ def send_message(message, to_number):
                                                  
 if __name__ == "__main__":
     app.run(debug=True)
-    print("hello from twilio")
     #send_message("hello again", "+12177227216")

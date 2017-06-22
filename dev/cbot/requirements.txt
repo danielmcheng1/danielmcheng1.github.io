@@ -1,2 +1,2 @@
-Flask
-twilio~=6.0.0
+Flask>=0.12
+twilio>=6.0.0
