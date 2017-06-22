@@ -8,7 +8,7 @@ app = Flask(__name__)
 def hello_monkey():
     """Respond to incoming calls with a simple text message."""
 
-    resp = MessagingResponse().message("Hello, Mobile Monkey")
+    resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
     return str(resp)
 
 def send_message(message, to_number):    
@@ -18,7 +18,7 @@ def send_message(message, to_number):
     client = Client(account_sid, auth_token)
     from_twilio = "+12175744267"
     message = client.api.account.messages.create(to=to_number,
-                                                 from_=from_twilo,
+                                                 from_=from_twilio,
                                                  body=message)
                                                  
 if __name__ == "__main__":
