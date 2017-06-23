@@ -15,7 +15,7 @@ TWILIO_FROM_NUMBER = config_hidden.TWILIO_FROM_NUMBER
 TWILIO_BASE_URL = "https://{account_sid}:{auth_token}@api.twilio.com/2010-04-01/Accounts/{account_sid}".format(account_sid = TWILIO_ACCOUNT_SID, auth_token = TWILIO_AUTH_TOKEN)
 
 app = Flask(__name__)
-@app.route("/", methods=['GET', 'POST'])        
+@app.route("/", methods=['GET'])       
 def respond_to_SMS():    
     messages = requests.get(TWILIO_BASE_URL + "/Messages")
     first_sid = find_first_content("Sid", messages.text)
@@ -44,7 +44,11 @@ def respond_to_SMS():
     resp = all_messages[0]
     return str(resp)
     '''
-
+    
+@app.route("/", methods=['POST'])
+def test():
+    return "Here in Post"
+    
 def send_message(message, to_number):    
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) 
     from_twilio = TWILIO_FROM_NUMBER
