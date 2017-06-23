@@ -123,7 +123,7 @@ def generateReply(message):
     reflectedEmotion = reflectEmotion(emotions)
     #reflectedPersonality = reflectPersonality(personalities)
     
-    return "Ellie says: {0}    EmotionBot says: {1}".format(ellieResponse, reflectedEmotion) 
+    return "[Ellie]: {0} -- [EmotionBot]: {1}".format(ellieResponse, reflectedEmotion) 
     
     message_pos = getPOS(message) 
     sentiment = getSentiment(message)

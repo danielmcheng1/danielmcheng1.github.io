@@ -6,6 +6,8 @@ import requests
 import random 
 import config_hidden
 
+import generate_reply
+
 TWILIO_ACCOUNT_SID = config_hidden.TWILIO_ACCOUNT_SID
 TWILIO_AUTH_TOKEN = config_hidden.TWILIO_AUTH_TOKEN
 TWILIO_FROM_NUMBER = config_hidden.TWILIO_FROM_NUMBER
@@ -21,7 +23,8 @@ def respond_to_SMS():
     first_message = requests.get(TWILIO_BASE_URL + "/Messages/" + first_sid)
     first_message_body = strip_trial(find_first_content("Body", first_message.text))
     
-    resp = MessagingResponse().message("You said: " + first_message_body)
+    final_response = generate_reply.generateReply(first_message_body)
+    resp = MessagingResponse().message(final_response)
     
     return str(resp)
     
