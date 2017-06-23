@@ -3,9 +3,18 @@ from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 
 import random 
+import yaml
+
+f = open('cbot_hidden.conf', 'r')
+config = yaml.safe_load(f)
+TWILIO_ACCOUNT_SID = config["TWILIO_ACCOUNT_SID"]
+TWILIO_AUTH_TOKEN = config["TWILIO_AUTH_TOKEN"]
+TWILIO_FROM_NUMBER = config["TWILIO_FROM_NUMBER"]
+f.close()
 
 app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
+
 
 
 def hello_monkey():
@@ -13,9 +22,7 @@ def hello_monkey():
 
     #resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
     
-    account_sid = "YOUR ACCOUNT"
-    auth_token = "YOUR TOKEN"
-    client = Client(account_sid, auth_token)    
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)    
     all_messages = []
     for sms in client.messages.list():
         message = client.messages(sms.sid).fetch()
@@ -27,11 +34,8 @@ def hello_monkey():
     return str(resp)
 
 def send_message(message, to_number):    
-    # Find these values at https://twilio.com/user/account
-    account_sid = "YOUR ACCOUNT"
-    auth_token = "YOUR TOKEN"
-    client = Client(account_sid, auth_token)
-    from_twilio = "+12175744267"
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) 
+    from_twilio = TWILIO_FROM_NUMBER
     message = client.api.account.messages.create(to=to_number,
                                                  from_=from_twilio,
                                                  body=message)
