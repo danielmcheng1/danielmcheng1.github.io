@@ -30,5 +30,3 @@ def getSentiment(message):
     except Exception as e: #Error occurred, just assume 0.5 sentiment
         print(e)
         return 0.5;
-
-#print(getSentiment("I hate you"))

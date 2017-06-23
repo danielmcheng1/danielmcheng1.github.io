@@ -2,7 +2,7 @@ import http.client
 import json 
 import nltk
 import config_hidden
-from nltk.draw.tree import draw_trees
+#from nltk.draw.tree import draw_trees
 
 headers = {
     # Request headers
