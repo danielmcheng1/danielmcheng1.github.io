@@ -89,7 +89,7 @@ def reflectPersonality(personalities, all):
         candidates = [
             "I'd bet your MBTI type is the {0}--but I'm only {1} certain".format(trait, toPercent(prob)),
             "You strike me as the {0} type".format(trait),
-            "Now to me, you seem like the {0} type".format(trait),
+            "There's a {0} chance you're the {1} type".format(toPercent(prob), trait),
             "If we were taking a personality test, I'd definitely flag you as the {0}".format(trait)
         ]
         return random.choice(candidates)
