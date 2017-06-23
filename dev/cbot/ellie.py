@@ -374,7 +374,7 @@ rules = {
         "What would it take to change your mind?",
         ],
     "?*x are ?*y": [
-        "Did you think they might not be ?y?",
+        "Did you think they might not be ?y",
         "Possibly they are ?y",
         "How might you change ?y?",
         ],
