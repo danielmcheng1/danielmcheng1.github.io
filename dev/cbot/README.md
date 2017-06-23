@@ -14,3 +14,7 @@ If you have any questions, please don't hesitate to email me at alanduu50[at]gma
 - Python 3 installed
 - Simple Websocket Server: https://github.com/dpallot/simple-websocket-server
 - Microsoft Cognitive Services (free): https://www.microsoft.com/cognitive-services/en-US/subscriptions?mode=NewTrials
+
+#### Updated
+See requirements.txt
+Will need to run ntlk.download() to download wordnet corpous
