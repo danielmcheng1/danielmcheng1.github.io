@@ -17,6 +17,5 @@ class ChatServer(WebSocket):
         print(self.address, 'closed')
 
 
-#print(generateReply("I am not cool."))
 server = SimpleWebSocketServer('', 8000, ChatServer)
 server.serveforever()
