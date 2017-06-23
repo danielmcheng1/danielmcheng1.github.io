@@ -6,8 +6,8 @@ class ChatServer(WebSocket):
 
     def handleMessage(self):
         # echo message back to client
-        message = self.data
-        response = generateReply(message, "Ellie")
+        data = self.data
+        response = generateReply(data)
         self.sendMessage(response)
 
     def handleConnected(self):

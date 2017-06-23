@@ -12,7 +12,7 @@
         var currentBot = "Ellie"; 
         var ws = new WebSocket("ws://localhost:8000");
 
-        ws.onopen = () => ws.send('hello');
+        //ws.onopen = () => ws.send('hello');
         
         // Close socket when window closes
         $(window).on('beforeunload', function(){
@@ -61,8 +61,11 @@
                  var message = $(this).val();
                  $(this).val("");
                  chat_add_message(message, true);
-                 ws.send(message);
-                 alert(currentBot)
+                 ws.send(currentBot + " " + message)
+                 /*ws.send(JSON.stringify({
+                    bot: currentBot, 
+                    message: message
+                 }));*/
               }
            });
         });
@@ -72,8 +75,8 @@
 
 <body>
     <br>
-    <div class = "dropdown"><b>Select Your Friend:</b>
-        <br><button class="dropbtn" id = "Ellie">Ellie</button> <button class="dropbtn" id= "Emoti">Emoti</button> <button class="dropbtn" id = "MBTI Master">MBTI Master</button>
+    <div class = "dropdown"><b>Select Your Therapist:</b>
+        <br><button class="dropbtn" id = "Ellie">Ellie</button> <button class="dropbtn" id= "Emoti">Emoti</button> <button class="dropbtn" id = "MBTI_Master">MBTI Master</button>
     </div>
     <div id="chat_container">
         <div id="chat_log">
@@ -87,7 +90,7 @@
 </html>
 
 <script>
-    var bots = ["Ellie", "Emoti", "MBTI Master"]
+    var bots = ["Ellie", "Emoti", "MBTI_Master"]
     bots.forEach(function(bot) {
         var elem = document.getElementById(bot);
         elem.addEventListener("click", function() {

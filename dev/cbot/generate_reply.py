@@ -112,17 +112,19 @@ def findYouAreJJ(message_pos):
 #------------------------------------------------------#
 
 # Generates a bot response from a user message
-def generateReply(message, persona):
+def generateReply(data):
+    persona = data.split(" ")[0]
+    message = " ".join(data.split(" ")[1:])
     if persona == "Ellie":
         response = ellie.respond(message)
     elif persona == "Emoti":
         emotions = getEmotions(message) 
         response = reflectEmotion(emotions)
-    elif persona == "MBTI Master":
+    elif persona == "MBTI_Master":
         personalities = getPersonalities(message)
         response = reflectPersonality(personalities)
     else:
-        response = "ERROR: No such persona exists"
+        response = "No such persona {0} exists".format(persona)
         
     return "{0}".format(response) 
     
@@ -141,7 +143,5 @@ def generateReply(message, persona):
     return respondToSentiment(sentiment, message)
      
 def runTests():  
-    print(generateReply("I've been feeling rather down lately. Can you help?", "Ellie"))
-
-#if __name__ == "__main__":
-    #runTests()
+    print(generateReply("I've been feeling rather down lately. Can you help?", "Junk"))
+#runTests()
