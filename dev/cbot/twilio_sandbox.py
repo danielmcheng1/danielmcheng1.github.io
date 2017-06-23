@@ -1,13 +1,16 @@
 from twilio.rest import Client
-from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 
+from flask import Flask, request, redirect
+import requests 
 import random 
 import config_hidden
 
 TWILIO_ACCOUNT_SID = config_hidden.TWILIO_ACCOUNT_SID
 TWILIO_AUTH_TOKEN = config_hidden.TWILIO_AUTH_TOKEN
 TWILIO_FROM_NUMBER = config_hidden.TWILIO_FROM_NUMBER
+
+TWILIO_BASE_URL = "https://{account_sid}:{auth_token}@api.twilio.com/2010-04-01/Accounts/{account_sid}".format(account_sid = TWILIO_ACCOUNT_SID, auth_token = TWILIO_AUTH_TOKEN)
 
 app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
@@ -16,9 +19,15 @@ app = Flask(__name__)
 
 def hello_monkey():
     """Respond to incoming calls with a simple text message."""
-
-    #resp = MessagingResponse().message("Hello, Mobile Monkey from Git")
+    resp = MessagingResponse().message("Hello, Mobile Monkey")
+    return (resp)
     
+    response = requests.get(TWILIO_BASE_URL + "/Messages")
+    print(response.text)
+    print(type(response.text))
+    return str(response.text) 
+    
+    '''
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)    
     all_messages = []
     for sms in client.messages.list():
@@ -29,6 +38,7 @@ def hello_monkey():
     #print(*all_messages, sep = '\n')
     resp = all_messages[0]
     return str(resp)
+    '''
 
 def send_message(message, to_number):    
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) 
