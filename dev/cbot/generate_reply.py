@@ -31,18 +31,26 @@ def getPersonalities(message):
     
 def getEmotions(message):
     '''anger, fear, sadness, surprise, joy'''
-    return indicoio.emotion(message)
+    return remapEmotions(indicoio.emotion(message))
+    
+def remapEmotions(emotions):
+    mapping = {"anger": "anger", "fear": "fright", "joy": "happiness", "sadness": "sadness", "surprise": "surprised"}   
+    remappedEmotions = {}
+    for emotion in emotions:
+        remappedEmotions[mapping[emotion]] = emotions[emotion]
+    return remappedEmotions
     
 #-------------------------------------------#    
 def cleanTraitAndProbability(tuple):
     return (nounToAdj(tuple[0]), toPercent(tuple[1]))
     
+#TBD will rename to adjToSynonyms
 def nounToAdj(token, all):
     candidates = nltk_other.convertPOS(token, nltk_other.WN_NOUN, nltk_other.WN_ADJECTIVE)
     if all:
         return " / ".join([c[0] for c in candidates])
     else:
-        return random.choice(candidates[0]) 
+        return random.choice([c[0] for c in candidates]) 
     
 def toPercent(num, digits = 0):
     #default floating point representation includes .0 
@@ -56,9 +64,21 @@ def reflectEmotion(emotions, all):
     if all:
         return reflectAllWrapper(emotions, "You seem", "; or")
     else:
+        emotion_to_pattern = {
+            "anger": ["Oh man, you sound [x]", "Uh oh, you seem [x]", "Back off, you [x] person"],
+            "fright": ["Don't be [x], I'm here for you", "Shoot, you seem really [x]", "Ahhhhhhhh how [x]!"],
+            "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "How [x]. However can you possibly deal?"],
+            "surprised": ["Where did *that* come from??", "That must have been a bit unexpected", "What?!?! I totally would not have seen that happening"], 
+            "happiness": ["Hooray, what [x] circumstances!", "You must feel [x]! Let's celebrate (toot-toot)", "That's so awesome, sounds like you're on the path to success"]
+        }
+ 
         (trait, prob) = getNRankedKey(emotions, 1)
         adj_trait = nounToAdj(trait, False)
-        return "Well, I'd have to say {0}".format(adj_trait)
+        
+        candidates = emotion_to_pattern[trait]
+        pattern = random.choice(candidates)
+        choice = pattern.replace("[x]", adj_trait)
+        return choice
         
         
 def reflectPersonality(personalities, all):
@@ -66,8 +86,13 @@ def reflectPersonality(personalities, all):
         return reflectWrapper(personalities, "Personality wise, you strike me as", "; or perhaps more like")
     else:
         (trait, prob) = getNRankedKey(personalities, 1)
-        adj_trait = nounToAdj(trait, False)
-        return "I'd bet your MBTI type is {0}".format(adj_trait)
+        candidates = [
+            "I'd bet your MBTI type is the {0}--but I'm only {1} certain".format(trait, toPercent(prob)),
+            "You strike me as the {0} type".format(trait),
+            "Now to me, you seem like the {0} type".format(trait),
+            "If we were taking a personality test, I'd definitely flag you as the {0}".format(trait)
+        ]
+        return random.choice(candidates)
         
 def reflectAllWrapper(traits, start, connector):
     response = ""
@@ -133,7 +158,7 @@ def generateReply(data):
     elif persona == "EMOTI":
         emotions = getEmotions(message) 
         response = reflectEmotion(emotions, False)
-    elif persona == "MBTI_MASTER":
+    elif persona == "MBTIMASTER":
         personalities = getPersonalities(message)
         response = reflectPersonality(personalities, False)
     elif persona == "EMOTIALL":
@@ -160,5 +185,6 @@ def generateReply(data):
     return respondToSentiment(sentiment, message)
      
 def runTests():  
-    print(generateReply("I've been feeling rather down lately. Can you help?", "Junk"))
+    print(generateReply("EmotiAll I've been feeling rather down lately. Can you help?"))
+    print(generateReply("MBTIMASTER I've been feeling rather down lately. Can you help?"))
 #runTests()
