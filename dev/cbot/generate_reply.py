@@ -5,11 +5,8 @@ import yaml
 
 #api modules 
 import indicoio 
-f = open('cbot_hidden.conf', 'r')
-config = yaml.safe_load(f)
-indicoio.config.api_key = config["INDICOIO_API_KEY"]
-f.close()
-
+import config_hidden
+indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 
 #own modules 
 from sentiment import getSentiment
@@ -68,6 +65,7 @@ def reflectWrapper(traits, start, connector):
             response = "{start} {trait} ({prob})".format(start = start, trait = nounToAdj(trait), prob = toPercent(prob))
         else:
             response = "{prev}{connector} {trait} ({prob})".format(prev = response, connector = connector, trait = nounToAdj(trait), prob = toPercent(prob))    
+        break 
     return response 
     
 
@@ -119,13 +117,13 @@ def generateReply(message):
     tokens = message.split(" ")
     ellieResponse = ellie.respond(message)
     
-    personalities = getPersonalities(message)
+    #personalities = getPersonalities(message)
     emotions = getEmotions(message) 
     
     reflectedEmotion = reflectEmotion(emotions)
-    reflectedPersonality = reflectPersonality(personalities)
+    #reflectedPersonality = reflectPersonality(personalities)
     
-    return "Ellie: {0}    Emotion: {1}    Personality: {2}".format(ellieResponse, reflectedEmotion, reflectedPersonality) 
+    return "Ellie says: {0}    EmotionBot says: {1}".format(ellieResponse, reflectedEmotion) 
     
     message_pos = getPOS(message) 
     sentiment = getSentiment(message)
@@ -147,4 +145,4 @@ def runTests():
     print(generateReply("You're smart, I wish I were like you"))
     '''
     print(generateReply("I've been feeling rather down lately. Can you help?"))
-#runTests()
+runTests()
