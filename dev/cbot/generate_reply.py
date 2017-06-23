@@ -66,9 +66,9 @@ def reflectEmotion(emotions, all):
     else:
         emotion_to_pattern = {
             "anger": ["Oh man, you sound [x]", "Uh oh, you seem [x]", "Back off, you [x] person"],
-            "fright": ["Don't be [x], I'm here for you", "Shoot, you seem really [x]", "Ahhhhhhhh how [x]!"],
-            "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "How [x]. However can you possibly deal?"],
-            "surprised": ["Where did *that* come from??", "That must have been a bit unexpected", "What?!?! I totally would not have seen that happening"], 
+            "fright": ["Don't be scared, I'm here for you", "Shoot, you seem really [x]. I'm getting nervous myself", "Ahhhhhhhh scary"],
+            "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. However can you possibly deal?"],
+            "surprised": ["Where did *that* come from?", "That must have been a bit unexpected", "What?! I totally would not have seen that happening"], 
             "happiness": ["Hooray, what [x] circumstances!", "You must feel [x]! Let's celebrate (toot-toot)", "That's so awesome, sounds like you're on the path to success"]
         }
  
