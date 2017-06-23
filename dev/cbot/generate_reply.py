@@ -113,14 +113,14 @@ def findYouAreJJ(message_pos):
 
 # Generates a bot response from a user message
 def generateReply(data):
-    persona = data.split(" ")[0]
+    persona = data.split(" ")[0].upper()
     message = " ".join(data.split(" ")[1:])
-    if persona == "Ellie":
+    if persona == "ELLIE":
         response = ellie.respond(message)
-    elif persona == "Emoti":
+    elif persona == "EMOTI":
         emotions = getEmotions(message) 
         response = reflectEmotion(emotions)
-    elif persona == "MBTI_Master":
+    elif persona == "MBTI_MASTER":
         personalities = getPersonalities(message)
         response = reflectPersonality(personalities)
     else:

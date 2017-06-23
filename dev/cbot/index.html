@@ -9,7 +9,6 @@
     
 
     <script>
-        var currentBot = "Ellie"; 
         var ws = new WebSocket("ws://localhost:8000");
 
         //ws.onopen = () => ws.send('hello');
@@ -101,6 +100,7 @@
 </html>
 
 <script>
+    var currentBot = "Ellie";
     var bots = ["Ellie", "Emoti", "MBTI_Master"]
     bots.forEach(function(bot) {
         var elem = document.getElementById(bot);
@@ -113,7 +113,7 @@
     phoneNumberElem.addEventListener("keypress", function(e) {
         if (e.keyCode == 13) {
             phoneNumber = document.getElementById("phone number entry").innerHTML;
-            alert(currentBot, phoneNumber);
+            alert("Text " + currentBot + " at (217) 574-4267. She hasn't had the chance to set up automated texting to your #.");
         }
     });
 </script>
