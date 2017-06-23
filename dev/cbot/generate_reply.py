@@ -37,10 +37,13 @@ def getEmotions(message):
 def cleanTraitAndProbability(tuple):
     return (nounToAdj(tuple[0]), toPercent(tuple[1]))
     
-def nounToAdj(token):
+def nounToAdj(token, all):
     candidates = nltk_other.convertPOS(token, nltk_other.WN_NOUN, nltk_other.WN_ADJECTIVE)
-    return " / ".join([c[0] for c in candidates])
-
+    if all:
+        return " / ".join([c[0] for c in candidates])
+    else:
+        return random.choice(candidates[0]) 
+    
 def toPercent(num, digits = 0):
     #default floating point representation includes .0 
     if digits == 0:
@@ -49,22 +52,32 @@ def toPercent(num, digits = 0):
     
 
 #-------------------------------------------#
-def reflectEmotion(emotions):
-    return reflectWrapper(emotions, "You seem", "; or")
-    
-def reflectPersonality(personalities):
-    return reflectWrapper(personalities, "Personality wise, you strike me as", "; or perhaps more like")
-    
-def reflectWrapper(traits, start, connector):
+def reflectEmotion(emotions, all):
+    if all:
+        return reflectAllWrapper(emotions, "You seem", "; or")
+    else:
+        (trait, prob) = getNRankedKey(emotions, 1)
+        adj_trait = nounToAdj(trait, False)
+        return "Well, I'd have to say {0}".format(adj_trait)
+        
+        
+def reflectPersonality(personalities, all):
+    if all:
+        return reflectWrapper(personalities, "Personality wise, you strike me as", "; or perhaps more like")
+    else:
+        (trait, prob) = getNRankedKey(personalities, 1)
+        adj_trait = nounToAdj(trait, False)
+        return "I'd bet your MBTI type is {0}".format(adj_trait)
+        
+def reflectAllWrapper(traits, start, connector):
     response = ""
     for i, v in enumerate(traits.keys()):
         #TBD can make this better 
         (trait, prob) = getNRankedKey(traits, i + 1) 
         if response == "":
-            response = "{start} {trait} ({prob})".format(start = start, trait = nounToAdj(trait), prob = toPercent(prob))
+            response = "{start} {trait} ({prob})".format(start = start, trait = nounToAdj(trait, True), prob = toPercent(prob))
         else:
-            response = "{prev}{connector} {trait} ({prob})".format(prev = response, connector = connector, trait = nounToAdj(trait), prob = toPercent(prob))    
-        break 
+            response = "{prev}{connector} {trait} ({prob})".format(prev = response, connector = connector, trait = nounToAdj(trait, True), prob = toPercent(prob))    
     return response 
     
 
@@ -119,10 +132,13 @@ def generateReply(data):
         response = ellie.respond(message)
     elif persona == "EMOTI":
         emotions = getEmotions(message) 
-        response = reflectEmotion(emotions)
+        response = reflectEmotion(emotions, False)
     elif persona == "MBTI_MASTER":
         personalities = getPersonalities(message)
-        response = reflectPersonality(personalities)
+        response = reflectPersonality(personalities, False)
+    elif persona == "EMOTIALL":
+        emotions = getEmotions(message)
+        response = reflectEmotion(emotions, True)
     else:
         #default to Ellie 
         response = ellie.respond(message) 

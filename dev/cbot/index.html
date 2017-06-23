@@ -75,7 +75,11 @@
 <body>
     <br>
     <div class = "dropdown"><b>Select Your Therapist:</b>
-        <br><button class="dropbtn" id = "Ellie">Ellie</button> <button class="dropbtn" id= "Emoti">Emoti</button> <button class="dropbtn" id = "MBTI_Master">MBTI Master</button>
+        <br><button class="dropbtn" id = "Ellie">Ellie</button> 
+        <button class="dropbtn" id= "Emoti">Emoti</button> 
+        <button class="dropbtn" id = "MBTIMaster">MBTIMaster</button>
+        <button class="dropbtn" id = "EmotiAll">EmotiAll</button>
+        
     </div>
     <div id="chat_container">
         <div id="chat_log">
@@ -101,7 +105,7 @@
 
 <script>
     var currentBot = "Ellie";
-    var bots = ["Ellie", "Emoti", "MBTI_Master"]
+    var bots = ["Ellie", "Emoti", "MBTIMaster", "EmotiDebug"]
     bots.forEach(function(bot) {
         var elem = document.getElementById(bot);
         elem.addEventListener("click", function() {
