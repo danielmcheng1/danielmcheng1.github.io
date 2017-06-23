@@ -124,7 +124,8 @@ def generateReply(data):
         personalities = getPersonalities(message)
         response = reflectPersonality(personalities)
     else:
-        response = "No such persona {0} exists".format(persona)
+        #default to Ellie 
+        response = ellie.respond(message) 
         
     return "{0}".format(response) 
     
