@@ -23,7 +23,7 @@ def hello_monkey():
     #return str(resp)
     
     response = requests.get(TWILIO_BASE_URL + "/Messages")
-    return str(response.text) 
+    return str(response.text[:100]) 
     
     '''
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)    
