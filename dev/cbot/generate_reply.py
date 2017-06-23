@@ -118,13 +118,13 @@ def generateReply(message, persona):
     elif persona == "Emoti":
         emotions = getEmotions(message) 
         response = reflectEmotion(emotions)
-    elif persona == "MBTI":
+    elif persona == "MBTI Master":
         personalities = getPersonalities(message)
         response = reflectPersonality(personalities)
     else:
         response = "ERROR: No such persona exists"
         
-    return "[0}]: {1}".format(persona, response) 
+    return "{0}".format(response) 
     
     tokens = message.split(" ")
     message_pos = getPOS(message) 
@@ -141,10 +141,7 @@ def generateReply(message, persona):
     return respondToSentiment(sentiment, message)
      
 def runTests():  
-    '''
-    print(generateReply("You are smart"))
-    print(generateReply("You are crass"))
-    print(generateReply("You're smart, I wish I were like you"))
-    '''
-    print(generateReply("I've been feeling rather down lately. Can you help?"))
-#runTests()
+    print(generateReply("I've been feeling rather down lately. Can you help?", "Ellie"))
+
+#if __name__ == "__main__":
+    #runTests()

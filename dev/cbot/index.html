@@ -6,9 +6,14 @@
     <link rel=stylesheet href="css/nav.css">
     <link rel=stylesheet href="css/chat.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+
     <script>
+        var currentBot = "Ellie"; 
         var ws = new WebSocket("ws://localhost:8000");
 
+        ws.onopen = () => ws.send('hello');
+        
         // Close socket when window closes
         $(window).on('beforeunload', function(){
            ws.close();
@@ -57,19 +62,19 @@
                  $(this).val("");
                  chat_add_message(message, true);
                  ws.send(message);
+                 alert(currentBot)
               }
            });
         });
     </script>
+
 </head>
 
 <body>
-    <br><div class="dropdown">
-        <button class="dropbtn">Select Level</button>
-        <div class="dropdown-content" id="dropdown-menu">
-        </div>
+    <br>
+    <div class = "dropdown"><b>Select Your Friend:</b>
+        <br><button class="dropbtn" id = "Ellie">Ellie</button> <button class="dropbtn" id= "Emoti">Emoti</button> <button class="dropbtn" id = "MBTI Master">MBTI Master</button>
     </div>
-
     <div id="chat_container">
         <div id="chat_log">
         </div>
@@ -80,3 +85,13 @@
 
 </body>
 </html>
+
+<script>
+    var bots = ["Ellie", "Emoti", "MBTI Master"]
+    bots.forEach(function(bot) {
+        var elem = document.getElementById(bot);
+        elem.addEventListener("click", function() {
+            currentBot = bot;
+        });
+    });
+</script>

@@ -3,9 +3,9 @@
     background-color: light gray;
     color: black;
     padding: 8px;
-    font-size: 14px;
+    font-size: 16px;
     border: black;
-	border-width: 1px;
+	border-width: 2px;
 	border-style: none;
     cursor: pointer;
 }
