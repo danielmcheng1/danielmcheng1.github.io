@@ -3,14 +3,11 @@ from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 
 import random 
-import yaml
+import config_hidden
 
-f = open('cbot_hidden.conf', 'r')
-config = yaml.safe_load(f)
-TWILIO_ACCOUNT_SID = config["TWILIO_ACCOUNT_SID"]
-TWILIO_AUTH_TOKEN = config["TWILIO_AUTH_TOKEN"]
-TWILIO_FROM_NUMBER = config["TWILIO_FROM_NUMBER"]
-f.close()
+TWILIO_ACCOUNT_SID = config_hidden.TWILIO_ACCOUNT_SID
+TWILIO_AUTH_TOKEN = config_hidden.TWILIO_AUTH_TOKEN
+TWILIO_FROM_NUMBER = config_hidden.TWILIO_FROM_NUMBER
 
 app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])
