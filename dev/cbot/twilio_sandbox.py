@@ -13,19 +13,26 @@ TWILIO_FROM_NUMBER = config_hidden.TWILIO_FROM_NUMBER
 TWILIO_BASE_URL = "https://{account_sid}:{auth_token}@api.twilio.com/2010-04-01/Accounts/{account_sid}".format(account_sid = TWILIO_ACCOUNT_SID, auth_token = TWILIO_AUTH_TOKEN)
 
 app = Flask(__name__)
-@app.route("/", methods=['GET', 'POST'])
-
-
-
+@app.route("/", methods=['GET', 'POST'])        
 def hello_monkey():
-    """Respond to incoming calls with a simple text message."""
     resp = MessagingResponse().message("Hello, Mobile Monkey")
     #return str(resp)
     
-    response = requests.get(TWILIO_BASE_URL + "/Messages")
-    return str(response.text[:100]) 
+    messages = requests.get(TWILIO_BASE_URL + "/Messages")
+    first_sid = find_first_content("Sid", messages.text)
+    
+    first_message = requests.get(TWILIO_BASE_URL + "/Messages/" + first_sid)
+    first_message_body = strip_trial(find_first_content("Body", first_message.text))
+    
+    resp = MessagingResponse().message(first_message_body)
+    
+    return str(resp)
+    
     
     '''
+    twiml = '<Response><Message>Hello from your Django app!</Message></Response>'
+    return HttpResponse(twiml, content_type='text/xml')
+
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)    
     all_messages = []
     for sms in client.messages.list():
@@ -44,10 +51,25 @@ def send_message(message, to_number):
     message = client.api.account.messages.create(to=to_number,
                                                  from_=from_twilio,
                                                  body=message)
-                                                 
+def find_first_tag(tag, text):
+    return text.index(tag)
+def find_first_open(tag, text):
+    return text.index("<" + tag + ">") + len("<" + tag + ">")
+def find_first_close(tag, text):
+    return text.index("</" + tag + ">")
+def find_first_content(tag, text):
+    return text[find_first_open(tag, text) : find_first_close(tag, text)]
+def strip_trial(text):
+    trial_text = "Sent from your Twilio trial account - "
+    if len(text) >= len(trial_text):
+        if text[0:len(trial_text)] == trial_text:
+            return text[len(trial_text):]
+    return text 
+
+    
 if __name__ == "__main__":
     app.run(debug=True)
-    
+    #hello_monkey()
     #send_message("hello again", "+12177227216")
     
     #why do the field names/attributes not line up at all witih the api?
