@@ -20,7 +20,7 @@ app = Flask(__name__)
 def hello_monkey():
     """Respond to incoming calls with a simple text message."""
     resp = MessagingResponse().message("Hello, Mobile Monkey")
-    return (resp)
+    return str(resp)
     
     response = requests.get(TWILIO_BASE_URL + "/Messages")
     print(response.text)
