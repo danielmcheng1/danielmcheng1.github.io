@@ -85,6 +85,17 @@
             <div><input id="chat_input" /></div>
         </div>
     </div>
+    <br><br>
+    <div>
+        <b>Set Me Up With Her Personal Line:</b>
+        <!--form id="phone number" method="get" action="http://danielmcheng1.pythonanywhere.com"-->        
+        <form id="phone number form">
+            <input type="text" id="phone number entry"></input><br>
+            <!--input type="button" onclick="" value="Submit"></input-->
+        </form>
+    </div>
+</form>
+
 
 </body>
 </html>
@@ -96,5 +107,13 @@
         elem.addEventListener("click", function() {
             currentBot = bot;
         });
+    });
+    
+    phoneNumberElem = document.getElementById("phone number entry")
+    phoneNumberElem.addEventListener("keypress", function(e) {
+        if (e.keyCode == 13) {
+            phoneNumber = document.getElementById("phone number entry").innerHTML;
+            alert(currentBot, phoneNumber);
+        }
     });
 </script>

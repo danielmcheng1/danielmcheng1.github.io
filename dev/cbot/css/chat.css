@@ -11,7 +11,7 @@ body {
     border-radius: 15px;
     border: 1px solid black;
     margin: 40px 80px 0px 80px;
-    width: 600px;
+    width: 700px;
 }
 #chat_log {
     background-color: #718392;
@@ -19,7 +19,7 @@ body {
     border-bottom: 1px solid black;
     overflow-y: scroll;
     height: 300px;
-    width: 600px;
+    width: 700px;
     font-size: 14px;
 }
 #chat_input_container {
