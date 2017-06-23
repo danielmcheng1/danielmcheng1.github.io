@@ -14,17 +14,14 @@ TWILIO_BASE_URL = "https://{account_sid}:{auth_token}@api.twilio.com/2010-04-01/
 
 app = Flask(__name__)
 @app.route("/", methods=['GET', 'POST'])        
-def hello_monkey():
-    resp = MessagingResponse().message("Hello, Mobile Monkey")
-    #return str(resp)
-    
+def respond_to_SMS():    
     messages = requests.get(TWILIO_BASE_URL + "/Messages")
     first_sid = find_first_content("Sid", messages.text)
     
     first_message = requests.get(TWILIO_BASE_URL + "/Messages/" + first_sid)
     first_message_body = strip_trial(find_first_content("Body", first_message.text))
     
-    resp = MessagingResponse().message(first_message_body)
+    resp = MessagingResponse().message("You said: " + first_message_body)
     
     return str(resp)
     
@@ -51,6 +48,9 @@ def send_message(message, to_number):
     message = client.api.account.messages.create(to=to_number,
                                                  from_=from_twilio,
                                                  body=message)
+                                   
+                                   
+#Utility XML functions 
 def find_first_tag(tag, text):
     return text.index(tag)
 def find_first_open(tag, text):
@@ -69,11 +69,6 @@ def strip_trial(text):
     
 if __name__ == "__main__":
     app.run(debug=True)
-    #hello_monkey()
     #send_message("hello again", "+12177227216")
-    
-    #why do the field names/attributes not line up at all witih the api?
-    #good tutorials / links to other resources to set everythign up
-        
         
     
