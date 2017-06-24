@@ -23,17 +23,17 @@ var unitTest = [
 	];
 var easy = [
 	  "                   x  ",
-	  "             o     |  ",
 	  "             o        ",
 	  "             o        ",
-	  "             x        ",
+	  "      x=     o     o  ",
+	  "             x     o  ",
 	  "                   o  ",
-	  "  x=               x  ",
+	  "  x                x  ",
 	  "  x         o o    x  ",
 	  "  x        xxxxx   x  ",
 	  "  x  1             x  ",
-	  "  x!!xx!!!!!!!!!!!!x  ",
-	  "      xxxxxxxxxxxxxx  ",
+	  "  xxxxx!!!!!!!!!!!!x  ",
+	  "  xxxxxxxxxxxxxxxxxx  ",
 	  "                      "
 	];
 	
@@ -324,26 +324,38 @@ var elevator = [
 
 ];
 
-var ALL_LEVELS = [
-        unitTest, 
-        easy, simpleAbyss, bungeeJump, 
-        lavaWorld, abyssRevisited, gauntlet, 
-        bombAway, bunnyWorld, toTheSky, 
-        foolsGold, chase, iceWorld, 
-        elevator, weepingAngel, intoTheMines];
 
-var ALL_SPEED_MULTIPLIERS = [
-        {}, 
-        {}, {}, {}, 
-        {"=": 4}, {}, {"=": 3}, 
-        {"|": 2, "v": 2}, {}, {"=": 3}, 
-        {}, {}, {"=": 4, "-": 3}, 
-        {"+": 3, "-":3}, {}, {"=": 4}];
+
+var MASTER_DICT = {
+    "Unit Test World": [unitTest, {}],
+    "Easy": [easy, {}],
+    "Simple Abyss": [simpleAbyss, {}],
+    "Bungee Jump": [bungeeJump, {}],
+    "Lava World": [lavaWorld, {"=": 4}],
+    "Abyss Revisted": [abyssRevisited, {}],
+    "Gauntlet": [gauntlet, {"=": 3}],
+    "Bomb Away": [bombAway, {"|": 2, "v": 2}],
+    "Bunny World": [bunnyWorld, {}],
+    "To the Sky": [toTheSky, {"=": 3}],
+    "Fool's Gold": [foolsGold, {}], 
+    "Chase": [chase, {}],
+    "Ice World": [iceWorld, {"=": 4, "-": 3}],
+    "Elevator": [elevator, {"+": 3, "-":3}],
+    "Weeping Angel": [weepingAngel, {}],
+    "Into the Mines": [intoTheMines, {"=": 4}]
+};
 
 var ALL_NAMES = [
         "Unit Test World", 
         "Easy", "Simple Abyss", "Bungee Jump", 
-        "Lava World", "Abyss Revisted", "Gauntlet", 
-        "Bomb Away", "Bunny World", "To the Sky", 
-        "Fool's Gold", "Chase", "Ice World",
-        "Elevator", "Weeping Angel", "Into the Mines"];
+        "Lava World", "Abyss Revisted", "Chase", "Gauntlet", 
+        "Bomb Away",  "To the Sky", "Weeping Angel",
+        "Ice World", "Elevator", 
+        "Bunny World", "Fool's Gold", "Into the Mines"];
+        
+var ALL_LEVELS = []
+var ALL_SPEED_MULTIPLIERS = []
+for(var i = 0; i < ALL_NAMES.length; i++) {
+    ALL_LEVELS.push(MASTER_DICT[ALL_NAMES[i]][0]);
+    ALL_SPEED_MULTIPLIERS.push(MASTER_DICT[ALL_NAMES[i]][1]);
+};
