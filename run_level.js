@@ -557,8 +557,8 @@ function runAnimation(frameFunc) {
 function runLevel(level, Display, andThen) {
 	var display = new Display(document.body, level);
 	level.updateStatus();
-	document.body.onkeyup = function (e) {
-		if (e.keyCode == 13) { //enter key
+	//document.body.onkeyup = function (e) {
+	//	if (e.keyCode == 13) { //enter key
 			runAnimation(function(step) {
 				level.animate(step, arrows);
 				display.drawFrame(step);
@@ -570,8 +570,8 @@ function runLevel(level, Display, andThen) {
 					return false;
 				}
 			});
-		};
-	};
+	//	};
+	//};
 };
 
 //TBD how is status reset each time?--don't quite get these final steps
@@ -610,10 +610,11 @@ function runGame(plans, names, speedMultipliers, Display) {
 			
 			var musicNode = document.getElementById("music");
 			musicNode.volume = 0.6;
-			musicNode.src = "sound/aladdin.mp3";
+			musicNode.src = "sound/bachgigue.mp3";
 			musicNode.play();
 			musicNode.addEventListener('ended', function() {
-				var rand = Math.random();
+				/*
+                var rand = Math.random();
 				if (rand < 0.3) {
 					musicNode.src = "sound/trump.mp3";
 				} else if (rand < 0.6) {
@@ -623,6 +624,7 @@ function runGame(plans, names, speedMultipliers, Display) {
 				} else {
 					musicNode.src = "sound/aladdin.mp3";
 				};
+                */
 				musicNode.play();
 			});
 		};
