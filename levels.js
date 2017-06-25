@@ -53,7 +53,7 @@ var simpleAbyss = [
 	  "  x   =         o  x                  ",
 	  "  xxxxx         o  x     o       x    ",
 	  "  xxxxx         x  x     o       x    ",
-	  "  xxxxx  o      B        o   x   x    ",
+	  "  xxxxx  o      o  v     o   x   x    ",
 	  "  xxxxx  x               o   x   x    ",
 	  "  xxxxx                  o   x   x    ",
 	  "  xxxxx       o          o   x   x    ",
