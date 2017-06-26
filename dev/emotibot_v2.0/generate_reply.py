@@ -70,11 +70,6 @@ def get_emotions(message):
     '''anger, fear, sadness, surprise, joy'''
     return indicoio.emotion(message)
   
-'''
-plot keywords, word freq cloud, etc.
-use the keywords api or nltk
-random word pull in from web scrape
-'''
 if __name__ == "__main__":
     print(make_initial_greeting())
     while True:
