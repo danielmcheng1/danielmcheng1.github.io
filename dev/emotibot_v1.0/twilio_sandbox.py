@@ -70,7 +70,8 @@ def strip_trial(text):
 
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5002,debug=True)
+    #app.run(debug=True)
     #send_message("hello again", "+12177227216")
         
     

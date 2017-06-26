@@ -1,20 +1,16 @@
-from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
-from generate_reply import generateReply
 
-# Simple WebSocket for single-user chat bot
-class ChatServer(WebSocket):
+from flask import Flask, render_template, request
+import requests
+import flask-socketio
 
-    def handleMessage(self):
-        # echo message back to client
-        data = self.data
-        response = generateReply(data)
-        self.sendMessage(response)
+app = Flask(__name__)
 
-    def handleConnected(self):
-        print(self.address, 'connected')
+@app.route('/',methods=['GET','POST'])
+def print_form():
+    if request.method == 'POST':
+        return render_template('form.html',result=request.form['fooput'])
+    if request.method == 'GET':
+        return render_template('index.html')
 
-    def handleClose(self):
-        print(self.address, 'closed')
-
-server = SimpleWebSocketServer('', 8000, ChatServer)
-server.serveforever()
+if __name__ == '__main__':
+    app.run()
