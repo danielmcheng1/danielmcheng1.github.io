@@ -36,6 +36,15 @@ def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
     socketio.emit('server originated', {'life': 42})
+    '''
+    
+        socket.on ('server originated', function(data)  { 
+            console.log("server originated: Received the following")
+            for (var key in data) {
+                console.log(key, data[key])
+            };
+        });
+    '''
     
 def acknowledgement():
     print("message was received!")
@@ -46,6 +55,7 @@ def print_form():
     if request.method == 'GET':
         return render_template('index.html')
 '''
+USAGE
 export FLASK_APP=server.py
 set FLASK_APP=server.py
 flask run 
