@@ -31,6 +31,7 @@ def handle_event(json):
             console.log(data)
         });
     '''
+@socketio.on('connect')
 def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
