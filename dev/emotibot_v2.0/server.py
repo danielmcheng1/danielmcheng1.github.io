@@ -13,8 +13,6 @@ def index():
 
 @socketio.on('human message')
 def handle_event(data):
-    for key in data:
-        print(key, data[key])
     emit('bot message', {"message": "You said: " + data["message"]}) 
     #send('my send', json=True, callback = acknowledgement()) 
     
