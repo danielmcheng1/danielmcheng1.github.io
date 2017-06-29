@@ -13,31 +13,27 @@ function append_to_chat_box(data) {
           '<span class = "message">' + data['message'] + '</span>' + 
       '</div>').appendTo('.message_box').fadeIn();
     
+    scroll_message_box();
 };
 
+//keep scrolled to bottom of chat
+function scroll_message_box() {
+    var scrolltoh = $('.message_box')[0].scrollHeight;
+    $('.message_box').scrollTop(scrolltoh);
+};
 
 /*loading data into the chat box*/
 $("#shout_message").keypress(function(evt) {
     if(evt.which == 13) {
         var iusername = $('#shout_username').val() || "You";
         var imessage = $('#shout_message').val();
-        data = {'username':iusername, 'message':imessage};
-       
         
-        //append data into messagebox
-        $('<div class="shout_msg">' + 
-              '<time>' + new Date().toLocaleTimeString() + '</time>' +
-              '<span class = "username">' + data['username'] + '</span>' +
-              '<span class = "message">' + data['message'] + '</span>' + 
-          '</div>').appendTo('.message_box').fadeIn();
-
-        socket.emit('human message', {"message": data['message']})
-        //keep scrolled to bottom of chat
-        var scrolltoh = $('.message_box')[0].scrollHeight;
-        $('.message_box').scrollTop(scrolltoh);
+        data = {'username':iusername, 'message':imessage};        
+        append_to_chat_box(data);
         
-        //reset value of message box
         $('#shout_message').val('');
+        
+        socket.emit('human message', {"message": data['message']});
     }
 });
 

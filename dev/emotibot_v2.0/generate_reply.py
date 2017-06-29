@@ -24,7 +24,7 @@ def respond_to_message(message):
     if BOT_MADE_RANDOM_RESPONSE:
         BOT_MADE_RANDOM_RESPONSE = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
-    elif random.randint(1, 10) == 1:
+    elif random.randint(1, 20) == 1:
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
     else:
