@@ -1,10 +1,10 @@
 
 from flask import Flask, render_template, request
 import requests
+import generate_reply 
 
 from flask_socketio import SocketIO, emit, send
 
-BOT_NAME = 'Ellie'
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -14,14 +14,16 @@ def index():
 
 @socketio.on('human message')
 def handle_event(data):
-    emit('bot message', {"message": "You said: " + data["message"], 'username': BOT_NAME}) 
+    response = generate_reply.respond_to_message(data["message"])
+    emit('bot message', {"message": response["message"], 'username': response["username"]}) 
     #send('my send', json=True, callback = acknowledgement()) 
     
 @socketio.on('connect')
 def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
-    socketio.emit('begin chat', {'message': "Hi I'm {0}".format(BOT_NAME), 'username': BOT_NAME})
+    response = generate_reply.make_initial_greeting()
+    socketio.emit('begin chat', {'message': response["message"], 'username': response["username"]})
     
 def acknowledgement():
     print("chat received!")

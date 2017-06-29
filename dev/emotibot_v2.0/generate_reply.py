@@ -18,35 +18,37 @@ BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, the world w
 BOT_MADE_RANDOM_RESPONSE = False 
 
 def respond_to_message(message):
-
     global BOT_MADE_RANDOM_RESPONSE 
+    data = {"username": BOT_NAME, "message": "", "emotions": {}}
+    
     if BOT_MADE_RANDOM_RESPONSE:
         BOT_MADE_RANDOM_RESPONSE = False
-        return random.choice(BOT_RANDOM_RESPONSES_AFTER)
+        data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
     elif random.randint(1, 10) == 1:
         BOT_MADE_RANDOM_RESPONSE = True 
-        return random.choice(BOT_RANDOM_RESPONSES_BEFORE)
-
-        
-    (top_emotion, emotions) = reflect_emotion(message)
-    if top_emotion != None:
-        print(emotions)
-        return top_emotion 
-    return eliza_chatbot.respond(message)
+        data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
+    else:
+        #(top, emotions) = reflect_emotion(message)
+        #if top != None:
+        #    return top 
+        data["message"] = eliza_chatbot.respond(message)
+    return data
   
 def make_initial_greeting():
-    return random.choice(BOT_GREETINGS_OPENING)
+    data = {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
+    return data
     #return "{2}: {0} {1} {2}".format(random.choice(BOT_GREETINGS_OPENING), random.choice(BOT_GREETINGS_NAME), BOT_NAME)
 
 
 def reflect_emotion(message):
     emotions = get_emotions(message)
-    (top_emotion, probability) =  get_n_ranked_key(emotions, 1)
+    adjectives = map_emotions_to_adjectives(emotions)
+    (top, probability) =  get_n_ranked_key(adjectives, 1)
     if probability > 0.7:
-        return (top_emotion, emotions)
+        return (top, emotions)
     return (None, emotions) 
     
-def map_emotion_to_adjective(emotions):
+def map_emotions_to_adjectives(emotions):
     mapping = {
         "anger": ["angry", "mad", "upset"], 
         "fear": ["afraid", "scared"], 
