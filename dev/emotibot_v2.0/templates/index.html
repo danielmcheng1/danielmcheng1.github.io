@@ -5,29 +5,7 @@
     <meta charset="utf-8"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function() {
-            socket.emit('my event', {bot: 'Ellie', message: 'Initializing'});
-            console.log('connected');
-        });
-        socket.on ('message', function(data)  { 
-            console.log("Message: Received the following")
-            console.log(data)
-        });
-        socket.on ('my emit', function(data)  { 
-            console.log("Emit: Received the following")
-            for (var key in data) {
-                console.log(key, data[key])
-            };
-        });
-        socket.on ('server originated', function(data)  { 
-            console.log("server originated: Received the following")
-            for (var key in data) {
-                console.log(key, data[key])
-            };
-        });
-    </script>
+    <link rel=stylesheet href="../static/css/chat.css">
     <style>
     canvas{
         -moz-user-select: none;
@@ -37,8 +15,20 @@
     </style>
 </head>
 <body>
-
+    <div class="shout_box">
+    <div class="header">EmotiBot<div class="close_btn">&nbsp;</div></div>
+      <div class="toggle_chat">
+      <div class="message_box">
+        </div>
+        <div class="user_info">
+            <!--input name="shout_username" id="shout_username" type="text" placeholder="Your Name" maxlength="15" /-->
+            <input name="shout_username" id="shout_username" type="text" placeholder="Your Name" />
+            <input name="shout_message" id="shout_message" type="text" placeholder="Type Message Hit Enter"/> 
+        </div>
+        </div>
+    </div>
 </body>
 
 </html>
 
+<script type="text/javascript" src="../static/js/run_socket.js" charset="utf-8"></script>
