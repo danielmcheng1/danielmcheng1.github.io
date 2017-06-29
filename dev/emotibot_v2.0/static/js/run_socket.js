@@ -35,20 +35,12 @@ $("#shout_message").keypress(function(evt) {
             });
             
             //append data into messagebox with jQuery fade effect!
-            $("<div><time>", {
-                "class": "shout_msg",
-                "html": new Date().toLocaleTimeString()
-            }).appendTo('.message_box').fadeIn();
             
-            $('<div class="shout_msg"><time>' + new Date().toLocaleTimeString() + 
-              '</time><span class = "message">' + post_data["message"] + '</span></div>', {
-                "class": "shout_msg"
-            }).appendTo('.message_box').fadeIn();
-            console.log(post_data["message"])
-             /*
-             echo '<div class="shout_msg"><time>'.$msg_time.'</time><span class="username">'.$row["user"].'</span>
-                      <span class="message">'.$row["message"].'</span></div>';
-*/  
+            $('<div class="shout_msg">' + 
+                  '<time>' + new Date().toLocaleTimeString() + '</time>' +
+                  '<span class = "username">' + post_data['username'] + '</span>' +
+                  '<span class = "message">' + post_data["message"] + '</span>' + 
+              '</div>').appendTo('.message_box').fadeIn();
   
             //keep scrolled to bottom of chat!
             var scrolltoh = $('.message_box')[0].scrollHeight;
@@ -56,26 +48,6 @@ $("#shout_message").keypress(function(evt) {
             
             //reset value of message box
             $('#shout_message').val('');
-            //send data to "shout.php" using jQuery $.post()
-            /*
-            $.post('shout.php', post_data, function(data) {
-                
-                //append data into messagebox with jQuery fade effect!
-                $(data).hide().appendTo('.message_box').fadeIn();
-
-                //keep scrolled to bottom of chat!
-                var scrolltoh = $('.message_box')[0].scrollHeight;
-                $('.message_box').scrollTop(scrolltoh);
-                
-                //reset value of message box
-                $('#shout_message').val('');
-                
-            }).fail(function(err) { 
-            
-            //alert HTTP server error
-            alert(err.statusText); 
-            });
-            */
         }
 });
 

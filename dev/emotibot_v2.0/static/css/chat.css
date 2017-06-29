@@ -6,20 +6,24 @@ background:#627BAE; width:280px; overflow:hidden;
 position:fixed; bottom:0; right:20%; z-index:9;
 }
 .shout_box .header .close_btn {
-background-image: url('../img/gray_close_icon.svg') no-repeat 0px 0px; 
-float:right; width:15px;
-height: 15px;
+background: url('../img/close_btn.png') no-repeat 0px 0px; 
+background-size: 100% 100%;
+float:right; width:16px;
+height: 16px;
 }
 .shout_box .header .close_btn:hover {
-background-image: url('../img/gray_close_icon.svg') no-repeat 0px -16px;
+background: url('../img/close_btn.png') no-repeat 0px -20px;
+background-size: 100% 100%;
 }
 .shout_box .header .open_btn {
-background-image: url('../img/gray_close_icon.svg') no-repeat 0px -32px;
-float:right; width:15px;
-height:15px;
+background: url('../img/open_btn.png') no-repeat 0px 0px;
+background-size: 100% 100%;
+float:right; width:16px;
+height:16px;
 }
 .shout_box .header .open_btn:hover {
-background-image: url('../img/gray_close_icon.svg') no-repeat 0px -48px;
+background: url('../img/open_btn.png') no-repeat 0px -20px;
+background-size: 100% 100%;
 }
 .shout_box .header{
 padding: 5px 3px 5px 5px;
