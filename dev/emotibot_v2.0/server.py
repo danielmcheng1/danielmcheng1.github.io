@@ -11,27 +11,22 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
-@socketio.on('my event')
-def handle_event(json):
-    for key in json:
-        print(key, json[key])
-    emit('my emit', {"my": 1, "emit": 2}) 
-    send('my send', json=True, callback = acknowledgement()) 
+@socketio.on('human message')
+def handle_event(data):
+    for key in data:
+        print(key, data[key])
+    emit('bot message', {"message": "You said: " + data["message"]}) 
+    #send('my send', json=True, callback = acknowledgement()) 
+    
 @socketio.on('connect')
 def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
-    socketio.emit('server originated', {'life': 42})
+    socketio.emit('begin chat', {'message': "Hi I'm Ellie"})
     
 def acknowledgement():
-    print("message was received!")
+    print("chat received!")
     
-def print_form():
-    if request.method == 'POST':
-        return render_template('form.html',result=request.form['fooput'])
-    if request.method == 'GET':
-        return render_template('index.html')
-
 
 if __name__ == '__main__':
     #app.run()
