@@ -40,12 +40,14 @@ background: #FFFFFF; height: 225px;
 overflow:auto; border: 1px solid #CCC;
 }
 .shout_msg{
-margin-bottom: 10px; display: block;
+margin-bottom: 5px; display: block;
 border-bottom: 1px solid #F3F3F3; padding: 0px 5px 5px 5px;
-font: 12px 'lucida grande', tahoma, verdana, arial, sans-serif; color:#7C7C7C;
+font: 13px 'lucida grande', tahoma, verdana, arial, sans-serif; color:#7C7C7C;
+overflow:auto;
 }
 .message_box:last-child { border-bottom:none;
 }
+
 time{ 
 font: 11px 'lucida grande', tahoma, verdana, arial, sans-serif;
 font-weight: normal; float:right; color: #D5D5D5;

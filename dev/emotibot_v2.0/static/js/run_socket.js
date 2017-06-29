@@ -2,15 +2,14 @@
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 socket.on('connect', function() {
 });
-socket.on ('begin chat', append_bot_response)
-socket.on ('bot message', append_bot_response)
+socket.on ('begin chat', append_to_chat_box)
+socket.on ('bot message', append_to_chat_box)
 
-function append_bot_response(data) {
-    console.log("Received: " + data["message"]);
-    
+function append_to_chat_box(data) {    
     $('<div class="shout_msg">' + 
-          '<time>' + new Date().toLocaleTimeString() + '</time>' +
-          '<span class = "username">' + "Bot" + '</span>' +
+          '<span class = "username">' + data['username'] +
+            '<time>' + new Date().toLocaleTimeString() + '</time>' +
+          '</span>' +
           '<span class = "message">' + data['message'] + '</span>' + 
       '</div>').appendTo('.message_box').fadeIn();
     
@@ -20,7 +19,7 @@ function append_bot_response(data) {
 /*loading data into the chat box*/
 $("#shout_message").keypress(function(evt) {
     if(evt.which == 13) {
-        var iusername = $('#shout_username').val();
+        var iusername = $('#shout_username').val() || "You";
         var imessage = $('#shout_message').val();
         data = {'username':iusername, 'message':imessage};
        
