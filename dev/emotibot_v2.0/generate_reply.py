@@ -10,11 +10,10 @@ indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 BOT_NAME = "EmotiBot"
 
 BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better."]
-BOT_GREETINGS_OPENING = ["How're you doing, my friend?", "Hello, good day, and all that jazz. How's it going?", "Greetings and felicitations!"]
-BOT_GREETINGS_NAME = ["You can call me", "My name is", "I go by", "My friends call me"]
+BOT_GREETINGS_OPENING = ["How're you doing today, my friend?", "Hello, good day, and all that jazz. How's it going?", "Greetings and felicitations! How's it going?"]
 
-BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?"]
-BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, the world wide web distracted me for a moment"]
+BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
+BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
 BOT_MADE_RANDOM_RESPONSE = False 
 
 def respond_to_message(message):
@@ -38,10 +37,7 @@ def respond_to_message(message):
     return data
   
 def make_initial_greeting():
-    data = {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
-    return data
-    #return "{2}: {0} {1} {2}".format(random.choice(BOT_GREETINGS_OPENING), random.choice(BOT_GREETINGS_NAME), BOT_NAME)
-
+    return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
 
 def reflect_emotion(message):
     emotions = get_emotions(message)
