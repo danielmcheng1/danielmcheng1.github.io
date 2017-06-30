@@ -43,7 +43,7 @@ def reflect_emotion(message):
     emotions = get_emotions(message)
     (top, probability) =  get_n_ranked_key(emotions, 1)
     
-    if probability > 0.5:
+    if probability > 0.55:
         responses = map_emotions_to_response(emotions)
         return (responses[top], emotions)
     return (None, emotions) 
