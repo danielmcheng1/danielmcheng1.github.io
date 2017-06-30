@@ -21,17 +21,20 @@ def respond_to_message(message):
     global BOT_MADE_RANDOM_RESPONSE 
     data = {"username": BOT_NAME, "message": "", "emotions": {}}
     
+    (reflection, emotions) = reflect_emotion(message)
+    data["emotions"] = emotions
+    
     if BOT_MADE_RANDOM_RESPONSE:
         BOT_MADE_RANDOM_RESPONSE = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
-    elif random.randint(1, 20) == 1:
+    elif random.randint(1, 15) == 1:
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
-    else:
-        #(top, emotions) = reflect_emotion(message)
-        #if top != None:
-        #    return top 
+    elif reflection != None:
+        data["message"] = reflection
+    else: 
         data["message"] = eliza_chatbot.respond(message)
+        
     return data
   
 def make_initial_greeting():
@@ -42,25 +45,33 @@ def make_initial_greeting():
 
 def reflect_emotion(message):
     emotions = get_emotions(message)
-    adjectives = map_emotions_to_adjectives(emotions)
-    (top, probability) =  get_n_ranked_key(adjectives, 1)
-    if probability > 0.7:
-        return (top, emotions)
-    return (None, emotions) 
+    (top, probability) =  get_n_ranked_key(emotions, 1)
     
-def map_emotions_to_adjectives(emotions):
-    mapping = {
-        "anger": ["angry", "mad", "upset"], 
+    if probability > 0.5:
+        responses = map_emotions_to_response(emotions)
+        return (responses[top], emotions)
+    return (None, emotions) 
+
+def map_emotions_to_response(emotions):
+    response_mapping = {
+        "anger": ["Oh man, you sound [x]", "Uh oh, you seem [x]", "Back off, you [x] person"],
+        "fear": ["You seem really [x]", "Don't be [x], I'm here for you"],
+        "sadness": ["You sound awfully [x]", "You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. You're really brave for dealing with this"],
+        "surprise": ["You seem [x]?", "That must have been a bit unexpected", "You sound [x]. I totally would not have seen that happening myself either"], 
+        "joy": ["You sound [x]! That's good to hear.", "You must feel [x]! Let's celebrate (toot-toot)", "That's so awesome, you seem so [x]"]
+    }
+    
+    adjective_mapping = {
+        "anger": ["angry", "mad", "choleric"], 
         "fear": ["afraid", "scared"], 
-        "joy": ["happy", "glad", "upbeat"], 
-        "sadness": ["sad", "down", "unhappy", "gloomy"], 
+        "joy": ["happy", "glad", "upbeat", "great"], 
+        "sadness": ["sad", "unhappy", "gloomy"], 
         "surprise": ["surprised", "shocked"]
     }   
-    adjectives = {}
-    for emotion in emotions:   
-        adjective = random.choice(mapping[emotion])
-        adjectives[adjective] = emotions[emotion]
-    return adjectives
+    
+    #replace each emotion with one of the above template responses and an adjective synonym for the emotion 
+    return {k: random.choice(response_mapping[k]).replace("[x]", random.choice(adjective_mapping[k])) for k, v in emotions.items()}
+    
     
 def get_n_ranked_key(dict, n):
     if n < 1 or n > len(dict):
