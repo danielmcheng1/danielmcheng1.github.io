@@ -32,7 +32,7 @@ def respond_to_message(message):
     elif reflection != None:
         data["message"] = reflection
     else: 
-        data["message"] = eliza_chatbot.respond(message)
+        data["message"] = eliza_chatbot.respond(message).capitalize()
         
     return data
   
