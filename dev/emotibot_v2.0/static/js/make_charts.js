@@ -1,6 +1,8 @@
 
 
-var chartColors = ["red", "blue", "yellow", "green", "black"];
+var emotionsToColor = {"anger": "red", "fear": "gray", "joy": "orange", "sadness": "blue", "surprise": "purple"}
+var emotionsToData = {"anger": [0.1, 0.2, 0.3, 0.1234, 0.5], "fear": [1, 0.9, 0.1, 0.2, 0.2234]}
+var emotions = Object.keys(emotionsToColor).sort()
 function randomScalingFactor() {
     return Math.random()
 }
@@ -9,43 +11,26 @@ var MONTHS = [0, 1, 3, 10]
 var config = {
     type: 'line',
     data: {
-        //labels: ["January", "February", "March", "April", "May", "June", "July"],
-        labels: [0, 1, 3, 10],
+        labels: [0, 1, 2, 3, 4],
         datasets: [{
-            label: "My First dataset",
-            backgroundColor: "red",
-            borderColor: "red",
-            data: [
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor()
-            ],
+            label: emotions[0],
+            backgroundColor: emotionsToColor[emotions[0]],
+            borderColor: emotionsToColor[emotions[0]],
+            data: emotionsToData[emotions[0]],
             fill: false,
         }, {
-            label: "My Second dataset",
+            label: emotions[1],
             fill: false,
-            backgroundColor: "blue",
-            borderColor: "blue",
-            data: [
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor()
-            ],
+            backgroundColor: emotionsToColor[emotions[1]],
+            borderColor: emotionsToColor[emotions[1]],
+            data: emotionsToData[emotions[1]],
         }]
     },
     options: {
         responsive: true,
         title:{
             display:true,
-            text:'Chart.js Line Chart'
+            text:'Emotions Throughout Conversation'
         },
         tooltips: {
             mode: 'index',
@@ -60,14 +45,14 @@ var config = {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Month'
+                    labelString: 'Response #'
                 }
             }],
             yAxes: [{
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Value'
+                    labelString: 'Probability'
                 }
             }]
         }

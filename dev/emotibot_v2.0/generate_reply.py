@@ -10,7 +10,7 @@ indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 BOT_NAME = "EmotiBot"
 
 BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better."]
-BOT_GREETINGS_OPENING = ["It's good to see you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "It's been a while since we talkd. What's been bothering you lately?"]
+BOT_GREETINGS_OPENING = ["It's good to see you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"]
 
 BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
@@ -52,9 +52,9 @@ def map_emotions_to_response(emotions):
     response_mapping = {
         "anger": ["Oh man, you sound [x]", "Uh oh, you seem [x]", "Back off, you [x] person"],
         "fear": ["You seem really [x]", "Don't be [x], I'm here for you"],
+        "joy": ["You sound [x]! That's good to hear.", "You must feel [x]! Let's celebrate (toot-toot)", "That's so awesome, you seem so [x]"],
         "sadness": ["You sound awfully [x]", "You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. You're really brave for dealing with this"],
-        "surprise": ["You seem [x]?", "That must have been a bit unexpected", "You sound [x]. I totally would not have seen that happening myself either"], 
-        "joy": ["You sound [x]! That's good to hear.", "You must feel [x]! Let's celebrate (toot-toot)", "That's so awesome, you seem so [x]"]
+        "surprise": ["You seem [x]?", "That must have been a bit unexpected", "You sound [x]. I totally would not have seen that happening myself either"]
     }
     
     adjective_mapping = {
@@ -76,7 +76,7 @@ def get_n_ranked_key(dict, n):
     return orderedDict[n - 1]
     
 def get_emotions(message):
-    '''anger, fear, sadness, surprise, joy'''
+    #anger, fear, joy, sadness, surprise
     return indicoio.emotion(message)
   
 if __name__ == "__main__":
