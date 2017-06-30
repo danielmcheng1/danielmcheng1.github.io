@@ -10,7 +10,7 @@ indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 BOT_NAME = "EmotiBot"
 
 BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better."]
-BOT_GREETINGS_OPENING = ["How're you doing today, my friend?", "Hello, good day, and all that jazz. How's it going?", "Greetings and felicitations! How's it going?"]
+BOT_GREETINGS_OPENING = ["It's good to see you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "It's been a while since we talkd. What's been bothering you lately?"]
 
 BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
