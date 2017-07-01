@@ -3,7 +3,7 @@ Styling from: https://www.sanwebe.com/2013/04/creating-shout-box-facebook-style
 */
 .shout_box {
 background:#627BAE; width:280px; overflow:hidden;
-position:fixed; bottom:0; right:20%; z-index:9;
+position:fixed; bottom:0; right:5%; z-index:9;
 }
 .shout_box .header .close_btn {
 background: url('../img/close_btn.png') no-repeat 0px 0px; 
