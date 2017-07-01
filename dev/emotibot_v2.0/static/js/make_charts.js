@@ -3,12 +3,6 @@
 var emotionsToColor = {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"}
 var emotionsToData = {}
 var emotions = Object.keys(emotionsToColor).sort()
-function appendData(newData, currentData) {
-    $.each(newData, function(index, item) {
-        console.log("d", currentData, "i", index, "item", item);
-        currentData[index].push(item);
-    });
-};
 
 var emotionsChartConfig = {
     type: 'line',
@@ -57,15 +51,9 @@ var emotionsChartConfig = {
     }
 };
 
-$.each(emotions, function(index, item) {
-    emotionsToData[item] = [];
-});
-
-$.each(emotions, function(index, item) {
-    emotionsChartConfig["data"]["labels"].push(index + 1);
-});
 function refreshChartData(dataValues, dataColors, chartConfig) {
     $.each(Object.keys(dataValues), function(index, item) {
+            console.log(index, item, dataColors[item], dataValues[item])
         chartConfig["data"]["datasets"].push({
             label: item,
             backgroundColor: dataColors[item],
@@ -73,6 +61,13 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
             data: dataValues[item],
             fill: false,
         });
+    });
+};
+
+function appendData(newData, currentData) {
+    $.each(newData, function(index, item) {
+        console.log("d", currentData, "i", index, "item", item);
+        currentData[index].push(item);
     });
 };
 
@@ -89,8 +84,18 @@ window.onload = function() {
         ).append('<label>' + item + '  </label>')
     });
     
+        
+    $.each(emotions, function(index, item) {
+        emotionsToData[item] = [];
+    });
+
+    $.each(emotions, function(index, item) {
+        emotionsChartConfig["data"]["labels"].push(index + 1);
+    });
     
-    //refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    
+    window.myLine.update();
     
 };
 
