@@ -8,7 +8,6 @@ function appendData(newData, currentData) {
         console.log("d", currentData, "i", index, "item", item);
         currentData[index].push(item);
     });
-
 };
 
 var emotionsChartConfig = {
@@ -48,6 +47,10 @@ var emotionsChartConfig = {
                 scaleLabel: {
                     display: true,
                     labelString: 'Probability'
+                },
+                ticks: {
+                    min:0,
+                    max: 1
                 }
             }]
         }
@@ -61,17 +64,17 @@ $.each(emotions, function(index, item) {
 $.each(emotions, function(index, item) {
     emotionsChartConfig["data"]["labels"].push(index + 1);
 });
-
-$.each(emotions, function(index, item) {
-    emotionsChartConfig["data"]["datasets"].push({
-        label: item,
-        backgroundColor: emotionsToColor[item],
-        borderColor: emotionsToColor[item],
-        data: emotionsToData[item],
-        fill: false,
+function refreshChartData(dataValues, dataColors, chartConfig) {
+    $.each(Object.keys(dataValues), function(index, item) {
+        chartConfig["data"]["datasets"].push({
+            label: item,
+            backgroundColor: dataColors[item],
+            borderColor: dataColors[item],
+            data: dataValues[item],
+            fill: false,
+        });
     });
-});
-
+};
 
 window.onload = function() {
     var ctx = document.getElementById("canvas").getContext("2d");
@@ -85,6 +88,10 @@ window.onload = function() {
            })
         ).append('<label>' + item + '  </label>')
     });
+    
+    
+    //refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    
 };
 
 document.getElementById('randomizeData').addEventListener('click', function() {
