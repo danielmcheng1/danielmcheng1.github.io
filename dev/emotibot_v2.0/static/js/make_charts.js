@@ -1,8 +1,15 @@
 
 
 var emotionsToColor = {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"}
-var emotionsToData = {"anger": [0.1, 0.2, 0.3, 0.1234, 0.5], "fear": [1, 0.9, 0.1, 0.2, 0.2234]}
+var emotionsToData = {}
 var emotions = Object.keys(emotionsToColor).sort()
+function appendData(newData, currentData) {
+    $.each(newData, function(index, item) {
+        console.log("d", currentData, "i", index, "item", item);
+        currentData[index].push(item);
+    });
+
+};
 
 var emotionsChartConfig = {
     type: 'line',
@@ -46,6 +53,10 @@ var emotionsChartConfig = {
         }
     }
 };
+
+$.each(emotions, function(index, item) {
+    emotionsToData[item] = [];
+});
 
 $.each(emotions, function(index, item) {
     emotionsChartConfig["data"]["labels"].push(index + 1);
