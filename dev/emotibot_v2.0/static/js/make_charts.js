@@ -33,18 +33,18 @@ var emotionsChartConfig = {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Response #'
+                    labelString: 'Response (#)'
                 }
             }],
             yAxes: [{
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Probability'
+                    labelString: 'Probability (%)'
                 },
                 ticks: {
                     min: 0,
-                    max: 1
+                    max: 100
                 }
             }]
         }
@@ -53,7 +53,8 @@ var emotionsChartConfig = {
 
 
 function refreshChartData_EmotionsWrapper(newData) {
-    appendNewData(newData, emotionsToData);
+    console.log(dataToPercent(newData));
+    appendNewData(dataToPercent(newData), emotionsToData);
     refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
 };
 
@@ -83,9 +84,19 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
 
 function appendNewData(newData, currentData) {
     $.each(newData, function(index, item) {
-        console.log("d", currentData, "i", index, "item", item);
         currentData[index].push(item);
     });
+};
+
+function numToPercent(num, digits) {
+    return (num * 100).toFixed(digits)
+};
+function dataToPercent(data) {
+    var rv = {}
+    $.each(data, function(index, item) {
+        rv[index] = numToPercent(item, 1);
+    });
+    return rv;
 };
 
 window.onload = function() {
@@ -106,7 +117,7 @@ window.onload = function() {
         emotionsToData[item] = [];
     });
     
-    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);    
+    refreshChartData_EmotionsWrapper({});
 };
 
 document.getElementById('randomizeData').addEventListener('click', function() {

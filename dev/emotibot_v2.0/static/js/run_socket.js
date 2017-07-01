@@ -14,7 +14,6 @@ function append_to_chat_box(data) {
       '</div>').appendTo('.message_box').fadeIn();
     
     scroll_message_box();
-    data['emotions'] = {surprise: 0.2273275256, fear: 0.1852285266, sadness: 0.1208139434, joy: 0.3197956979, anger: 0.146834299};
     refreshChartData_EmotionsWrapper(data['emotions'])
 };
 
