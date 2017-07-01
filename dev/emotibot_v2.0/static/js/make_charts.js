@@ -74,9 +74,10 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
     
     //update horizontal axes labels based on length of the first dataset
     emotionsChartConfig["data"]["labels"] = []
-    $.each(chartConfig["data"]["datasets"][keys[0]], function(index, item) {
+    $.each(dataValues[keys[0]], function(index, item) {
         emotionsChartConfig["data"]["labels"].push(index + 1);
     });
+    console.log(dataValues[keys[0]],    emotionsChartConfig["data"]["labels"])
     
     //refresh canvas 
     window.myLine.update();
