@@ -3,6 +3,8 @@
 var emotionsToColor = {"anger": "red", "fear": "gray", "joy": "orange", "sadness": "blue", "surprise": "purple"}
 var emotionsToData = {"anger": [0.1, 0.2, 0.3, 0.1234, 0.5], "fear": [1, 0.9, 0.1, 0.2, 0.2234]}
 var emotions = Object.keys(emotionsToColor).sort()
+
+    
 function randomScalingFactor() {
     return Math.random()
 }
@@ -62,6 +64,15 @@ var config = {
 window.onload = function() {
     var ctx = document.getElementById("canvas").getContext("2d");
     window.myLine = new Chart(ctx, config);
+    $.each(emotions, function(index, item) {
+        $('#checkboxes_emotion_chart').append(
+           $(document.createElement('input')).attr({
+               id:    'checkbox_' + item
+              ,type:  'checkbox'
+              ,checked: true
+           })
+        ).append('<label>' + item + '</label>')
+    });
 };
 
 document.getElementById('randomizeData').addEventListener('click', function() {
@@ -71,8 +82,9 @@ document.getElementById('randomizeData').addEventListener('click', function() {
         });
 
     });
-
     window.myLine.update();
+        
+        
 });
 
 var colorNames = Object.keys(chartColors);
