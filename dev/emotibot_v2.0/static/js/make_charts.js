@@ -62,6 +62,7 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
             fill: false,
         });
     });
+    window.myLine.update();
 };
 
 function appendData(newData, currentData) {
@@ -69,6 +70,11 @@ function appendData(newData, currentData) {
         console.log("d", currentData, "i", index, "item", item);
         currentData[index].push(item);
     });
+};
+
+function refreshChartData_EmotionsWrapper(newData) {
+    appendData(newData, emotionsToData);
+    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
 };
 
 window.onload = function() {
@@ -93,10 +99,7 @@ window.onload = function() {
         emotionsChartConfig["data"]["labels"].push(index + 1);
     });
     
-    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
-    
-    window.myLine.update();
-    
+    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);    
 };
 
 document.getElementById('randomizeData').addEventListener('click', function() {
