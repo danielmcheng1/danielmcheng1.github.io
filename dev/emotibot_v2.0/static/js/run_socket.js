@@ -14,6 +14,7 @@ function append_to_chat_box(data) {
       '</div>').appendTo('.message_box').fadeIn();
     
     scroll_message_box();
+    console.log(data['emotions'], data)
 };
 
 //keep scrolled to bottom of chat

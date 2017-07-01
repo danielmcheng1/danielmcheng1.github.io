@@ -15,7 +15,7 @@ def index():
 @socketio.on('human message')
 def handle_event(data):
     response = generate_reply.respond_to_message(data["message"])
-    emit('bot message', {"message": response["message"], 'username': response["username"]}) 
+    emit('bot message', response) 
     #send('my send', json=True, callback = acknowledgement()) 
     
 @socketio.on('connect')
@@ -23,7 +23,7 @@ def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
     response = generate_reply.make_initial_greeting()
-    socketio.emit('begin chat', {'message': response["message"], 'username': response["username"]})
+    socketio.emit('begin chat', response)
     
 def acknowledgement():
     print("chat received!")
