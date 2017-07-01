@@ -43,7 +43,7 @@ var emotionsChartConfig = {
                     labelString: 'Probability'
                 },
                 ticks: {
-                    min:0,
+                    min: 0,
                     max: 1
                 }
             }]
@@ -51,9 +51,17 @@ var emotionsChartConfig = {
     }
 };
 
+
+function refreshChartData_EmotionsWrapper(newData) {
+    appendNewData(newData, emotionsToData);
+    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+};
+
 function refreshChartData(dataValues, dataColors, chartConfig) {
-    $.each(Object.keys(dataValues), function(index, item) {
-            console.log(index, item, dataColors[item], dataValues[item])
+    //update vertical axes data values 
+    var keys = Object.keys(dataValues).sort();
+    chartConfig["data"]["datasets"] = []
+    $.each(keys, function(index, item) {
         chartConfig["data"]["datasets"].push({
             label: item,
             backgroundColor: dataColors[item],
@@ -62,19 +70,22 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
             fill: false,
         });
     });
+    
+    //update horizontal axes labels based on length of the first dataset
+    emotionsChartConfig["data"]["labels"] = []
+    $.each(chartConfig["data"]["datasets"][keys[0]], function(index, item) {
+        emotionsChartConfig["data"]["labels"].push(index + 1);
+    });
+    
+    //refresh canvas 
     window.myLine.update();
 };
 
-function appendData(newData, currentData) {
+function appendNewData(newData, currentData) {
     $.each(newData, function(index, item) {
         console.log("d", currentData, "i", index, "item", item);
         currentData[index].push(item);
     });
-};
-
-function refreshChartData_EmotionsWrapper(newData) {
-    appendData(newData, emotionsToData);
-    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
 };
 
 window.onload = function() {
@@ -94,10 +105,6 @@ window.onload = function() {
     $.each(emotions, function(index, item) {
         emotionsToData[item] = [];
     });
-
-    $.each(emotions, function(index, item) {
-        emotionsChartConfig["data"]["labels"].push(index + 1);
-    });
     
     refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);    
 };
@@ -113,8 +120,6 @@ document.getElementById('randomizeData').addEventListener('click', function() {
         
         
 });
-
-var colorNames = Object.keys(chartColors);
 document.getElementById('addDataset').addEventListener('click', function() {
     var colorName = colorNames[config.data.datasets.length % colorNames.length];
     var newColor = chartColors[colorName];
