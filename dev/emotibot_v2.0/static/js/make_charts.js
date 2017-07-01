@@ -1,38 +1,24 @@
 
 
-var emotionsToColor = {"anger": "red", "fear": "gray", "joy": "orange", "sadness": "blue", "surprise": "purple"}
+var emotionsToColor = {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"}
 var emotionsToData = {"anger": [0.1, 0.2, 0.3, 0.1234, 0.5], "fear": [1, 0.9, 0.1, 0.2, 0.2234]}
 var emotions = Object.keys(emotionsToColor).sort()
 
-    
-function randomScalingFactor() {
-    return Math.random()
-}
-//var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-var MONTHS = [0, 1, 3, 10]
-var config = {
+var emotionsChartConfig = {
     type: 'line',
     data: {
-        labels: [0, 1, 2, 3, 4],
-        datasets: [{
-            label: emotions[0],
-            backgroundColor: emotionsToColor[emotions[0]],
-            borderColor: emotionsToColor[emotions[0]],
-            data: emotionsToData[emotions[0]],
-            fill: false,
-        }, {
-            label: emotions[1],
-            fill: false,
-            backgroundColor: emotionsToColor[emotions[1]],
-            borderColor: emotionsToColor[emotions[1]],
-            data: emotionsToData[emotions[1]],
-        }]
-    },
+        labels: [],
+        datasets: []
+        },
     options: {
         responsive: true,
         title:{
             display:true,
             text:'Emotions Throughout Conversation'
+        },
+        legend: {
+            display: true,
+            position: 'top'
         },
         tooltips: {
             mode: 'index',
@@ -61,9 +47,24 @@ var config = {
     }
 };
 
+$.each(emotions, function(index, item) {
+    emotionsChartConfig["data"]["labels"].push(index + 1);
+});
+
+$.each(emotions, function(index, item) {
+    emotionsChartConfig["data"]["datasets"].push({
+        label: item,
+        backgroundColor: emotionsToColor[item],
+        borderColor: emotionsToColor[item],
+        data: emotionsToData[item],
+        fill: false,
+    });
+});
+
+
 window.onload = function() {
     var ctx = document.getElementById("canvas").getContext("2d");
-    window.myLine = new Chart(ctx, config);
+    window.myLine = new Chart(ctx, emotionsChartConfig);
     $.each(emotions, function(index, item) {
         $('#checkboxes_emotion_chart').append(
            $(document.createElement('input')).attr({
@@ -71,7 +72,7 @@ window.onload = function() {
               ,type:  'checkbox'
               ,checked: true
            })
-        ).append('<label>' + item + '</label>')
+        ).append('<label>' + item + '  </label>')
     });
 };
 
