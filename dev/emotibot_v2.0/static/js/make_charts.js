@@ -130,8 +130,8 @@ window.onload = function() {
         
         $('#checkbox_' + item).change(function() {
             console.log(item, this.checked);
-            if (this.checked) addDataset(item, emotionsDataConfig["plotFlags"], emotionsChartConfig);
-            else removeDataset(item, emotionsDataConfig["plotFlags"], emotionsChartConfig);            
+            if (this.checked) addDataset(item, emotionsDataConfig, emotionsChartConfig);
+            else removeDataset(item, emotionsDataConfig, emotionsChartConfig);           
         });
     });    
     
