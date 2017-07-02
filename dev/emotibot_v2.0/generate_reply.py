@@ -16,10 +16,18 @@ BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute pupp
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
 BOT_MADE_RANDOM_RESPONSE = False 
 
+#TBD--should move this into a true backend database 
+bot_chat_history = []
+
 def respond_to_message(message):
-    global BOT_MADE_RANDOM_RESPONSE 
-    data = {"username": BOT_NAME, "message": "", "emotions": {}}
+    #append this to our running log 
+    bot_chat_history.append(message)
     
+    #now process and respond 
+    global BOT_MADE_RANDOM_RESPONSE 
+    data = {"username": BOT_NAME, "message": "", "emotions": {}, "history": bot_chat_history, "keywords": {}}
+    
+    data["keywords"] = indicoio.keywords(" ".join(bot_chat_history), version=2, top_n=10, relative=True)
     #(reflection, emotions) = reflect_emotion(message)
     #data["emotions"] = emotions
     reflection = None
@@ -33,7 +41,6 @@ def respond_to_message(message):
         data["message"] = reflection
     else: 
         data["message"] = eliza_chatbot.respond(message).capitalize()
-    data["message"] = str(indicoio.keywords(message, version=2, top_n=10, relative=True))  
     return data
   
 def make_initial_greeting():

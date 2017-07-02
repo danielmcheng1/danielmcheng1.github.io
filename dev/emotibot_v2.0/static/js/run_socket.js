@@ -1,9 +1,13 @@
 /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
-socket.on('connect', function() {
+socket.on ('begin chat', function(data) {
+    append_to_chat_box(data);
+    refresh_charts(data);
 });
-socket.on ('begin chat', append_to_chat_box)
-socket.on ('bot message', append_to_chat_box)
+socket.on ('bot message', function(data) {
+    append_to_chat_box(data);
+    refresh_charts(data);
+});
 
 function append_to_chat_box(data) {    
     $('<div class="shout_msg">' + 
@@ -14,9 +18,16 @@ function append_to_chat_box(data) {
       '</div>').appendTo('.message_box').fadeIn();
     
     scroll_message_box();
+};
+function refresh_charts(data) {
     if (data['emotions'])
         refreshChartData_EmotionsWrapper(data['emotions']);
+    if (data['keywords'])
+        continue;
+    if (data['chatHistory'])
+        continue;
 };
+    
 
 //keep scrolled to bottom of chat
 function scroll_message_box() {
@@ -33,10 +44,10 @@ $("#shout_message").keypress(function(evt) {
         $('#shout_message').val('');
         
         //for testing 
-        refreshChartData_EmotionsWrapper({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
-        refreshChatHistory(data["message"]);
+        //refreshChartData_EmotionsWrapper({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
+        //refreshChatHistory(data["message"]);
 
-        //socket.emit('human message', {"message": data['message']});
+        socket.emit('human message', {"message": data['message']});
     }
 });
 
