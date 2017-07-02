@@ -1,9 +1,11 @@
 
 
-var emotionsToColor = {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"}
-var emotionsToData = {}
-var emotionsToPlot = {}
-var emotions = Object.keys(emotionsToColor).sort()
+var emotionsDataConfig {
+    colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
+    dataValues: {}
+    plotFlags: {}
+};
+var emotions = Object.keys(emotionsDataConfig["colors"]).sort()
 
 var emotionsChartConfig = {
     type: 'line',
@@ -57,8 +59,8 @@ var emotionsChartConfig = {
 
 
 function refreshChartData_EmotionsWrapper(newData) {
-    appendNewData(dataToPercent(newData), emotionsToData);
-    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
+    refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
 };
 
 function refreshChartData(dataValues, dataColors, chartConfig) {
@@ -108,8 +110,8 @@ function dataToPercent(data) {
 window.onload = function() {
     //initialize the data objects for plotting emotions 
     $.each(emotions, function(index, item) {
-        emotionsToData[item] = [];
-        emotionsToPlot[item] = true;
+        emotionsDataConfig["dataValues"][item] = [];
+        emotionsDataConfig["plotFlags"][item] = true;
     });
     
     //set up charting canvas 
@@ -128,8 +130,8 @@ window.onload = function() {
         
         $('#checkbox_' + item).change(function() {
             console.log(item, this.checked);
-            if (this.checked) addDataset(item, emotionsToPlot, emotionsChartConfig);
-            else removeDataset(item, emotionsToPlot, emotionsChartConfig);            
+            if (this.checked) addDataset(item, emotionsDataConfig["plotFlags"], emotionsChartConfig);
+            else removeDataset(item, emotionsDataConfig["plotFlags"], emotionsChartConfig);            
         });
     });    
     
@@ -138,14 +140,14 @@ window.onload = function() {
 };
 function addDataset(label) {
     dataToPlot[label] = true;
-    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
 };
 
 function removeDataset(label) {
     //mark this so that all future chart updates won't plot this data 
     dataToPlot[label] = false;
     
-    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
     
     /*
     //now remove this from the currently displayed chart
