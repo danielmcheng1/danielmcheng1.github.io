@@ -56,7 +56,6 @@ var emotionsChartConfig = {
 
 
 function refreshChartData_EmotionsWrapper(newData) {
-    console.log(dataToPercent(newData));
     appendNewData(dataToPercent(newData), emotionsToData);
     refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
 };
@@ -80,7 +79,6 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
     $.each(dataValues[keys[0]], function(index, item) {
         emotionsChartConfig["data"]["labels"].push(index + 1);
     });
-    console.log(dataValues[keys[0]],    emotionsChartConfig["data"]["labels"])
     
     //refresh canvas 
     window.myLine.update();
@@ -104,8 +102,11 @@ function dataToPercent(data) {
 };
 
 window.onload = function() {
+    //set up charting canvas 
     var ctx = document.getElementById("canvas").getContext("2d");
     window.myLine = new Chart(ctx, emotionsChartConfig);
+    
+    //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
         $('#checkboxes_emotion_chart').append(
            $(document.createElement('input')).attr({
@@ -114,13 +115,20 @@ window.onload = function() {
               ,checked: true
            })
         ).append('<label>' + item + '  </label>')
+        
+        $('#checkbox_' + item).change(function() {
+            console.log(item, this.checked);
+            if (this.checked) addDataset(item);
+            else removeDataset(item);            
+        });
     });
     
-        
+    //initialize the data object for plotting emotions 
     $.each(emotions, function(index, item) {
         emotionsToData[item] = [];
     });
     
+    //load initial blank data
     refreshChartData_EmotionsWrapper({});
 };
 
