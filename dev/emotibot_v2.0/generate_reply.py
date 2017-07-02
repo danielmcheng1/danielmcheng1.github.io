@@ -20,20 +20,20 @@ def respond_to_message(message):
     global BOT_MADE_RANDOM_RESPONSE 
     data = {"username": BOT_NAME, "message": "", "emotions": {}}
     
-    (reflection, emotions) = reflect_emotion(message)
-    data["emotions"] = emotions
-    
+    #(reflection, emotions) = reflect_emotion(message)
+    #data["emotions"] = emotions
+    reflection = None
     if BOT_MADE_RANDOM_RESPONSE:
         BOT_MADE_RANDOM_RESPONSE = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
-    elif random.randint(1, 15) == 1:
+    elif random.randint(1, 10) == 1:
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
     elif reflection != None:
         data["message"] = reflection
     else: 
         data["message"] = eliza_chatbot.respond(message).capitalize()
-        
+    data["message"] = str(indicoio.keywords(message, version=2, top_n=10, relative=True))  
     return data
   
 def make_initial_greeting():
