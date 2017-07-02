@@ -52,7 +52,7 @@ def map_emotions_to_response(emotions):
     response_mapping = {
         "anger": ["Oh man, you sound awfully [x]", "Uh oh, you seem [x]", "Back off, you [x] person"],
         "fear": ["You seem really [x]", "Don't be [x], I'm here for you"],
-        "joy": ["You sound so [x]! That's great.", "You must feel [x]! Let's celebrate (toot-toot)", "That's awesome, you seem so [x]"],
+        "joy": ["You sound so [x]! That's great.", "You seem [x]! Let's celebrate (toot-toot)", "That's awesome, you seem so [x]"],
         "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. You're really brave for dealing with this"],
         "surprise": ["You seem [x]?", "That must have been a bit unexpected", "You sound [x]. I totally would not have seen that happening myself either"]
     }

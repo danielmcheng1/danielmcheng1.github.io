@@ -1,33 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Your Neighborhood Therapist</title>
+    <title>Your Virtual Therapist</title>
     <meta charset="utf-8"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <link rel=stylesheet href="../static/css/chat.css">
-    <style>
-    canvas{
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-    }
-    </style>
+    <link rel=stylesheet href="../static/css/chatbot.css">
 </head>
 <body>
     <!--Charts-->
-    <div style="width:75%;">
-        <canvas id="canvas"></canvas>
+    <div id="div_emotions_chart">
+        <canvas id="canvas_emotions_chart"></canvas>
+        <br>
+        <div id="checkboxes_emotions_chart"></div>
     </div>
-    <br><br><br>
-    <div id="checkboxes_emotion_chart">
-    </div>
+    <br>
     <!--button id="show full">Show Full Conversation</button-->
 
     <!--Popup chat box-->
     <div class="shout_box">
-    <div class="header">Your Neighborhood Therapist<div class="close_btn">&nbsp;</div></div>
+    <div class="header">Your Virtual Therapist<div class="close_btn">&nbsp;</div></div>
       <div class="toggle_chat">
       <div class="message_box">
         </div>

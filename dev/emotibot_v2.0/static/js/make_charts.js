@@ -135,12 +135,12 @@ window.onload = function() {
     });
     
     //set up charting canvas 
-    var ctx = document.getElementById("canvas").getContext("2d");
+    var ctx = document.getElementById("canvas_emotions_chart").getContext("2d");
     emotionsChartObject = new Chart(ctx, emotionsChartConfig);
     
     //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
-        $('#checkboxes_emotion_chart').append(
+        $('#checkboxes_emotions_chart').append(
            $(document.createElement('input')).attr({
                id:    'checkbox_' + item
               ,type:  'checkbox'
