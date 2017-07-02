@@ -1,9 +1,12 @@
+
+/*****************************************/
+var keywordsChartObject;
 var keywordsChartConfigData = {
-    labels: ['food', 'water', 'airport', 'gun', 'life in the desert'],
+    labels: [],
     datasets: [
         {
             'label': 'Full History', 
-            'data': [0.9, 0.2, 0.35, 0.14, 0.5].map(function(elem) {return elem * 100}),
+            'data': []
             'fill': true,
             'borderColor': 'rgb(54, 162, 235)',
             'pointBackgroundColor':'rgb(54, 162, 235)',
@@ -44,16 +47,58 @@ var keywordsChartConfigOptions = {
         }
     }
 };
-                
-var chatHistory = [];
-var emotionsDataConfig = {
-    colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
-    dataValues: {},
-    plotFlags: {}
+var keywordsChartConfig = {
+    type: 'radar',
+    data: keywordsChartConfigData,
+    options: keywordsChartConfigOptions
 };
-var emotions = Object.keys(emotionsDataConfig["colors"]).sort();
 
+/*****************************************/
 var emotionsChartObject;
+var emotionsChartConfigOptions = {
+    responsive: true,
+    title:{
+        display:true,
+        text:'Conversation Emotions',
+        fontSize: 18
+    },
+    legend: {
+        display: true,
+        position: 'top'
+    },
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+    },
+    hover: {
+        //mode: 'nearest',
+        intersect: true
+    },
+    scales: {
+        xAxes: [{
+            display: true,
+            scaleLabel: {
+                display: true,
+                labelString: 'Response',
+                fontSize: 14
+            }
+        }],
+        yAxes: [{
+            display: true,
+            scaleLabel: {
+                display: true,
+                labelString: 'Probability (%)',
+                fontSize: 14
+            },
+            ticks: {
+                min: 0,
+                max: 100
+            }
+        }]
+    }
+};
+        
+
 var emotionsChartConfig = {
     type: 'line',
     events: ['click'],
@@ -61,50 +106,18 @@ var emotionsChartConfig = {
         labels: [],
         datasets: []
         },
-    options: {
-        responsive: true,
-        title:{
-            display:true,
-            text:'Conversation Emotions',
-            fontSize: 18
-        },
-        legend: {
-            display: true,
-            position: 'top'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            //mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            xAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Response',
-                    fontSize: 14
-                }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Probability (%)',
-                    fontSize: 14
-                },
-                ticks: {
-                    min: 0,
-                    max: 100
-                }
-            }]
-        }
-    }
+    options: emotionsChartConfigOptions
 };
-
+ 
+/*****************************************/    
+var emotionsDataConfig = {
+    colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
+    dataValues: {},
+    plotFlags: {}
+};
+var emotions = Object.keys(emotionsDataConfig["colors"]).sort();
+               
+var chatHistory = [];
 
 function refreshChartData_EmotionsWrapper(newData) {
     appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
@@ -190,13 +203,7 @@ window.onload = function() {
     emotionsChartObject = new Chart(ctx, emotionsChartConfig);
     
     var ctxKeywords = document.getElementById("canvas_keywords_chart").getContext("2d");
-    var keywordsChart = new Chart(ctxKeywords,
-        {
-            type: 'radar',
-            data: keywordsChartConfigData,
-            options: keywordsChartConfigOptions
-        }
-    );
+    keywordsChartObject = new Chart(ctxKeywords, keywordsChartConfig);
                 
     keywordsChart.update();
     
