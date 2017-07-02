@@ -1,4 +1,5 @@
 
+var chatHistory = [];
 
 var emotionsDataConfig = {
     colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
@@ -10,6 +11,7 @@ var emotions = Object.keys(emotionsDataConfig["colors"]).sort();
 var emotionsChartObject;
 var emotionsChartConfig = {
     type: 'line',
+    events: ['click'],
     data: {
         labels: [],
         datasets: []
@@ -127,6 +129,10 @@ function removeDataset(label, dataConfig, chartConfig, chartObject) {
     refreshChartData(dataConfig, chartConfig, chartObject);  
 };
 
+function refreshChatHistory(newData) {
+    chatHistory.push(newData);
+};
+
 window.onload = function() {
     //initialize the data objects for plotting emotions 
     $.each(emotions, function(index, item) {
@@ -156,4 +162,18 @@ window.onload = function() {
     
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
+    document.getElementById("canvas_emotions_chart").addEventListener('click', function(event) {
+        var activeElement = emotionsChartObject.getElementAtEvent(event);
+        if (activeElement.length > 0) {
+            var responseNum = activeElement[0]._index;
+            $("#show_chat_message").empty().append(
+                '<b>Selected Response (#' + responseNum + ')</b><br>' + 
+                '<i>' + chatHistory[responseNum] + '</i>'
+            );
+        } else {
+            $("#show_chat_message").empty().append(
+                '<i>Click on a data point to view detail</i>'
+            );
+        };
+    });
 };

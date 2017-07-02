@@ -27,17 +27,16 @@ function scroll_message_box() {
 /*loading data into the chat box*/
 $("#shout_message").keypress(function(evt) {
     if(evt.which == 13) {
-        var iusername = $('#shout_username').val() || "You";
-        var imessage = $('#shout_message').val();
-        
-        data = {'username':iusername, 'message':imessage};        
+        data = {'message': $('#shout_message').val(), 'username': $('#shout_username').val() || "You"};        
         append_to_chat_box(data);
         
         $('#shout_message').val('');
         
         //for testing 
-        //refreshChartData_EmotionsWrapper({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
-        socket.emit('human message', {"message": data['message']});
+        refreshChartData_EmotionsWrapper({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
+        refreshChatHistory(data["message"]);
+
+        //socket.emit('human message', {"message": data['message']});
     }
 });
 
