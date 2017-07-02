@@ -1,4 +1,60 @@
-
+var keywordsChartConfigData = {
+    labels: ['food', 'water', 'airport', 'gun', 'life in the desert'],
+    datasets: [
+        {
+            'label': 'Latest Message',
+            'data': [0.1, 0.2, 0.3, 0.4, 0.5],
+            'fill': true,
+            'borderColor': 'rgb(255, 99, 132)',
+            'pointBackgroundColor':'rgb(255, 99, 132)',
+            'pointBorderColor':'#fff',
+            'pointHoverBackgroundColor':'#fff',
+            'pointHoverBorderColor':'rgb(255, 99, 132)',
+            'backgroundColor':'rgba(255, 99, 132, 0.2)'
+        }, 
+        {
+            'label': 'Full History', 
+            'data': [0.9, 0.2, 0.35, 0.14, 0.5],
+            'fill': true,
+            'borderColor': 'rgb(54, 162, 235)',
+            'pointBackgroundColor':'rgb(54, 162, 235)',
+            'pointBorderColor':'#fff',
+            'pointHoverBackgroundColor':'#fff',
+            'pointHoverBorderColor':'rgb(54, 162, 235)',
+            'backgroundColor':'rgba(54, 162, 235, 0.2)'
+        }, 
+    ]
+};
+var keywordsChartConfigOptions = {
+    responsive: true,
+    title:{
+        display:true,
+        text:'Conversation Themes',
+        fontSize: 18
+    },
+    legend: {
+        display: true,
+        position: 'top'
+    },
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+    },
+    hover: {
+        //mode: 'nearest',
+        intersect: true
+    },
+    scale: {
+        ticks: {
+            min: 0,
+            max: 1
+        },
+        pointLabels: {
+            fontSize: 18
+        }
+    }
+};
+                
 var chatHistory = [];
 var emotionsDataConfig = {
     colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
@@ -147,35 +203,11 @@ window.onload = function() {
     var keywordsChart = new Chart(ctxKeywords,
         {
             type: 'radar',
-            data: {
-                labels: ['food', 'water', 'airport', 'gun', 'life in the desert'],
-                datasets: [
-                    {
-                        'label': 'Latest Message',
-                        'data': [0.1, 0.2, 0.3, 0.4, 0.5],
-                        'fill': true,
-                        'borderColor': 'rgb(255, 99, 132)',
-                        'pointBackgroundColor':'rgb(255, 99, 132)',
-                        'pointBorderColor':'#fff',
-                        'pointHoverBackgroundColor':'#fff',
-                        'pointHoverBorderColor':'rgb(255, 99, 132)',
-                        'backgroundColor':'rgba(255, 99, 132, 0.2)'
-                    }, 
-                    {
-                        'label': 'Full History', 
-                        'data': [0.9, 0.2, 0.35, 0.14, 0.5],
-                        'fill': true,
-                        'borderColor': 'rgb(54, 162, 235)',
-                        'pointBackgroundColor':'rgb(54, 162, 235)',
-                        'pointBorderColor':'#fff',
-                        'pointHoverBackgroundColor':'#fff',
-                        'pointHoverBorderColor':'rgb(54, 162, 235)',
-                        'backgroundColor':'rgba(54, 162, 235, 0.2)'
-                    }, 
-                ]
-            }
+            data: keywordsChartConfigData,
+            options: keywordsChartConfigOptions
         }
     );
+                
     keywordsChart.update();
     
     //create checkboxes for selecting/deselecting each emotion 
