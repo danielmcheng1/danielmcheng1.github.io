@@ -60,7 +60,7 @@ var emotionsChartConfig = {
 
 function refreshChartData_EmotionsWrapper(newData) {
     appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
-    refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
+    refreshChartData(emotionsDataConfig, emotionsChartConfig);
 };
 
 function refreshChartData(dataConfig, chartConfig) {
@@ -100,11 +100,11 @@ function numToPercent(num, digits) {
     return (num * 100).toFixed(digits)
 };
 function dataToPercent(data) {
-    var rv = {}
+    var toPercent = {}
     $.each(data, function(index, item) {
-        rv[index] = numToPercent(item, 1);
+        toPercent[index] = numToPercent(item, 1);
     });
-    return rv;
+    return toPercent;
 };
 
 window.onload = function() {
