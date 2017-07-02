@@ -35,8 +35,8 @@ $("#shout_message").keypress(function(evt) {
         
         $('#shout_message').val('');
         
-        refreshChartData_EmotionsWrapper({"sadness": 0.1, "joy": 0.2, "anger": 0.3, "surprise": 0.4, "fear": 0.5})
-        //socket.emit('human message', {"message": data['message']});
+        //refreshChartData_EmotionsWrapper({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
+        socket.emit('human message', {"message": data['message']});
     }
 });
 

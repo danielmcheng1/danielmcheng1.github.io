@@ -59,8 +59,7 @@ var emotionsChartConfig = {
 
 
 function refreshChartData_EmotionsWrapper(newData) {
-    console.log("Entering stupid wrapper", emotionsDataConfig)
-    appendNewData(dataToPercent(newData), emotionsDataConfig);
+    appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
     refreshChartData(emotionsDataConfig, emotionsChartConfig);
 };
 
@@ -69,15 +68,16 @@ function refreshChartData(dataConfig, chartConfig) {
     var keys = Object.keys(dataConfig["dataValues"]).sort().filter(function(elem) {
         return dataConfig["plotFlags"][elem] === true; //don't plot any datasets that have been previously unchecked by user
     });
-    console.log("refresh keys:", keys);
-    console.log("refresh dataConfig:", dataConfig);
+    
     chartConfig["data"]["datasets"] = []
     $.each(keys, function(index, item) {
+        var color = dataConfig["colors"][item]
+        var dataValue = dataConfig["dataValues"][item]
         chartConfig["data"]["datasets"].push({
             label: item,
-            backgroundColor: dataConfig["colors"][item],
-            borderColor: dataConfig["colors"][item],
-            data: dataConfig["dataValues"][item],
+            backgroundColor: color,
+            borderColor: color,
+            data: dataValue,
             fill: false,
         });
     });
@@ -92,14 +92,12 @@ function refreshChartData(dataConfig, chartConfig) {
     window.emotionsChartObject.update();
 };
 
-function appendNewData(newData, dataConfig) {
-    console.log("newData:", newData, "cumulativeData",dataConfig["dataValues"]);
-    
- 
+function appendNewData(newData, cumulativeData) {   
     $.each(newData, function(index, item) {
-        //console.log("in loop index", index, "in loop item", item);
-        //console.log(cumulativeData[index]);
-        dataConfig["dataValues"][index].push(item);
+        //dataConfig["dataValues"][index].push(item);
+        //do not use push because chart js automatically adds event listeners to trigger updates incorrectly (addEventListener in Chart.bundle.js)
+        var currLen = cumulativeData[index].length;
+        cumulativeData[index][currLen] = item;
     });
 };
 
@@ -120,7 +118,6 @@ window.onload = function() {
         emotionsDataConfig["dataValues"][item] = [];
         emotionsDataConfig["plotFlags"][item] = true;
     });
-    console.log('initialized', emotionsDataConfig);
     
     //set up charting canvas 
     var ctx = document.getElementById("canvas").getContext("2d");
