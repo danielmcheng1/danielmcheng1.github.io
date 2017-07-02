@@ -66,6 +66,7 @@ function refreshChartData(dataValues, dataColors, chartConfig) {
     var keys = Object.keys(dataValues).sort().filter(function(elem) {
         return dataToPlot[elem] === true; //don't plot any datasets that have been previously unchecked by user
     });
+    
     chartConfig["data"]["datasets"] = []
     $.each(keys, function(index, item) {
         chartConfig["data"]["datasets"].push({
@@ -135,10 +136,18 @@ window.onload = function() {
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
 };
-function removeDataset(label, dataToPlot, chartConfig) {
+function addDataset(label) {
+    dataToPlot[label] = true;
+    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+};
+
+function removeDataset(label) {
     //mark this so that all future chart updates won't plot this data 
     dataToPlot[label] = false;
     
+    refreshChartData(emotionsToData, emotionsToColor, emotionsChartConfig);
+    
+    /*
     //now remove this from the currently displayed chart
     var indexToRemove = -1;
     $.each(chartConfig["data"]["datasets"], function(index, item) {
@@ -148,62 +157,6 @@ function removeDataset(label, dataToPlot, chartConfig) {
     });
     if (indexToRemove != -1) {
         chartConfig["data"]["datasets"].splice(index, 1);
-    };    
+    }; 
+    */   
 };
-document.getElementById('randomizeData').addEventListener('click', function() {
-    config.data.datasets.forEach(function(dataset) {
-        dataset.data = dataset.data.map(function() {
-            return randomScalingFactor();
-        });
-
-    });
-    window.myLine.update();
-        
-        
-});
-document.getElementById('addDataset').addEventListener('click', function() {
-    var colorName = colorNames[config.data.datasets.length % colorNames.length];
-    var newColor = chartColors[colorName];
-    var newDataset = {
-        label: 'Dataset ' + config.data.datasets.length,
-        backgroundColor: newColor,
-        borderColor: newColor,
-        data: [],
-        fill: false
-    };
-
-    for (var index = 0; index < config.data.labels.length; ++index) {
-        newDataset.data.push(randomScalingFactor());
-    }
-
-    config.data.datasets.push(newDataset);
-    window.myLine.update();
-});
-
-document.getElementById('addData').addEventListener('click', function() {
-    if (config.data.datasets.length > 0) {
-        var month = MONTHS[config.data.labels.length % MONTHS.length];
-        config.data.labels.push(month);
-
-        config.data.datasets.forEach(function(dataset) {
-            dataset.data.push(randomScalingFactor());
-        });
-
-        window.myLine.update();
-    }
-});
-
-document.getElementById('removeDataset').addEventListener('click', function() {
-    config.data.datasets.splice(0, 1);
-    window.myLine.update();
-});
-
-document.getElementById('removeData').addEventListener('click', function() {
-    config.data.labels.splice(-1, 1); // remove the label first
-
-    config.data.datasets.forEach(function(dataset, datasetIndex) {
-        dataset.data.pop();
-    });
-
-    window.myLine.update();
-});
