@@ -92,7 +92,7 @@ function refreshChartData(dataConfig, chartConfig, chartObject) {
     });
     
     //refresh canvas 
-    window.emotionsChartObject.update();
+    chartObject.update();
 };
 
 function appendNewData(newData, cumulativeData) {   
@@ -143,6 +143,18 @@ window.onload = function() {
     //set up charting canvas 
     var ctx = document.getElementById("canvas_emotions_chart").getContext("2d");
     emotionsChartObject = new Chart(ctx, emotionsChartConfig);
+    
+    var ctxKeywords = document.getElementById("canvas_keywords_chart").getContext("2d");
+    var keywordsChart = new Chart(ctxKeywords,
+        {
+            type: 'radar',
+            data: {
+                labels: ['food', 'water', 'airport', 'gun', 'life in the desert'],
+                datasets: [{'backgroundColor': 'red', 'data': [0.1]}, {'data': [0.2]}, {'data': [0.5]}, {'data': [1]}, {'data': [0]}]
+            }
+        }
+    );
+    keywordsChart.update();
     
     //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
