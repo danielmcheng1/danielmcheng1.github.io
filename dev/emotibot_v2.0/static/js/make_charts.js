@@ -14,7 +14,8 @@ var emotionsChartConfig = {
         responsive: true,
         title:{
             display:true,
-            text:'Emotions Throughout Conversation'
+            text:'Conversation Emotions',
+            fontSize: 18
         },
         legend: {
             display: true,
@@ -33,14 +34,16 @@ var emotionsChartConfig = {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Response (#)'
+                    labelString: 'Response (#)',
+                    fontSize: 14
                 }
             }],
             yAxes: [{
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Probability (%)'
+                    labelString: 'Probability (%)',
+                    fontSize: 14
                 },
                 ticks: {
                     min: 0,
