@@ -2,19 +2,8 @@ var keywordsChartConfigData = {
     labels: ['food', 'water', 'airport', 'gun', 'life in the desert'],
     datasets: [
         {
-            'label': 'Latest Message',
-            'data': [0.1, 0.2, 0.3, 0.4, 0.5],
-            'fill': true,
-            'borderColor': 'rgb(255, 99, 132)',
-            'pointBackgroundColor':'rgb(255, 99, 132)',
-            'pointBorderColor':'#fff',
-            'pointHoverBackgroundColor':'#fff',
-            'pointHoverBorderColor':'rgb(255, 99, 132)',
-            'backgroundColor':'rgba(255, 99, 132, 0.2)'
-        }, 
-        {
             'label': 'Full History', 
-            'data': [0.9, 0.2, 0.35, 0.14, 0.5],
+            'data': [0.9, 0.2, 0.35, 0.14, 0.5].map(function(elem) {return elem * 100}),
             'fill': true,
             'borderColor': 'rgb(54, 162, 235)',
             'pointBackgroundColor':'rgb(54, 162, 235)',
@@ -33,7 +22,7 @@ var keywordsChartConfigOptions = {
         fontSize: 18
     },
     legend: {
-        display: true,
+        display: false,
         position: 'top'
     },
     tooltips: {
@@ -47,10 +36,11 @@ var keywordsChartConfigOptions = {
     scale: {
         ticks: {
             min: 0,
-            max: 1
+            max: 100,
+            stepSize: 20
         },
         pointLabels: {
-            fontSize: 18
+            fontSize: 14
         }
     }
 };
