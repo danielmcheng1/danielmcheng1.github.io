@@ -1,8 +1,8 @@
 
 
-var emotionsDataConfig {
+var emotionsDataConfig = {
     colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
-    dataValues: {}
+    dataValues: {},
     plotFlags: {}
 };
 var emotions = Object.keys(emotionsDataConfig["colors"]).sort()
@@ -59,7 +59,8 @@ var emotionsChartConfig = {
 
 
 function refreshChartData_EmotionsWrapper(newData) {
-    appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
+    console.log("Entering stupid wrapper", emotionsDataConfig)
+    appendNewData(dataToPercent(newData), emotionsDataConfig);
     refreshChartData(emotionsDataConfig, emotionsChartConfig);
 };
 
@@ -68,7 +69,8 @@ function refreshChartData(dataConfig, chartConfig) {
     var keys = Object.keys(dataConfig["dataValues"]).sort().filter(function(elem) {
         return dataConfig["plotFlags"][elem] === true; //don't plot any datasets that have been previously unchecked by user
     });
-    
+    console.log("refresh keys:", keys);
+    console.log("refresh dataConfig:", dataConfig);
     chartConfig["data"]["datasets"] = []
     $.each(keys, function(index, item) {
         chartConfig["data"]["datasets"].push({
@@ -87,12 +89,17 @@ function refreshChartData(dataConfig, chartConfig) {
     });
     
     //refresh canvas 
-    window.myLine.update();
+    window.emotionsChartObject.update();
 };
 
-function appendNewData(newData, currentData) {
+function appendNewData(newData, dataConfig) {
+    console.log("newData:", newData, "cumulativeData",dataConfig["dataValues"]);
+    
+ 
     $.each(newData, function(index, item) {
-        currentData[index].push(item);
+        //console.log("in loop index", index, "in loop item", item);
+        //console.log(cumulativeData[index]);
+        dataConfig["dataValues"][index].push(item);
     });
 };
 
@@ -113,10 +120,11 @@ window.onload = function() {
         emotionsDataConfig["dataValues"][item] = [];
         emotionsDataConfig["plotFlags"][item] = true;
     });
+    console.log('initialized', emotionsDataConfig);
     
     //set up charting canvas 
     var ctx = document.getElementById("canvas").getContext("2d");
-    window.myLine = new Chart(ctx, emotionsChartConfig);
+    window.emotionsChartObject = new Chart(ctx, emotionsChartConfig);
     
     //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
@@ -129,7 +137,6 @@ window.onload = function() {
         ).append('<label>' + item + '  </label>')
         
         $('#checkbox_' + item).change(function() {
-            console.log(item, this.checked);
             if (this.checked) addDataset(item, emotionsDataConfig, emotionsChartConfig);
             else removeDataset(item, emotionsDataConfig, emotionsChartConfig);           
         });
@@ -146,7 +153,7 @@ function addDataset(label, dataConfig, chartConfig) {
 
 function removeDataset(label, dataConfig, chartConfig) {
     //mark this so that all future chart updates won't plot this data 
-    dataConfig["plotFlags"][label] = true;
+    dataConfig["plotFlags"][label] = false;
     refreshChartData(dataConfig, chartConfig);
     /*
     //now remove this from the currently displayed chart

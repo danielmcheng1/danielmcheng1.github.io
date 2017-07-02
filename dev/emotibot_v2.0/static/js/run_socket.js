@@ -14,7 +14,8 @@ function append_to_chat_box(data) {
       '</div>').appendTo('.message_box').fadeIn();
     
     scroll_message_box();
-    refreshChartData_EmotionsWrapper(data['emotions'])
+    if (data['emotions'])
+        refreshChartData_EmotionsWrapper(data['emotions']);
 };
 
 //keep scrolled to bottom of chat
@@ -34,7 +35,8 @@ $("#shout_message").keypress(function(evt) {
         
         $('#shout_message').val('');
         
-        socket.emit('human message', {"message": data['message']});
+        refreshChartData_EmotionsWrapper({"sadness": 0.1, "joy": 0.2, "anger": 0.3, "surprise": 0.4, "fear": 0.5})
+        //socket.emit('human message', {"message": data['message']});
     }
 });
 
