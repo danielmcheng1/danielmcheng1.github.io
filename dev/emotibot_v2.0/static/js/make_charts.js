@@ -38,7 +38,7 @@ var emotionsChartConfig = {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Response (#)',
+                    labelString: 'Response',
                     fontSize: 14
                 }
             }],
@@ -86,7 +86,7 @@ function refreshChartData(dataConfig, chartConfig, chartObject) {
     //update horizontal axes labels based on length of the first dataset
     chartConfig["data"]["labels"] = []
     $.each(dataConfig["dataValues"][keys[0]], function(index, item) {
-        chartConfig["data"]["labels"].push(index + 1);
+        chartConfig["data"]["labels"].push("#" + (index + 1));
     });
     
     //refresh canvas 
