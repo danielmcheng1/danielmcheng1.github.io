@@ -2,6 +2,7 @@
 
 var emotionsToColor = {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"}
 var emotionsToData = {}
+var emotionsToPlot = {}
 var emotions = Object.keys(emotionsToColor).sort()
 
 var emotionsChartConfig = {
@@ -62,7 +63,9 @@ function refreshChartData_EmotionsWrapper(newData) {
 
 function refreshChartData(dataValues, dataColors, chartConfig) {
     //update vertical axes data values 
-    var keys = Object.keys(dataValues).sort();
+    var keys = Object.keys(dataValues).sort().filter(function(elem) {
+        return dataToPlot[elem] === true; //don't plot any datasets that have been previously unchecked by user
+    });
     chartConfig["data"]["datasets"] = []
     $.each(keys, function(index, item) {
         chartConfig["data"]["datasets"].push({
@@ -102,6 +105,12 @@ function dataToPercent(data) {
 };
 
 window.onload = function() {
+    //initialize the data objects for plotting emotions 
+    $.each(emotions, function(index, item) {
+        emotionsToData[item] = [];
+        emotionsToPlot[item] = true;
+    });
+    
     //set up charting canvas 
     var ctx = document.getElementById("canvas").getContext("2d");
     window.myLine = new Chart(ctx, emotionsChartConfig);
@@ -118,20 +127,19 @@ window.onload = function() {
         
         $('#checkbox_' + item).change(function() {
             console.log(item, this.checked);
-            if (this.checked) addDataset(item, emotionsChartConfig);
-            else removeDataset(item, emotionsChartConfig);            
+            if (this.checked) addDataset(item, emotionsToPlot, emotionsChartConfig);
+            else removeDataset(item, emotionsToPlot, emotionsChartConfig);            
         });
-    });
-    
-    //initialize the data object for plotting emotions 
-    $.each(emotions, function(index, item) {
-        emotionsToData[item] = [];
-    });
+    });    
     
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
 };
-function removeDataset(label, chartConfig) {
+function removeDataset(label, dataToPlot, chartConfig) {
+    //mark this so that all future chart updates won't plot this data 
+    dataToPlot[label] = false;
+    
+    //now remove this from the currently displayed chart
     var indexToRemove = -1;
     $.each(chartConfig["data"]["datasets"], function(index, item) {
         if (item["label"] == label) {
