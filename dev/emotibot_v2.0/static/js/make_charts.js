@@ -2,11 +2,11 @@
 /*****************************************/
 var keywordsChartObject;
 var keywordsChartConfigData = {
-    labels: [],
+    labels: ['unk', 'food', 'dump'],
     datasets: [
         {
             'label': 'Full History', 
-            'data': []
+            'data': [50, 100, 25],
             'fill': true,
             'borderColor': 'rgb(54, 162, 235)',
             'pointBackgroundColor':'rgb(54, 162, 235)',
@@ -117,8 +117,14 @@ var emotionsDataConfig = {
 };
 var emotions = Object.keys(emotionsDataConfig["colors"]).sort();
                
+/*****************************************/  
 var chatHistory = [];
 
+
+
+/*****************************************/  
+/*****************************************/  
+/*****************************************/  
 function refreshChartData_EmotionsWrapper(newData) {
     appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
     refreshChartData(emotionsDataConfig, emotionsChartConfig, emotionsChartObject);
@@ -199,13 +205,12 @@ window.onload = function() {
     });
     
     //set up charting canvas 
-    var ctx = document.getElementById("canvas_emotions_chart").getContext("2d");
-    emotionsChartObject = new Chart(ctx, emotionsChartConfig);
+    var ctxEmotions = document.getElementById("canvas_emotions_chart").getContext("2d");
+    emotionsChartObject = new Chart(ctxEmotions, emotionsChartConfig);
     
     var ctxKeywords = document.getElementById("canvas_keywords_chart").getContext("2d");
-    keywordsChartObject = new Chart(ctxKeywords, keywordsChartConfig);
-                
-    keywordsChart.update();
+    keywordsChartObject = new Chart(ctxKeywords, keywordsChartConfig);            
+    keywordsChartObject.update();
     
     //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
@@ -225,6 +230,8 @@ window.onload = function() {
     
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
+    
+    //have selected conversation text pop up upon selecting the data point
     $("#canvas_emotions_chart").click(function(event) {
         var activeElement = emotionsChartObject.getElementAtEvent(event);
         if (activeElement.length > 0) {
