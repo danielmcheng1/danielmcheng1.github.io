@@ -63,27 +63,27 @@ function refreshChartData_EmotionsWrapper(newData) {
     refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
 };
 
-function refreshChartData(dataValues, dataColors, chartConfig) {
+function refreshChartData(dataConfig, chartConfig) {
     //update vertical axes data values 
-    var keys = Object.keys(dataValues).sort().filter(function(elem) {
-        return dataToPlot[elem] === true; //don't plot any datasets that have been previously unchecked by user
+    var keys = Object.keys(dataConfig["dataValues"]).sort().filter(function(elem) {
+        return dataConfig["plotFlags"][elem] === true; //don't plot any datasets that have been previously unchecked by user
     });
     
     chartConfig["data"]["datasets"] = []
     $.each(keys, function(index, item) {
         chartConfig["data"]["datasets"].push({
             label: item,
-            backgroundColor: dataColors[item],
-            borderColor: dataColors[item],
-            data: dataValues[item],
+            backgroundColor: dataConfig["colors"][item],
+            borderColor: dataConfig["colors"][item],
+            data: dataConfig["dataValues"][item],
             fill: false,
         });
     });
     
     //update horizontal axes labels based on length of the first dataset
-    emotionsChartConfig["data"]["labels"] = []
-    $.each(dataValues[keys[0]], function(index, item) {
-        emotionsChartConfig["data"]["labels"].push(index + 1);
+    chartConfig["data"]["labels"] = []
+    $.each(dataConfig["dataValues"][keys[0]], function(index, item) {
+        chartConfig["data"]["labels"].push(index + 1);
     });
     
     //refresh canvas 
@@ -138,17 +138,16 @@ window.onload = function() {
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
 };
-function addDataset(label) {
-    dataToPlot[label] = true;
-    refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
+function addDataset(label, dataConfig, chartConfig) {
+    //mark this so that all future chart updates will plot this data 
+    dataConfig["plotFlags"][label] = true;
+    refreshChartData(dataConfig, chartConfig)
 };
 
-function removeDataset(label) {
+function removeDataset(label, dataConfig, chartConfig) {
     //mark this so that all future chart updates won't plot this data 
-    dataToPlot[label] = false;
-    
-    refreshChartData(emotionsDataConfig["dataValues"], emotionsDataConfig["colors"], emotionsChartConfig);
-    
+    dataConfig["plotFlags"][label] = true;
+    refreshChartData(dataConfig, chartConfig);
     /*
     //now remove this from the currently displayed chart
     var indexToRemove = -1;
