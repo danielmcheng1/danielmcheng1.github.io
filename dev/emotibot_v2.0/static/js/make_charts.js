@@ -118,8 +118,8 @@ window.onload = function() {
         
         $('#checkbox_' + item).change(function() {
             console.log(item, this.checked);
-            if (this.checked) addDataset(item);
-            else removeDataset(item);            
+            if (this.checked) addDataset(item, emotionsChartConfig);
+            else removeDataset(item, emotionsChartConfig);            
         });
     });
     
@@ -131,7 +131,17 @@ window.onload = function() {
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
 };
-
+function removeDataset(label, chartConfig) {
+    var indexToRemove = -1;
+    $.each(chartConfig["data"]["datasets"], function(index, item) {
+        if (item["label"] == label) {
+            indexToRemove = index;
+        };
+    });
+    if (indexToRemove != -1) {
+        chartConfig["data"]["datasets"].splice(index, 1);
+    };    
+};
 document.getElementById('randomizeData').addEventListener('click', function() {
     config.data.datasets.forEach(function(dataset) {
         dataset.data = dataset.data.map(function() {
