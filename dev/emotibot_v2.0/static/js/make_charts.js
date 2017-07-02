@@ -5,8 +5,9 @@ var emotionsDataConfig = {
     dataValues: {},
     plotFlags: {}
 };
-var emotions = Object.keys(emotionsDataConfig["colors"]).sort()
+var emotions = Object.keys(emotionsDataConfig["colors"]).sort();
 
+var emotionsChartObject;
 var emotionsChartConfig = {
     type: 'line',
     data: {
@@ -60,10 +61,10 @@ var emotionsChartConfig = {
 
 function refreshChartData_EmotionsWrapper(newData) {
     appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
-    refreshChartData(emotionsDataConfig, emotionsChartConfig);
+    refreshChartData(emotionsDataConfig, emotionsChartConfig, emotionsChartObject);
 };
 
-function refreshChartData(dataConfig, chartConfig) {
+function refreshChartData(dataConfig, chartConfig, chartObject) {
     //update vertical axes data values 
     var keys = Object.keys(dataConfig["dataValues"]).sort().filter(function(elem) {
         return dataConfig["plotFlags"][elem] === true; //don't plot any datasets that have been previously unchecked by user
@@ -112,6 +113,20 @@ function dataToPercent(data) {
     return toPercent;
 };
 
+
+
+function addDataset(label, dataConfig, chartConfig, chartObject) {
+    //mark this so that all future chart updates will plot this data 
+    dataConfig["plotFlags"][label] = true;
+    refreshChartData(dataConfig, chartConfig, chartObject)
+};
+
+function removeDataset(label, dataConfig, chartConfig, chartObject) {
+    //mark this so that all future chart updates won't plot this data 
+    dataConfig["plotFlags"][label] = false;
+    refreshChartData(dataConfig, chartConfig, chartObject);  
+};
+
 window.onload = function() {
     //initialize the data objects for plotting emotions 
     $.each(emotions, function(index, item) {
@@ -121,7 +136,7 @@ window.onload = function() {
     
     //set up charting canvas 
     var ctx = document.getElementById("canvas").getContext("2d");
-    window.emotionsChartObject = new Chart(ctx, emotionsChartConfig);
+    emotionsChartObject = new Chart(ctx, emotionsChartConfig);
     
     //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
@@ -134,34 +149,11 @@ window.onload = function() {
         ).append('<label>' + item + '  </label>')
         
         $('#checkbox_' + item).change(function() {
-            if (this.checked) addDataset(item, emotionsDataConfig, emotionsChartConfig);
-            else removeDataset(item, emotionsDataConfig, emotionsChartConfig);           
+            if (this.checked) addDataset(item, emotionsDataConfig, emotionsChartConfig, emotionsChartObject);
+            else removeDataset(item, emotionsDataConfig, emotionsChartConfig, emotionsChartObject);           
         });
     });    
     
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
-};
-function addDataset(label, dataConfig, chartConfig) {
-    //mark this so that all future chart updates will plot this data 
-    dataConfig["plotFlags"][label] = true;
-    refreshChartData(dataConfig, chartConfig)
-};
-
-function removeDataset(label, dataConfig, chartConfig) {
-    //mark this so that all future chart updates won't plot this data 
-    dataConfig["plotFlags"][label] = false;
-    refreshChartData(dataConfig, chartConfig);
-    /*
-    //now remove this from the currently displayed chart
-    var indexToRemove = -1;
-    $.each(chartConfig["data"]["datasets"], function(index, item) {
-        if (item["label"] == label) {
-            indexToRemove = index;
-        };
-    });
-    if (indexToRemove != -1) {
-        chartConfig["data"]["datasets"].splice(index, 1);
-    }; 
-    */   
 };
