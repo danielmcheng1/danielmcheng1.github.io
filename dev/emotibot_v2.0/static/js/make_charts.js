@@ -162,7 +162,7 @@ window.onload = function() {
     
     //load initial blank data
     refreshChartData_EmotionsWrapper({});
-    document.getElementById("canvas_emotions_chart").addEventListener('click', function(event) {
+    $("#canvas_emotions_chart").click(function(event) {
         var activeElement = emotionsChartObject.getElementAtEvent(event);
         if (activeElement.length > 0) {
             var responseNum = activeElement[0]._index;
