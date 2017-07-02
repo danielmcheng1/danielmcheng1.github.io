@@ -66,4 +66,9 @@ font-weight: bold; display: block;
 
 #div_emotions_chart{ 
     width: 70%;
+    height:40%;
+}
+#div_keywords_chart{
+    width:70%;
+    height:40%;
 }

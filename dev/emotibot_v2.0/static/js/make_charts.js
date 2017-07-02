@@ -1,6 +1,5 @@
 
 var chatHistory = [];
-
 var emotionsDataConfig = {
     colors: {"anger": "red", "fear": "grey", "joy": "green", "sadness": "#000080", "surprise": "orange"},
     dataValues: {},
@@ -32,7 +31,7 @@ var emotionsChartConfig = {
             intersect: false,
         },
         hover: {
-            mode: 'nearest',
+            //mode: 'nearest',
             intersect: true
         },
         scales: {
@@ -150,7 +149,30 @@ window.onload = function() {
             type: 'radar',
             data: {
                 labels: ['food', 'water', 'airport', 'gun', 'life in the desert'],
-                datasets: [{'backgroundColor': 'red', 'data': [0.1]}, {'data': [0.2]}, {'data': [0.5]}, {'data': [1]}, {'data': [0]}]
+                datasets: [
+                    {
+                        'label': 'Latest Message',
+                        'data': [0.1, 0.2, 0.3, 0.4, 0.5],
+                        'fill': true,
+                        'borderColor': 'rgb(255, 99, 132)',
+                        'pointBackgroundColor':'rgb(255, 99, 132)',
+                        'pointBorderColor':'#fff',
+                        'pointHoverBackgroundColor':'#fff',
+                        'pointHoverBorderColor':'rgb(255, 99, 132)',
+                        'backgroundColor':'rgba(255, 99, 132, 0.2)'
+                    }, 
+                    {
+                        'label': 'Full History', 
+                        'data': [0.9, 0.2, 0.35, 0.14, 0.5],
+                        'fill': true,
+                        'borderColor': 'rgb(54, 162, 235)',
+                        'pointBackgroundColor':'rgb(54, 162, 235)',
+                        'pointBorderColor':'#fff',
+                        'pointHoverBackgroundColor':'#fff',
+                        'pointHoverBorderColor':'rgb(54, 162, 235)',
+                        'backgroundColor':'rgba(54, 162, 235, 0.2)'
+                    }, 
+                ]
             }
         }
     );
