@@ -38,13 +38,13 @@ def respond_to_message(message):
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
     elif reflection != None:
         data["message"] = reflection
-    elif random.randint(1, 10) == 1:
+    elif make_random_response(BOT_CHAT_HISTORY):
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
     else: 
         data["message"] = eliza_chatbot.respond(message).capitalize()
     return data
-  
+
 def make_initial_greeting():
     return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
 
@@ -59,7 +59,7 @@ def reflect_emotion(message):
 
 def map_emotions_to_response(emotions):
     response_mapping = {
-        "anger": ["Oh man, you sound awfully [x]", "Uh oh, you seem [x]", "Back off, you [x] person"],
+        "anger": ["Oh man, you sound awfully [x]", "Uh oh, you seem [x]", "Calm down, you [x] person"],
         "fear": ["You seem really [x]", "Don't be [x], I'm here for you"],
         "joy": ["You sound so [x]! That's great.", "You seem [x]! Let's celebrate (toot-toot)", "That's awesome, you seem so [x]"],
         "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. You're really brave for dealing with this"],
@@ -76,7 +76,10 @@ def map_emotions_to_response(emotions):
     
     #replace each emotion with one of the above template responses and an adjective synonym for the emotion 
     return {k: random.choice(response_mapping[k]).replace("[x]", random.choice(adjective_mapping[k])) for k, v in emotions.items()}
-    
+
+def make_random_response(message_history):
+    return len(message_history) > 5 and random.randint(1, 10) == 1
+        
     
 def get_n_ranked_key(dict, n):
     if n < 1 or n > len(dict):

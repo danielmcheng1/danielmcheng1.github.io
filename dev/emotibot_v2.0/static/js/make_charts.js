@@ -254,7 +254,8 @@ window.onload = function() {
             );
         } else {
             $("#show_chat_message").empty().append(
-                '<br><i>Click on a data point to view detail</i>'
+                '<br><br>' + 
+                '  <i>Click on a data point to view detail</i>'
             );
         };
     });
