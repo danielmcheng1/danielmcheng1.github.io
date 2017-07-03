@@ -2,11 +2,11 @@
 /*****************************************/
 var keywordsChartObject;
 var keywordsChartConfigData = {
-    labels: ['unk', 'food', 'dump'],
+    labels: [],
     datasets: [
         {
             'label': 'Full History', 
-            'data': [50, 100, 25],
+            'data': [],
             'fill': true,
             'borderColor': 'rgb(54, 162, 235)',
             'pointBackgroundColor':'rgb(54, 162, 235)',
@@ -125,11 +125,22 @@ var chatHistory = [];
 /*****************************************/  
 /*****************************************/  
 /*****************************************/  
-function refreshChartData_EmotionsWrapper(newData) {
+function wrapper_refreshKeywordsChart(newData) {
+    keywordsChartConfigData["labels"] = Object.keys(newData);
+    keywordsChartConfigData["datasets"]["data"] = Object.values(newData);
+    keywordsChartObject.update();
+};
+function wrapper_refreshEmotionsChart(newData) {
     appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
     refreshChartData(emotionsDataConfig, emotionsChartConfig, emotionsChartObject);
 };
 
+function wrapper_refreshChatHistory(newData) {
+    chatHistory = newData || [];
+};
+
+
+/*****************************************/  
 function refreshChartData(dataConfig, chartConfig, chartObject) {
     //update vertical axes data values 
     var keys = Object.keys(dataConfig["dataValues"]).sort().filter(function(elem) {
@@ -193,10 +204,6 @@ function removeDataset(label, dataConfig, chartConfig, chartObject) {
     refreshChartData(dataConfig, chartConfig, chartObject);  
 };
 
-function refreshChatHistory(newData) {
-    chatHistory.push(newData);
-};
-
 window.onload = function() {
     //initialize the data objects for plotting emotions 
     $.each(emotions, function(index, item) {
@@ -209,8 +216,12 @@ window.onload = function() {
     emotionsChartObject = new Chart(ctxEmotions, emotionsChartConfig);
     
     var ctxKeywords = document.getElementById("canvas_keywords_chart").getContext("2d");
-    keywordsChartObject = new Chart(ctxKeywords, keywordsChartConfig);            
-    keywordsChartObject.update();
+    keywordsChartObject = new Chart(ctxKeywords, keywordsChartConfig); 
+    
+    //load initial blank data
+    wrapper_refreshEmotionsChart({});
+    wrapper_refreshKeywordsChart({});
+    
     
     //create checkboxes for selecting/deselecting each emotion 
     $.each(emotions, function(index, item) {
@@ -228,8 +239,6 @@ window.onload = function() {
         });
     });    
     
-    //load initial blank data
-    refreshChartData_EmotionsWrapper({});
     
     //have selected conversation text pop up upon selecting the data point
     $("#canvas_emotions_chart").click(function(event) {

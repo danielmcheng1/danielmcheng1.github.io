@@ -20,12 +20,13 @@ function append_to_chat_box(data) {
     scroll_message_box();
 };
 function refresh_charts(data) {
+    console.log(data);
     if (data['emotions'])
-        refreshChartData_EmotionsWrapper(data['emotions']);
+        wrapper_refreshEmotionsChart(data['emotions']);
     if (data['keywords'])
-        continue;
-    if (data['chatHistory'])
-        continue;
+        wrapper_refreshKeywordsChart(data['keywords']);
+    if (data['history'])
+        wrapper_refreshChatHistory(data['history']);
 };
     
 
@@ -44,8 +45,7 @@ $("#shout_message").keypress(function(evt) {
         $('#shout_message').val('');
         
         //for testing 
-        //refreshChartData_EmotionsWrapper({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
-        //refreshChatHistory(data["message"]);
+        //wrapper_refreshEmotionsChart({"anger": 0.1, "fear": 0.2, "joy": 0.3, "sadness": 0.4, "surprise": 0.5});
 
         socket.emit('human message', {"message": data['message']});
     }
