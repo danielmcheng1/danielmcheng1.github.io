@@ -5,7 +5,7 @@ var keywordsChartConfigData = {
     labels: [],
     datasets: [
         {
-            'label': 'Full History', 
+            'label': 'Probability (%): '
             'data': [],
             'fill': true,
             'borderColor': 'rgb(54, 162, 235)',
@@ -21,7 +21,7 @@ var keywordsChartConfigOptions = {
     responsive: true,
     title:{
         display:true,
-        text:'Conversation Themes',
+        text:'Top Conversation Themes (by Probability)',
         fontSize: 18
     },
     legend: {
@@ -127,7 +127,7 @@ var chatHistory = [];
 /*****************************************/  
 function wrapper_refreshKeywordsChart(newData) {
     keywordsChartConfigData["labels"] = Object.keys(newData);
-    keywordsChartConfigData["datasets"]["data"] = Object.values(newData);
+    keywordsChartConfigData["datasets"][0]["data"] = Object.values(dataToPercent(newData));
     keywordsChartObject.update();
 };
 function wrapper_refreshEmotionsChart(newData) {
@@ -220,7 +220,7 @@ window.onload = function() {
     
     //load initial blank data
     wrapper_refreshEmotionsChart({});
-    wrapper_refreshKeywordsChart({});
+    //wrapper_refreshKeywordsChart({});
     
     
     //create checkboxes for selecting/deselecting each emotion 
