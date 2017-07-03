@@ -1,4 +1,5 @@
 
+
 /*****************************************/
 var keywordsChartObject;
 var keywordsChartConfigData = {
@@ -92,7 +93,8 @@ var emotionsChartConfigOptions = {
             },
             ticks: {
                 min: 0,
-                max: 100
+                max: 100,
+                stepSize: 20
             }
         }]
     }
@@ -220,7 +222,7 @@ window.onload = function() {
     
     //load initial blank data
     wrapper_refreshEmotionsChart({});
-    //wrapper_refreshKeywordsChart({});
+    wrapper_refreshKeywordsChart({});
     
     
     //create checkboxes for selecting/deselecting each emotion 
@@ -246,12 +248,13 @@ window.onload = function() {
         if (activeElement.length > 0) {
             var responseNum = activeElement[0]._index;
             $("#show_chat_message").empty().append(
-                '<b>Selected Response (#' + responseNum + ')</b><br>' + 
-                '<i>' + chatHistory[responseNum] + '</i>'
+                '<br><br>' + 
+                '  <b>Selected Response (#' + responseNum + ')</b><br>' + 
+                '  <i>' + chatHistory[responseNum] + '</i>'
             );
         } else {
             $("#show_chat_message").empty().append(
-                '<i>Click on a data point to view detail</i>'
+                '<br><i>Click on a data point to view detail</i>'
             );
         };
     });
