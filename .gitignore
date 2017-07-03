@@ -1,3 +1,7 @@
 **/*hidden.conf
 **/*hidden.py
 dev/betty
+
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class

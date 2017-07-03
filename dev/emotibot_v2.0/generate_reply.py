@@ -17,28 +17,30 @@ BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling
 BOT_MADE_RANDOM_RESPONSE = False 
 
 #TBD--should move this into a true backend database 
-bot_chat_history = []
+BOT_CHAT_HISTORY = []
 
 def respond_to_message(message):
-    #append this to our running log 
-    bot_chat_history.append(message)
+    #append latest human message to our running log 
+    BOT_CHAT_HISTORY.append(message)
     
-    #now process and respond 
+    #now parse keywords and emotions in  message 
     global BOT_MADE_RANDOM_RESPONSE 
-    data = {"username": BOT_NAME, "message": "", "emotions": {}, "history": bot_chat_history, "keywords": {}}
+    data = {"username": BOT_NAME, "message": "", "emotions": {}, "history": BOT_CHAT_HISTORY, "keywords": {}}
     
-    data["keywords"] = indicoio.keywords(" ".join(bot_chat_history), version=2, top_n=10, relative=True)
-    #(reflection, emotions) = reflect_emotion(message)
-    #data["emotions"] = emotions
-    reflection = None
+    data["keywords"] = get_keywords(BOT_CHAT_HISTORY, 5)
+    
+    (reflection, emotions) = reflect_emotion(message)
+    data["emotions"] = emotions
+    
+    #and respond
     if BOT_MADE_RANDOM_RESPONSE:
         BOT_MADE_RANDOM_RESPONSE = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
+    elif reflection != None:
+        data["message"] = reflection
     elif random.randint(1, 10) == 1:
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
-    elif reflection != None:
-        data["message"] = reflection
     else: 
         data["message"] = eliza_chatbot.respond(message).capitalize()
     return data
@@ -85,7 +87,18 @@ def get_n_ranked_key(dict, n):
 def get_emotions(message):
     #anger, fear, joy, sadness, surprise
     return indicoio.emotion(message)
-  
+    
+def get_keywords(message, top_n = None):
+    if isinstance(message, list):
+        full_message = ' '.join(message)
+    else:
+        full_message = message
+        
+    if top_n is None:
+        return indicoio.keywords(full_message, version = 2, relative = True)
+    else:
+        return indicoio.keywords(full_message, version = 2, top_n = top_n, relative = True)
+     
 if __name__ == "__main__":
     print(make_initial_greeting())
     while True:

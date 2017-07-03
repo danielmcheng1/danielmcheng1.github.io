@@ -5,7 +5,7 @@ var keywordsChartConfigData = {
     labels: [],
     datasets: [
         {
-            'label': 'Probability (%): '
+            'label': 'Probability (%): ',
             'data': [],
             'fill': true,
             'borderColor': 'rgb(54, 162, 235)',

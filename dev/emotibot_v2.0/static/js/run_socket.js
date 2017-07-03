@@ -20,7 +20,6 @@ function append_to_chat_box(data) {
     scroll_message_box();
 };
 function refresh_charts(data) {
-    console.log(data);
     if (data['emotions'])
         wrapper_refreshEmotionsChart(data['emotions']);
     if (data['keywords'])
