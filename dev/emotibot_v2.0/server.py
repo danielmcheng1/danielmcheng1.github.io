@@ -14,7 +14,7 @@ def index():
 
 @socketio.on('human message')
 def handle_event(data):
-    response = generate_reply.respond_to_message(data["message"])
+    response = generate_reply.respond_to_user(data["message"])
     emit('bot message', response) 
     #send('my send', json=True, callback = acknowledgement()) 
     

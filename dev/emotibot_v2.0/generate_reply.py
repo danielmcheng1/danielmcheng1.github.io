@@ -7,8 +7,8 @@ import indicoio
 import config_hidden
 indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 
-BOT_NAME = "EmotiBot"
 
+BOT_DEFAULT_NAME = 'ELIANA'
 BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better."]
 BOT_GREETINGS_OPENING = ["It's good to see you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"]
 
@@ -19,7 +19,10 @@ BOT_MADE_RANDOM_RESPONSE = False
 #TBD--should move this into a true backend database 
 BOT_CHAT_HISTORY = []
 
-def respond_to_message(message):
+def respond_to_user(user_data):
+    message = user_data["message"]
+    requested_bot = user_data.get("requested_bot", BOT_DEFAULT_NAME)
+    
     #append latest human message to our running log 
     BOT_CHAT_HISTORY.append(message)
     
@@ -58,6 +61,12 @@ def respond_to_message(message):
             counter = counter + 1
         data["message"] = potential_response
     return data
+
+def respond_by_requested_bot(message, requested_bot):
+    if requested_bot == 'ELIANA':
+    elif requested_bot == 'ANA':
+    elif requested_bot == 'OLGA':
+    else:
     
 def make_initial_greeting():
     return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
