@@ -7,8 +7,6 @@ import indicoio
 import config_hidden
 indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 
-BOT_NAME = "EmotiBot"
-
 BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better."]
 BOT_GREETINGS_OPENING = ["It's good to see you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"]
 
@@ -19,7 +17,10 @@ BOT_MADE_RANDOM_RESPONSE = False
 #TBD--should move this into a true backend database 
 BOT_CHAT_HISTORY = []
 
-def respond_to_message(message):
+def respond_to_user(user_data):
+    message = user_data["message"]
+    requested_bot = user_data.get("requested_bot", "ELIZA").upper()
+    
     #append latest human message to our running log 
     BOT_CHAT_HISTORY.append(message)
     
@@ -37,6 +38,7 @@ def respond_to_message(message):
     if BOT_MADE_RANDOM_RESPONSE:
         BOT_MADE_RANDOM_RESPONSE = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
+
     elif reflection != None:
         #include counter as a safety in case module changes s.t. a user message triggers one deterministic response
         counter = 1
@@ -45,9 +47,11 @@ def respond_to_message(message):
             (reflection, emotions) = reflect_emotion(message)
             counter = counter + 1
         data["message"] = reflection
+    
     elif make_random_response(BOT_CHAT_HISTORY):
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
+    
     else: 
         potential_response = eliza_chatbot.respond(message).capitalize()
         #include counter as a safety in case module changes s.t. a user message triggers one deterministic response
@@ -58,6 +62,10 @@ def respond_to_message(message):
             counter = counter + 1
         data["message"] = potential_response
     return data
+def nltk_response(message, requested_bot):
+    if requested_bot == "ELIANA":
+    elif requested_bot == "ANA":
+    elif requested_bot == "OLGA":
     
 def make_initial_greeting():
     return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
