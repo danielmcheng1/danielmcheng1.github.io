@@ -23,12 +23,13 @@ def respond_to_message(message):
     #append latest human message to our running log 
     BOT_CHAT_HISTORY.append(message)
     
-    #now parse keywords and emotions in  message 
+    #now parse keywords in message
     global BOT_MADE_RANDOM_RESPONSE 
     data = {"username": BOT_NAME, "message": "", "emotions": {}, "history": BOT_CHAT_HISTORY, "keywords": {}}
     
     data["keywords"] = get_keywords(BOT_CHAT_HISTORY, 5)
     
+    #parse emotions
     (reflection, emotions) = reflect_emotion(message)
     data["emotions"] = emotions
     
@@ -37,14 +38,27 @@ def respond_to_message(message):
         BOT_MADE_RANDOM_RESPONSE = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
     elif reflection != None:
+        #include counter as a safety in case module changes s.t. a user message triggers one deterministic response
+        counter = 1
+        #reflection is a random response, so keep trying until we get something different 
+        while response_matches_previous(reflection) and counter < 15:
+            (reflection, emotions) = reflect_emotion(message)
+            counter = counter + 1
         data["message"] = reflection
     elif make_random_response(BOT_CHAT_HISTORY):
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
     else: 
-        data["message"] = eliza_chatbot.respond(message).capitalize()
+        potential_response = eliza_chatbot.respond(message).capitalize()
+        #include counter as a safety in case module changes s.t. a user message triggers one deterministic response
+        counter = 1
+        #nltk picks a random response, so keep trying until we get something different 
+        while response_matches_previous(potential_response) and counter < 15:
+            potential_response = eliza_chatbot.respond(message).capitalize()
+            counter = counter + 1
+        data["message"] = potential_response
     return data
-
+    
 def make_initial_greeting():
     return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
 
@@ -60,7 +74,7 @@ def reflect_emotion(message):
 def map_emotions_to_response(emotions):
     response_mapping = {
         "anger": ["Oh man, you sound awfully [x]", "Uh oh, you seem [x]", "Calm down, you [x] person"],
-        "fear": ["You seem really [x]", "Don't be [x], I'm here for you"],
+        "fear": ["You seem really [x]", "Don't be [x], I'm here for you", "You sound a bit [x] about this...?"],
         "joy": ["You sound so [x]! That's great.", "You seem [x]! Let's celebrate (toot-toot)", "That's awesome, you seem so [x]"],
         "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. You're really brave for dealing with this"],
         "surprise": ["You seem [x]?", "That must have been a bit unexpected", "You sound [x]. I totally would not have seen that happening myself either"]
