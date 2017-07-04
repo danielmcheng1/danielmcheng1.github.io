@@ -8,8 +8,8 @@ import config_hidden
 indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 
 BOT_DEFAULT_NAME = 'ELIANA'
-BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better."]
-BOT_GREETINGS_OPENING = ["It's good to see you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"]
+BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better.", "Sorry, you seem to be having a hard time expressing yourself. Can you try rephrasing?", "What you said doesn't make sense. Can you think a different way to phrase that?"]
+BOT_GREETINGS_OPENING = ["It's good to hear from you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"]
 
 BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
@@ -25,10 +25,24 @@ def respond_to_user(user_data):
     #append latest human message to our running log 
     BOT_CHAT_HISTORY.append(message)
     
+    response = respond_by_requested_bot(message, requested_bot)
+    
+
+def respond_to_message_as_bot(message, requested_bot):
+    if requested_bot == 'ELIANA':
+        return respond_to_message_as_eliana(message)
+    elif requested_bot == 'ANA': #VESTA
+        return respond_to_message_as_ana(message)
+    elif requested_bot == 'OLGA':
+        return respond_to_message_as_olga(message)
+    else:
+        return random.choice(BOT_DEFAULT_RESPONSES)
+
+
+def respond_to_message_as_eliana(message):
     #now parse keywords in message
     global BOT_MADE_RANDOM_RESPONSE 
     data = {"username": BOT_NAME, "message": "", "emotions": {}, "history": BOT_CHAT_HISTORY, "keywords": {}}
-    
     data["keywords"] = get_keywords(BOT_CHAT_HISTORY, 5)
     
     #parse emotions
@@ -63,12 +77,6 @@ def respond_to_user(user_data):
             counter = counter + 1
         data["message"] = potential_response
     return data
-
-def respond_by_requested_bot(message, requested_bot):
-    if requested_bot == 'ELIANA':
-    elif requested_bot == 'ANA':
-    elif requested_bot == 'OLGA':
-    else:
     
 def make_initial_greeting():
     return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
