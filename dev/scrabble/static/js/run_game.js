@@ -49,7 +49,7 @@ for (var i = 0; i < BOARD_MAX_ROW; i++) {
             };
             if (bonus != '') {
                 bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
-                table_cell = '<td class="boardCell bonus' + bonus.replace(" ", "") + 'Fill" id=board_' + i + '_' + j + '>' + bonusSpan;
+                table_cell = '<td class="boardCell bonusFill' + bonus.replace(" ", "") + '" id=board_' + i + '_' + j + '>' + bonusSpan;
             } else {
                 table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';  
             };

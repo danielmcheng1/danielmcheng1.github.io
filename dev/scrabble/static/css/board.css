@@ -21,16 +21,24 @@
 	font-family: arial;
 }
 .noBonusFill {
-    background-color: #f1f1f1;
+    background-color:#f1f1f1;
 }  
 
-.bonusTripleWordFill {
+.bonusFillTripleWord {
     color:black;
     background-color:#ec5858;
 }
-.bonusDoubleWordFill {
+.bonusFillDoubleWord {
     color:black;
-    background-color:pink;
+    background-color:#ffc0cb;
+}
+.bonusFillTripleLetter {
+    color:black;
+    background-color:#2da2e6;
+}
+.bonusFillDoubleLetter {
+    color:black;
+    background-color:#bbe0ff;
 }
 
 .tileOnBoard {
