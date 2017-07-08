@@ -12,8 +12,8 @@ for (var i = 0; i <= BOARD_MAX_ROW; i++) {
     for (var j = 0; j <= BOARD_MAX_COL; j++) {
         var table_cell = '<td class=boardCells id=board_' + i + '_' + j + '>';
         if ((i == 1 || i == 5 || i == 9) && (j == 1 || j == 3 || j == 11)) {
-            var tile = '<span class="tileOnBoard tileComputer">S<sub class="tilePoints">1</sub></span>'  
-            table_cell = table_cell + tile          
+            var tile = '<span class="tileOnBoard tileUnselected tileComputer">S<sub class="tilePoints">1</sub></span>'; 
+            table_cell = table_cell + tile;         
         };
         table_cell = table_cell + '</td>';
         table_row = table_row + table_cell;
@@ -21,4 +21,8 @@ for (var i = 0; i <= BOARD_MAX_ROW; i++) {
     table_row = table_row + "</tr>";
     table_whole = table_whole + table_row;
 };
-$("#board").append(table_whole)
+$("#board").append(table_whole);
+
+$(".tileOnBoard").click(function () {
+    $(this).toggleClass('tileUnselected tileSelected');
+});
