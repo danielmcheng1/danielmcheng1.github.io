@@ -47,7 +47,7 @@
 	border: 3px solid #d4c491;
     background-color: #ead89f;
     border-style: solid;
-    cursor: move;
+    cursor: pointer;
 }
 
 .tileComputer {
