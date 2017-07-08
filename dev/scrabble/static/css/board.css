@@ -7,9 +7,50 @@
 .boardCells {
 	height: 32px;
 	width: 32px;
-	border: 1px solid white;
-	text-align: center;
-	font-size: 10pt;
-    background-color: #efdfaf;
+	border: 1px solid grey;
+    border-radius: 4px;
+    background-color: #f1f1f1;
 	/*padding: 2px;*/
+}
+
+
+.tileOnBoard {
+	filter:alpha(opacity=90); 
+    opacity:0.9;
+	
+    display: table-cell;
+	width: 27px;
+	height: 27px;
+	border-radius: 5px; /* round corners Opera, Chrome */
+	-moz-border-radius: 5px; /* FF */
+    
+    font-size: 14pt;
+	font-family: arial;
+    
+    text-align: center;
+	vertical-align: middle;
+    
+    margin: auto;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	z-index: 10;
+	
+	/*line-height: 23px; /* ugly hack for IE6 */ 
+}
+
+.tileHuman {
+	border: 3px solid #d4c491;
+    background-color: #ead89f;
+    border-style: solid;
+    cursor: move;
+}
+
+.tileComputer {
+	border: 3px solid #843a3a;
+    background-color: #cc6d6d;
+    border-style: solid;
+    cursor: default;
+}
+.tilePoints {
+    font-size: 8px;
 }
