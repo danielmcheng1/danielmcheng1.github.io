@@ -38,15 +38,24 @@ for (var i = 0; i < BOARD_MAX_ROW; i++) {
                 var player = 'Human';
             tile = '<span class="tileOnBoard tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">1</sub></span>'; 
             table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile;         
-        } else {
-            if (j % 3) {
-                bonus = '<span class="bonusOverlay">Triple Word Score</span>';
-                table_cell = '<td class="boardCell bonusTripleWordFill" id=board_' + i + '_' + j + '>' + bonus;
-            } else {
-                bonus = '<span class="bonusOverlay">Double Word Score</span>';
-                table_cell = '<td class="boardCell bonusDoubleWordFill" id=board_' + i + '_' + j + '>' + bonus;
+        } 
+        else {
+            var bonus = "";
+            if (j == BOARD_MAX_COL - 1) {
+                if (i == 1) bonus = "Triple Word";
+                else if (i == 3) bonus = "Double Word";
+                else if (i == 5) bonus = "Triple Letter";
+                else if (i == 7) bonus = "Double Letter";
             };
-        }
+            if (bonus != '') {
+                bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
+                table_cell = '<td class="boardCell bonus' + bonus.replace(" ", "") + 'Fill" id=board_' + i + '_' + j + '>' + bonusSpan;
+            } else {
+                table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';  
+            };
+            
+            //table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';
+        };
         table_cell = table_cell + '</td>';
         table_row = table_row + table_cell;
     };
