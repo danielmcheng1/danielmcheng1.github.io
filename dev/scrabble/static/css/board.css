@@ -4,20 +4,29 @@
 	table-layout:fixed;
 }
 
-.boardCells {
+.boardCell {
 	height: 32px;
 	width: 32px;
 	border: 1px solid grey;
     border-radius: 4px;
-    background-color: #f1f1f1;
 	/*padding: 2px;*/
 }
+.noBonusFill {
+    background-color: #f1f1f1;
+}  
 
-.tileSelected {
-    opacity:0.8;
+.bonusTripleWordFill {
+    color:black;
+    background-color:#ec5858;
 }
-.tileUnselected {
-    opacity: 1;
+.bonusOverlay {
+    display: table-cell;
+    text-align: center;
+    width:100%;
+    height:100%;
+	vertical-align: middle;
+    font-size: 6pt;
+	font-family: arial;
 }
 
 .tileOnBoard {
@@ -39,8 +48,6 @@
 	margin-bottom: 1px;
 	margin-top: 1px;
 	z-index: 10; /*stack order -- higher = element in front*/
-	
-	/*line-height: 23px; /* ugly hack for IE6 */ 
 }
 
 .tileHuman {
@@ -60,16 +67,11 @@
     font-size: 8px;
 }
 
-
-.tileBonus {
-    display: table-cell;
-    text-align: center;
-    width:100%;
-    height:100%;
-	vertical-align: middle;
-    font-size: 6pt;
-	font-family: arial;
-  /*
-  transform: translate(-50%, -50%);
-  */
+.tileSelected {
+    opacity:0.8;
 }
+.tileUnselected {
+    opacity: 1;
+}
+
+
