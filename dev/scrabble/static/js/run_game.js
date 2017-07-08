@@ -29,7 +29,7 @@ var table_whole = "";
 for (var i = 0; i < BOARD_MAX_ROW; i++) {
     var table_row = "<tr>";
     for (var j = 0; j < BOARD_MAX_COL; j++) {
-        var table_cell = '<td class=boardCells id=board_' + i + '_' + j + '>';
+        var table_cell = '<td class="boardCells" id=board_' + i + '_' + j + '>';
         var letter = INPUT_BOARD_TILES[i][j];
         if (letter != '') {
             if (j % 2) 
@@ -39,7 +39,7 @@ for (var i = 0; i < BOARD_MAX_ROW; i++) {
             tile = '<span class="tileOnBoard tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">1</sub></span>'; 
             table_cell = table_cell + tile;         
         } else {
-            table_cell = table_cell + '<sub class="tileOnBoard tileBonus">Double Word</sub>';
+            table_cell = table_cell + '<div class="tileBonus tileOnBoard">Double Letter Score</div>';
         }
         table_cell = table_cell + '</td>';
         table_row = table_row + table_cell;

@@ -25,7 +25,7 @@
 	
     display: table-cell;
 	width: 27px;
-	height: 27px;
+	height: 27px; /*27 px*/
 	border-radius: 5px; /* round corners Opera, Chrome */
 	-moz-border-radius: 5px; /* FF */
     
@@ -38,7 +38,7 @@
     margin: auto;
 	margin-bottom: 1px;
 	margin-top: 1px;
-	z-index: 10;
+	z-index: 10; /*stack order -- higher = element in front*/
 	
 	/*line-height: 23px; /* ugly hack for IE6 */ 
 }
@@ -61,28 +61,21 @@
 }
 
 
-.module {
-  background: 
-    linear-gradient(
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.6)
-    )
-  width: 300px;
-  height: 200px;
-  margin: 10px 0 0 10px;
-  position: relative;
-  float: left;
-}
 .tileBonus {
-    font-size: 8pt;
-	font-family: arial;
+	filter:alpha(opacity=90); 
+	
+    display: table-cell;
     
-    background-size: cover;
-    text-align: center;
-	vertical-align: middle;
-    margin: 0px;
-    border-radius: 0px;
-    display: inline;
+    width:100%;
+    height:100%;
+    
+    border:0px;
+    padding:0px;
+    margin:0px;
+    border-radius:0px;
+    vertical-align:center;
+    font-size: 6pt;
+	font-family: arial;
   /*
   transform: translate(-50%, -50%);
   */
