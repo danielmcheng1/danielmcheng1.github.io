@@ -39,7 +39,7 @@ for (var i = 0; i < BOARD_MAX_ROW; i++) {
             tile = '<span class="tileOnBoard tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">1</sub></span>'; 
             table_cell = table_cell + tile;         
         } else {
-            table_cell = table_cell + '<div class="tileBonus tileOnBoard">Double Letter Score</div>';
+            table_cell = table_cell + '<span class="tileOnBoard tileBonus">Double Letter Score</span>';
         }
         table_cell = table_cell + '</td>';
         table_row = table_row + table_cell;
