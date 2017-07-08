@@ -62,7 +62,9 @@
 
 
 .tileBonus {
-    display: inline-table;
+    display: table-cell;
+    text-align: center;
+	vertical-align: middle;
     font-size: 6pt;
 	font-family: arial;
   /*
