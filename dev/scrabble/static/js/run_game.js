@@ -29,7 +29,7 @@ var table_whole = "";
 for (var i = 0; i < BOARD_MAX_ROW; i++) {
     var table_row = "<tr>";
     for (var j = 0; j < BOARD_MAX_COL; j++) {
-        var table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';
+        var table_cell = '';
         var letter = INPUT_BOARD_TILES[i][j];
         if (letter != '') {
             if (j % 2) 
@@ -37,9 +37,15 @@ for (var i = 0; i < BOARD_MAX_ROW; i++) {
             else 
                 var player = 'Human';
             tile = '<span class="tileOnBoard tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">1</sub></span>'; 
-            table_cell = table_cell + tile;         
+            table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile;         
         } else {
-            table_cell = '<td class="boardCell bonusTripleWordFill" id=board_' + i + '_' + j + '>' + '<span class="bonusOverlay">Double Letter Score</span>';
+            if (j % 3) {
+                bonus = '<span class="bonusOverlay">Triple Word Score</span>';
+                table_cell = '<td class="boardCell bonusTripleWordFill" id=board_' + i + '_' + j + '>' + bonus;
+            } else {
+                bonus = '<span class="bonusOverlay">Double Word Score</span>';
+                table_cell = '<td class="boardCell bonusDoubleWordFill" id=board_' + i + '_' + j + '>' + bonus;
+            };
         }
         table_cell = table_cell + '</td>';
         table_row = table_row + table_cell;
