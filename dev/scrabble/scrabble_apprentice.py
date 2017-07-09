@@ -5,7 +5,9 @@
 #Permits play with multiple AI's or human players
 
 #Currently working to clean code and transition into a web application
-
+'''
+Update in July 2017 -- setting up backend Python server and frontend Javascript application 
+'''
 import os, csv, sys, random
 import termcolor
 from pympler import asizeof
