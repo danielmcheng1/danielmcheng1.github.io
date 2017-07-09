@@ -1093,8 +1093,6 @@ class scrabble_game_play:
 if __name__ == "__main__":
     
     (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-    print(scrabble_corpus[0:10])
-    exit()
     scrabble_gaddag = gaddag(scrabble_corpus)
     scrabble_board = scrabble_board(scrabble_gaddag, scrabble_bag)
  
