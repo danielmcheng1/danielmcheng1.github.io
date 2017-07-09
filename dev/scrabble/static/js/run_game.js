@@ -23,7 +23,7 @@ DATA STRUCTURES
  /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 socket.on ('begin play', function(data) {
-    alert(str(data))
+    console.log(data);
     BOARD_MIN_ROW = 0;
     BOARD_MAX_ROW = 15;
     BOARD_MIN_COL = 0;

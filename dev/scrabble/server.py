@@ -17,8 +17,8 @@ def index():
 def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
-    response = scrabble_apprentice.wrapper_make_computer_move
-    socketio.emit('begin play', response)
+    response = scrabble_apprentice.wrapper_make_computer_move()
+    socketio.emit('begin play', str(response))
     
 @socketio.on('human play')
 def handle_event(data):
