@@ -1,4 +1,23 @@
 
+/*
+DATA STRUCTURE
+two-dimensional array representing board
+for each cell in board:
+    "cell" object:
+        .tile 
+            .letter 
+            .points
+            .player
+        .bonus 
+     if blank then attribute is N/A
+player object
+        self.name = name
+        self.is_human = is_human
+        self.rack = []  
+        self.running_score = 0
+        self.words_played = []
+        
+ */
 BOARD_MIN_ROW = 0;
 BOARD_MAX_ROW = 15;
 BOARD_MIN_COL = 0;
