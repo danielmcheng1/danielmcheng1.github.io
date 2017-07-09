@@ -273,6 +273,8 @@ class apprentice:
 class board_config:
     def __init__():
 '''    
+#need obj holding all this 
+#need to pass back the word player placed
 def wrapper_make_computer_move(scrabble_board_wrapper = None, scrabble_board_obj = None, scrabble_score_dict = None):
     #initialize board 
     if scrabble_board_wrapper is None:

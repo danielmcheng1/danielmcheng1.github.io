@@ -4,6 +4,8 @@ import requests
 
 from flask_socketio import SocketIO, emit, send
 
+import scrabble_apprentice 
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -11,15 +13,17 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
-@socketio.on('human play')
-def handle_event(data):
-    emit('bot play', response) 
-    
 @socketio.on('connect')
 def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
+    response = scrabble_apprentice.wrapper_make_computer_move
     socketio.emit('begin play', response)
+    
+@socketio.on('human play')
+def handle_event(data):
+    response = scrabble_apprentice.wrapper_make_computer_move
+    emit('bot play', response) 
     
     
 
