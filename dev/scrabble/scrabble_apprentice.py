@@ -324,7 +324,8 @@ def map_tile_to_view(cell, player_name, scrabble_score_dict):
     if cell.isalpha():
         return tile(cell, player_name, scrabble_score_dict)
     return ''
-        
+
+#TBD player name, type, or ID?    
 class tile:
     def __init__(self, letter, player_name, scrabble_score_dict):
         self.letter = letter

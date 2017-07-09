@@ -24,36 +24,35 @@ DATA STRUCTURES
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 socket.on ('begin play', function(data) {
     console.log(data);
+    
+    var board = data;
+    
+    var BOARD_MAX_ROW = board.length;
+    var BOARD_MAX_COL = board[0].length;
+    var BOARD_MIN_ROW = 0;
+    var BOARD_MIN_COL = 0;
+    
     var table_whole = "";
     for (var i = 0; i < BOARD_MAX_ROW; i++) {
         var table_row = "<tr>";
         for (var j = 0; j < BOARD_MAX_COL; j++) {
             var table_cell = '';
-            var letter = INPUT_BOARD_TILES[i][j];
-            if (letter != '') {
-                if (j % 2) 
-                    var player = 'Computer';
-                else 
-                    var player = 'Human';
-                tile = '<span class="tileOnBoard tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">1</sub></span>'; 
-                table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile;         
+            var tile_obj = board[i][j]["tile"];
+            if (tile_obj != '') {
+                var player_type = tile_obj["player_type"];
+                var letter = tile_obj["letter"];
+                var points = tile_obj["points"];
+                tile_span = '<span class="tileOnBoard tileUnselected tile' + player_type + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span>'; 
+                table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile_span;         
             } 
             else {
-                var bonus = "";
-                if (j == BOARD_MAX_COL - 1) {
-                    if (i == 1) bonus = "Triple Word";
-                    else if (i == 3) bonus = "Double Word";
-                    else if (i == 5) bonus = "Triple Letter";
-                    else if (i == 7) bonus = "Double Letter";
-                };
+                var bonus = board[i][j]["bonus"];
                 if (bonus != '') {
                     bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
                     table_cell = '<td class="boardCell bonusFill' + bonus.replace(" ", "") + '" id=board_' + i + '_' + j + '>' + bonusSpan;
                 } else {
                     table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';  
                 };
-                
-                //table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';
             };
             table_cell = table_cell + '</td>';
             table_row = table_row + table_cell;
