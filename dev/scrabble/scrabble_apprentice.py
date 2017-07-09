@@ -266,7 +266,45 @@ DEBUG_PULL_VALID_CROSSWORD = False
 DEBUG_GENERATE_MOVES = False
 DEBUG_FINAL_CALC_SCORE = False
 DEBUG_ALL_MOVES = False
+'''
+class apprentice:
+    def __init__(board_obj):
+        self.board_obj = board_obj
+class board_config:
+    def __init__():
+'''    
+def wrapper_make_computer_move(scrabble_board_wrapper = None, scrabble_board_obj = None):
+    #initialize board 
+    if scrabble_board_wrapper is None:
+        (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
+        scrabble_gaddag = gaddag(scrabble_corpus[0:10])
+        scrabble_board_obj = scrabble_board(scrabble_gaddag, scrabble_bag)
+        scrabble_board_wrapper = [[{"bonus": map_to_front_end_fields(scrabble_board_obj.board[row][col])} for col in range(MAX_COL)] for row in range(MAX_ROW)]   
+        '''
+                .tile 
+                    .letter 
+                    .points
+                    .player
+                .bonus 
+                '''
+        return (scrabble_board_wrapper, scrabble_board_obj)
 
+    #make normal move 
+    return (scrabble_board_wrapper, scrabble_board_obj)
+    
+def map_to_front_end_fields(cell):
+    if cell == NO_BONUS:
+        return ''
+    if cell == TRIPLE_LETTER:
+        return 'Triple Letter'
+    if cell == TRIPLE_WORD:
+        return 'Triple Word'
+    if cell == DOUBLE_LETTER:
+        return 'Double Letter'
+    if cell == DOUBLE_WORD:
+        return 'Double Word'
+    raise ValueError('Invalid cell value: {0}'.format(cell))
+    
 class scrabble_board:
     #highest for loop appears first!! http://rhodesmill.org/brandon/2009/nested-comprehensions/
     def __init__(self, gaddag, bag):
@@ -1091,7 +1129,7 @@ class scrabble_game_play:
         self.print_game_state()
         for player in self.play_order:
             player.print_player_state()
-        
+          
 if __name__ == "__main__":
     
     (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
@@ -1103,9 +1141,10 @@ if __name__ == "__main__":
     scrabble_player_2 = scrabble_player("Computer 2", IS_COMPUTER, scrabble_board)  
     #scrabble_player_3 = scrabble_player("Computer 3", IS_COMPUTER, scrabble_board)   
     #scrabble_player_4 = scrabble_player("Computer 4", IS_COMPUTER, scrabble_board) 
-    scrabble_game_play = scrabble_game_play(scrabble_board, scrabble_player_1, scrabble_player_2)    
+    print(scrabble_board.board)
+    #scrabble_game_play = scrabble_game_play(scrabble_board, scrabble_player_1, scrabble_player_2)    
 
-    scrabble_game_play.play_game()
+    #scrabble_game_play.play_game()
 
 
     
