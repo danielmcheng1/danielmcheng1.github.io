@@ -275,9 +275,9 @@ class board_config:
 '''    
 #need obj holding all this 
 #need to pass back the word player placed
-def wrapper_make_computer_move(scrabble_board_wrapper = None, scrabble_board_obj = None, scrabble_score_dict = None):
+def wrapper_make_computer_move(data = None):
     #initialize board 
-    if scrabble_board_wrapper is None:
+    if data[0] is None:
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
         scrabble_gaddag = gaddag(scrabble_corpus[0:10])
         scrabble_board_obj = scrabble_board(scrabble_gaddag, scrabble_bag)
@@ -295,13 +295,17 @@ def wrapper_make_computer_move(scrabble_board_wrapper = None, scrabble_board_obj
 
     #make normal move 
     else:
-        rack = list('FOXES')
-        rack.extend(['A', 'B'])
-        scrabble_board_obj.place_word(CENTER_ROW, CENTER_COL, HORIZONTAL, list('FOXES'), rack)
-        scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board_obj.board[row][col]), \
-                                    "tile": map_tile_to_view(scrabble_board_obj.board[row][col], 'Human', scrabble_score_dict)} \
-                                    for col in range(MAX_COL)] \
-                                    for row in range(MAX_ROW)] 
+        scrabble_board_wrapper = data[0]
+        scrabble_board_obj = data[1]
+        scrabble_score_dict = data[2]
+    #temporary for testing  
+    rack = list('FOXES')
+    rack.extend(['A', 'B'])
+    scrabble_board_obj.place_word(CENTER_ROW, CENTER_COL, HORIZONTAL, list('FOXES'), rack)
+    scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board_obj.board[row][col]), \
+                                "tile": map_tile_to_view(scrabble_board_obj.board[row][col], 'Human', scrabble_score_dict)} \
+                                for col in range(MAX_COL)] \
+                                for row in range(MAX_ROW)] 
     return (scrabble_board_wrapper, scrabble_board_obj, scrabble_score_dict)
     
 def map_bonus_to_view(cell):
@@ -319,22 +323,22 @@ def map_bonus_to_view(cell):
     print('WARNING: returning blank for {0}'.format(cell))
     return ''
     
-def map_tile_to_view(cell, player_name, scrabble_score_dict):
+def map_tile_to_view(cell, player_type, scrabble_score_dict):
     #TBD flip to the is_scrabble_tile method? 
     if cell.isalpha():
-        return tile(cell, player_name, scrabble_score_dict)
+        return tile(cell, player_type, scrabble_score_dict).get_tile()
     return ''
 
 #TBD player name, type, or ID?    
 class tile:
-    def __init__(self, letter, player_name, scrabble_score_dict):
+    def __init__(self, letter, player_type, scrabble_score_dict):
         self.letter = letter
-        self.player_name = player_name
-        if self.letter == '': 
-            self.score = 0 
-        else:
-            self.score = scrabble_score_dict[letter] 
-    
+        self.player_type = player_type
+        self.points = scrabble_score_dict[letter] 
+        
+    def get_tile(self):
+        return {'letter': self.letter, 'points': self.points, 'player_type': self.player_type}
+        
 class scrabble_board:
     #highest for loop appears first!! http://rhodesmill.org/brandon/2009/nested-comprehensions/
     def __init__(self, gaddag, bag):

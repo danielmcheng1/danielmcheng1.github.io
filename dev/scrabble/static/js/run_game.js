@@ -18,10 +18,17 @@ DATA STRUCTURES
                     .player
                 .bonus 
              if blank then attribute is N/A
-     
+ To Do
+    Make this data structure better..
+    Move to FLASK template 
+    
+    TBDs in python apprentice module 
+    
  */
  /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
+//socket.emit('human message', {"message": data['message']});
+    
 socket.on ('begin play', function(data) {
     console.log(data);
     
