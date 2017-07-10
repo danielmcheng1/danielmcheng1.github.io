@@ -1,4 +1,14 @@
-
+#computerRack{
+    table-layout:fixed;
+}
+#humanRack{
+    table-layout:fixed;
+}
+.rackCell {
+	height: 32px;
+	width: 36px;
+	border: none;
+}
 
 #board{
 	table-layout:fixed;
@@ -41,7 +51,7 @@
     background-color:#bbe0ff;
 }
 
-.tileOnBoard {
+.tile {
 	filter:alpha(opacity=90); 
 	
     display: table-cell;
@@ -86,4 +96,29 @@
     opacity: 1;
 }
 
+/*
+https://stackoverflow.com/questions/20456694/grid-of-responsive-squares
+.rackCellDiv {
+    background-color:green;
+    width: 30%;
+    padding-bottom: 30%;
+}
+.rackCellSquare {
+    background-color:yellow;
+    float:left;
+    position: relative;
+    width: 30%;
+    padding-bottom: 30%;
+    margin:1.66%;
+    overflow:hidden
+}
+
+.rackCellContent {
+    background-color:purple;
+    position:absolute;
+    height:80%;
+    width:90%; 
+    padding: 10% 5%;
+}
+*/
 

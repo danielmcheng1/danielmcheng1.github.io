@@ -49,7 +49,7 @@ socket.on ('begin play', function(data) {
                 var player_type = tile_obj["player_type"];
                 var letter = tile_obj["letter"];
                 var points = tile_obj["points"];
-                tile_span = '<span class="tileOnBoard tileUnselected tile' + player_type + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span>'; 
+                tile_span = '<span class="tile tileUnselected tile' + player_type + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span>'; 
                 table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile_span;         
             } 
             else {
@@ -69,7 +69,7 @@ socket.on ('begin play', function(data) {
     };
     $("#board").append(table_whole);
 
-    $(".tileOnBoard").click(function () {
+    $(".tile").click(function () {
         if ($(this).hasClass('tileHuman'))
             $(this).toggleClass('tileUnselected tileSelected');
     });
