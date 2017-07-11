@@ -28,7 +28,10 @@ DATA STRUCTURES
  /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 //socket.emit('human message', {"message": data['message']});
-    
+
+var source;
+var target;
+
 socket.on ('begin play', function(data) {
     console.log(data);
     
@@ -73,8 +76,38 @@ socket.on ('begin play', function(data) {
         if ($(this).hasClass('tileHuman'))
             $(this).toggleClass('tileUnselected tileSelected');
     });
+    $(".tile").click(function(event) {
+        event.stopPropagation(); //only select the topmost element
+        console.log("tile", event.target, "source", source);
+        if (source == undefined) 
+            source = event.target;
+    });
+    $(".boardCell").click(function(event) {
+        event.stopPropagation(); //only select the topmost element
+        console.log( "source", source, "board target", event.target);
+        if (source != undefined) {
+            console.log("target class", $(event.target).attr('class'))
+            event.target.append(source);
+            if ($(event.target).attr('class') == "bonusOverlay") {
+                $(event.target).remove();
+            };
+            
+            source = undefined;
+        } 
+    });
 });
-
+/*
+    document.body.onclick = function(evt) {
+        var evt = window.event || evt;
+        if (source != undefined) {
+            evt.target.append(source);
+            source = undefined;
+        } 
+        else {
+            source = evt.target;
+        };
+    };
+*/
 
 /*
     BOARD_MIN_ROW = 0;
