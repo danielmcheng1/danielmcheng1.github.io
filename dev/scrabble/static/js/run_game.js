@@ -32,9 +32,11 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
 //socket.emit('human message', {"message": data['message']});
 
 
-var sourceForTile;
+var sourceTile;
+var sourceCell;
 socket.on ('begin play', function(data) {
-    refreshBoard(data);
+    var board = data;
+    refreshBoard(board);
     
     //create audio element
     var soundEffects = document.createElement("audio");
@@ -58,44 +60,72 @@ socket.on ('begin play', function(data) {
     $(".tileNotFixed").click(function(event) {
         event.stopPropagation(); //only select the topmost element
         var clicked = $(event.target);
-        if (sourceForTile == undefined) {
-            if (clicked.hasClass('tilePoints')) {
-                if (clicked.parent().hasClass('tileNotFixed')) {
-                    sourceForTile = clicked.parent();
-                };
-            } 
-            else {
-                sourceForTile = clicked;
+        if (clicked.hasClass('tilePoints')) {
+            if (clicked.parent().hasClass('tileNotFixed')) {
+                sourceTile = clicked.parent();
             };
+        } 
+        else {
+            sourceTile = clicked;
         };
+        sourceCell = sourceTile.parent();
     });
     
     //click to place tile
     $(".boardCell, .rackCell").click(function(event) {
         event.stopPropagation(); //only select the topmost element
         var clicked = $(event.target);
-        if (sourceForTile != undefined) {
-            if (clicked.hasClass('bonusOverlay')) {
-                if (clicked.parent().hasClass('boardCell')) {
-                    clicked.parent().append(sourceForTile);
-                    clicked.remove();
-                };
+        var targetCell;
+        if (sourceTile != undefined) {
+            if (clicked.hasClass('bonusOverlay') && clicked.parent().hasClass('boardCell')) {
+                targetCell = clicked.parent();
+                clicked.remove();
             }
             else if (clicked.hasClass('boardCell') || clicked.hasClass('rackCell')) {
-                clicked.append(sourceForTile);
+                targetCell = clicked;
             };
-            //sound effect 
-            playSoundTileMoved(soundEffects);
-            //unselect tile 
-            $(".tileSelected").toggleClass('tileUnselected tileSelected');
-            //reset source 
-            sourceForTile = undefined;
+            if (targetCell) {
+                //sound effect 
+                playSoundTileMoved(soundEffects);
+                
+                //push tile onto cell 
+                targetCell.append(sourceTile);
+                
+                //redraw the bonus in the source cell since tile is no longer covering the source cell
+                var targetId = targetCell.attr("id");
+                var sourceId = sourceCell.attr("id");
+                if ($("#" + sourceId).hasClass("boardCell")) {
+                    var sourceIdParsed = parseIntoRowCol(sourceId);
+                    var targetIdParsed = parseIntoRowCol(targetId);
+                    var bonus = board[sourceIdParsed["row"]][sourceIdParsed["col"]]["bonus"];
+                    if (bonus != '') {
+                        bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
+                        $("#" + sourceId).append($(bonusSpan));
+                    };
+                };
+                
+                //unselect tile 
+                $(".tileSelected").toggleClass('tileUnselected tileSelected');
+                
+                //reset source 
+                sourceTile = undefined;
+            };
         } 
     });
 });
 
+function parseIntoRowCol(id) {
+    var regexResult = /.*_([0-9]+)_([0-9]+)/.exec(id);
+    var rv;
+    if (regexResult) {
+        rv = {};
+        rv["row"] = regexResult[1];
+        rv["col"] = regexResult[2];
+    }
+    return rv;
+}
+
 function refreshBoard(data) {
-        
     var board = data;
     
     var BOARD_MAX_ROW = board.length;
@@ -114,7 +144,7 @@ function refreshBoard(data) {
                 var letter = tile_obj["letter"];
                 var points = tile_obj["points"];
                 tile_span = '<span class="tile tileFixed tileUnselected tile' + player_type + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span>'; 
-                table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile_span;         
+                table_cell = '<td class="boardCell noBonusFill" id=boardCell_' + i + '_' + j + '>' + tile_span;         
             } 
             else {
                 var bonus = board[i][j]["bonus"];
@@ -122,7 +152,7 @@ function refreshBoard(data) {
                     bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
                     table_cell = '<td class="boardCell bonusFill' + bonus.replace(" ", "") + '" id=board_' + i + '_' + j + '>' + bonusSpan;
                 } else {
-                    table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>';  
+                    table_cell = '<td class="boardCell noBonusFill" id=boardCell_' + i + '_' + j + '>';  
                 };
             };
             table_cell = table_cell + '</td>';
