@@ -73,6 +73,10 @@
 	margin-top: 1px;
 	z-index: 10; /*stack order -- higher = element in front*/
 }
+.tileFixed  {
+}
+.tileNotFixed {
+}
 
 .tileHuman {
 	border: 3px solid #d4c491;
@@ -92,7 +96,7 @@
 }
 
 .tileSelected {
-    opacity:0.8;
+    opacity:0.7;
 }
 .tileUnselected {
     opacity: 1;

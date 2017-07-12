@@ -29,8 +29,7 @@ DATA STRUCTURES
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 //socket.emit('human message', {"message": data['message']});
 
-var source;
-var target;
+var sourceForTile;
 
 socket.on ('begin play', function(data) {
     console.log(data);
@@ -52,7 +51,7 @@ socket.on ('begin play', function(data) {
                 var player_type = tile_obj["player_type"];
                 var letter = tile_obj["letter"];
                 var points = tile_obj["points"];
-                tile_span = '<span class="tile tileUnselected tile' + player_type + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span>'; 
+                tile_span = '<span class="tile tileFixed tileUnselected tile' + player_type + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span>'; 
                 table_cell = '<td class="boardCell noBonusFill" id=board_' + i + '_' + j + '>' + tile_span;         
             } 
             else {
@@ -72,40 +71,39 @@ socket.on ('begin play', function(data) {
     };
     $("#board").append(table_whole);
 
-    $(".tile").click(function () {
+    $(".tileNotFixed").click(function () {
         if ($(this).hasClass('tileHuman'))
             $(this).toggleClass('tileUnselected tileSelected');
     });
-    $(".tile").click(function(event) {
+    $(".tileNotFixed").click(function(event) {
         event.stopPropagation(); //only select the topmost element
         var clicked = $(event.target);
-        console.log("tile", clicked, "source", source);
-        if (source == undefined) {
-            if (clicked.attr('class') == 'tilePoints') {
-                source = clicked.parent();
-                console.log("Parent", source)
+        if (sourceForTile == undefined) {
+            if (clicked.hasClass('tilePoints')) {
+                if (clicked.parent().hasClass('tileNotFixed')) {
+                    sourceForTile = clicked.parent();
+                };
             } 
             else {
-                source = clicked;
+                sourceForTile = clicked;
             };
         };
     });
     $(".boardCell").click(function(event) {
         event.stopPropagation(); //only select the topmost element
-        var target = $(event.target);
-        console.log( "source", source, "board target", target);
-        if (source != undefined) {
-            console.log("target class", target.attr('class'))
-            if (target.attr('class') == "bonusOverlay") {
-                console.log("parent", target.parent())
-                target.parent().append(source);
-                target.remove();
+        var clicked = $(event.target);
+        if (sourceForTile != undefined) {
+            if (clicked.hasClass('bonusOverlay')) {
+                if (clicked.parent().hasClass('boardCell')) {
+                    clicked.parent().append(sourceForTile);
+                    clicked.remove();
+                };
             }
             else {
-                target.append(source);
+                clicked.append(sourceForTile);
             };
             
-            source = undefined;
+            sourceForTile = undefined;
         } 
     });
 });
