@@ -34,6 +34,7 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
 
 var sourceTile;
 var sourceCell;
+var placedTiles = [];
 socket.on ('begin play', function(data) {
     var board = data;
     refreshBoard(board);
@@ -104,6 +105,30 @@ socket.on ('begin play', function(data) {
                     };
                 };
                 
+                //save the row, col of the target 
+                function updatePlacedTiles(sourceId, targetId) {
+                    if ($("#" + targetId).hasClass("boardCell")) {
+                        var idParsed = parseIntoRowCol(targetId);
+                        var existingIndex = placedTiles.findIndex(function(elem) {
+                            return elem[0] == idParsed["row"] && elem[1] == idParsed["col"];
+                        });
+                        //remove target if it already exists (ensures that we have the order in which tiles were placed as well)
+                        if (existingIndex != -1) 
+                            placedTiles.splice(existingIndex, 1)
+                        //push target onto list of placed tiles
+                        placedTiles.push([idParsed["row"], idParsed["col"]]);
+                        console.log(placedTiles);
+                    };
+                    if ($("#" + sourceId).hasClass("boardCell")) {
+                        var idParsed = parseIntoRowCol(sourceId);
+                        var existingIndex = placedTiles.findIndex(function(elem) {
+                            return elem[0] == idParsed["row"] && elem[1] == idParsed["col"];
+                        });
+                        if (existingIndex != -1) 
+                            placedTiles.splice(existingIndex, 1)
+                    };
+                };
+                updatePlacedTiles(sourceId, targetId);
                 //unselect tile 
                 $(".tileSelected").toggleClass('tileUnselected tileSelected');
                 
