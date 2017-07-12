@@ -25,15 +25,74 @@ DATA STRUCTURES
     TBDs in python apprentice module 
     
  */
+ 
+ 
  /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 //socket.emit('human message', {"message": data['message']});
 
-var sourceForTile;
 
+var sourceForTile;
 socket.on ('begin play', function(data) {
-    console.log(data);
+    refreshBoard(data);
     
+    //selecting/unselecting tiles
+    $(".tileNotFixed").click(function () {
+        if ($(this).hasClass('tileHuman')) {
+            if ($(this).hasClass('tileUnselected')) {
+                //untoggle any other tile that was selected 
+                $(".tileSelected").not(this).toggleClass('tileUnselected tileSelected');
+                //select this current tile 
+                $(this).toggleClass('tileUnselected tileSelected');
+            } else {
+                $(this).toggleClass('tileUnselected tileSelected');
+            };
+            //$(this).toggleClass('tileUnselected tileSelected');
+        };
+    });
+    
+    //click to move tile
+    $(".tileNotFixed").click(function(event) {
+        event.stopPropagation(); //only select the topmost element
+        var clicked = $(event.target);
+        if (sourceForTile == undefined) {
+            if (clicked.hasClass('tilePoints')) {
+                if (clicked.parent().hasClass('tileNotFixed')) {
+                    sourceForTile = clicked.parent();
+                };
+            } 
+            else {
+                sourceForTile = clicked;
+            };
+        };
+    });
+    
+    //click to place tile
+    $(".boardCell, .rackCell").click(function(event) {
+        event.stopPropagation(); //only select the topmost element
+        var clicked = $(event.target);
+        if (sourceForTile != undefined) {
+            if (clicked.hasClass('bonusOverlay')) {
+                if (clicked.parent().hasClass('boardCell')) {
+                    clicked.parent().append(sourceForTile);
+                    clicked.remove();
+                };
+            }
+            else if (clicked.hasClass('boardCell') || clicked.hasClass('rackCell')) {
+                clicked.append(sourceForTile);
+            };
+            //sound effect 
+            playSoundTileMoved();
+            //unselect tile 
+            $(".tileSelected").toggleClass('tileUnselected tileSelected');
+            //reset source 
+            sourceForTile = undefined;
+        } 
+    });
+});
+
+function refreshBoard(data) {
+        
     var board = data;
     
     var BOARD_MAX_ROW = board.length;
@@ -69,55 +128,10 @@ socket.on ('begin play', function(data) {
         table_row = table_row + "</tr>";
         table_whole = table_whole + table_row;
     };
+    
+    $("#board").empty();
     $("#board").append(table_whole);
-
-    $(".tileNotFixed").click(function () {
-        if ($(this).hasClass('tileHuman')) {
-            if ($(this).hasClass('tileUnselected')) {
-                //untoggle any other tile that was selected 
-                $(".tileSelected").not(this).toggleClass('tileUnselected tileSelected');
-                //select this current tile 
-                $(this).toggleClass('tileUnselected tileSelected');
-            } else {
-                $(this).toggleClass('tileUnselected tileSelected');
-            };
-            //$(this).toggleClass('tileUnselected tileSelected');
-        };
-    });
-    $(".tileNotFixed").click(function(event) {
-        event.stopPropagation(); //only select the topmost element
-        var clicked = $(event.target);
-        if (sourceForTile == undefined) {
-            if (clicked.hasClass('tilePoints')) {
-                if (clicked.parent().hasClass('tileNotFixed')) {
-                    sourceForTile = clicked.parent();
-                };
-            } 
-            else {
-                sourceForTile = clicked;
-            };
-        };
-    });
-    $(".boardCell, .rackCell").click(function(event) {
-        event.stopPropagation(); //only select the topmost element
-        var clicked = $(event.target);
-        if (sourceForTile != undefined) {
-            if (clicked.hasClass('bonusOverlay')) {
-                if (clicked.parent().hasClass('boardCell')) {
-                    playSoundTileMoved();
-                    clicked.parent().append(sourceForTile);
-                    clicked.remove();
-                };
-            }
-            else if (clicked.hasClass('boardCell')) {
-                playSoundTileMoved();
-                clicked.append(sourceForTile);
-            };
-            
-            sourceForTile = undefined;
-        } 
-    });
-});
+};
 
 function playSoundTileMoved() {    
     var audio = document.createElement("audio");
