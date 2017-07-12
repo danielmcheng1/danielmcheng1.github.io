@@ -110,19 +110,19 @@ socket.on ('begin play', function(data) {
                     if ($("#" + targetId).hasClass("boardCell")) {
                         var idParsed = parseIntoRowCol(targetId);
                         var existingIndex = placedTiles.findIndex(function(elem) {
-                            return elem[0] == idParsed["row"] && elem[1] == idParsed["col"];
+                            return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
                         });
                         //remove target if it already exists (ensures that we have the order in which tiles were placed as well)
                         if (existingIndex != -1) 
                             placedTiles.splice(existingIndex, 1)
                         //push target onto list of placed tiles
-                        placedTiles.push([idParsed["row"], idParsed["col"]]);
+                        placedTiles.push({"row": idParsed["row"], "col": idParsed["col"]});
                         console.log(placedTiles);
                     };
                     if ($("#" + sourceId).hasClass("boardCell")) {
                         var idParsed = parseIntoRowCol(sourceId);
                         var existingIndex = placedTiles.findIndex(function(elem) {
-                            return elem[0] == idParsed["row"] && elem[1] == idParsed["col"];
+                            return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
                         });
                         if (existingIndex != -1) 
                             placedTiles.splice(existingIndex, 1)
