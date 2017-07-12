@@ -109,24 +109,18 @@ socket.on ('begin play', function(data) {
                 function updatePlacedTiles(sourceId, targetId) {
                     if ($("#" + targetId).hasClass("boardCell")) {
                         var idParsed = parseIntoRowCol(targetId);
-                        var existingIndex = placedTiles.findIndex(function(elem) {
-                            return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
-                        });
-                        //remove target if it already exists (ensures that we have the order in which tiles were placed as well)
-                        if (existingIndex != -1) 
-                            placedTiles.splice(existingIndex, 1)
+                        var letter = pullLetterAtCellId(targetId);
                         //push target onto list of placed tiles
-                        placedTiles.push({"row": idParsed["row"], "col": idParsed["col"]});
-                        console.log(placedTiles);
+                        placedTiles.push({"row": idParsed["row"], "col": idParsed["col"], "letter": letter});                        
                     };
                     if ($("#" + sourceId).hasClass("boardCell")) {
                         var idParsed = parseIntoRowCol(sourceId);
                         var existingIndex = placedTiles.findIndex(function(elem) {
                             return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
                         });
-                        if (existingIndex != -1) 
-                            placedTiles.splice(existingIndex, 1)
+                        placedTiles.splice(existingIndex, 1)
                     };
+                    console.log(placedTiles);
                 };
                 updatePlacedTiles(sourceId, targetId);
                 //unselect tile 
@@ -148,7 +142,14 @@ function parseIntoRowCol(id) {
         rv["col"] = regexResult[2];
     }
     return rv;
-}
+};
+
+function pullLetterAtCellId(id) {
+    //.text() returns letter + points so substring to just the first character
+    return $("#" + id).find(".tile").text().charAt(0);
+    //return (document.getElementById(targetId).childNodes);
+};
+
 
 function refreshBoard(data) {
     var board = data;
