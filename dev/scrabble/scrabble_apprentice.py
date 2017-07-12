@@ -303,8 +303,8 @@ def wrapper_play_next_move(data = None):
             scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)    
                 
     scrabble_board = scrabble_game_play.scrabble_board
-    scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board_obj.board[row][col]), \
-                                "tile": map_tile_to_view(scrabble_board_obj.board[row][col], 'Human', scrabble_score_dict)} \
+    scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board.board[row][col]), \
+                                "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
                                 for row in range(MAX_ROW)] 
     return {"scrabble_board_wrapper": scrabble_board_wrapper, "scrabble_game_play": scrabble_game_play, "scrabble_score_dict": scrabble_score_dict}
