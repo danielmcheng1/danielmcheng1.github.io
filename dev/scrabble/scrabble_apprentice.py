@@ -273,41 +273,50 @@ class apprentice:
 class board_config:
     def __init__():
 '''    
-#need obj holding all this 
-#need to pass back the word player placed
-def wrapper_make_computer_move(data = None):
+
+#wrapper to replace scrabble_game.game_play method so that we can interface with flask/web app
+def wrapper_play_next_move(data = None):
     #initialize board 
     if data[0] is None:
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
         scrabble_gaddag = gaddag(scrabble_corpus[0:10])
-        scrabble_board_obj = scrabble_board(scrabble_gaddag, scrabble_bag)
-        scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board_obj.board[row][col]), \
-                                    "tile": map_tile_to_view(scrabble_board_obj.board[row][col], 'Human', scrabble_score_dict)} \
-                                    for col in range(MAX_COL)] \
-                                    for row in range(MAX_ROW)]   
-        '''
-        for row in range(MAX_ROW):
-            for col in range(MAX_COL):
-                scrabble_board_wrapper[row][col] = {} 
-                scrabble_board_wrapper[row][col]["bonus"] = map_bonus_to_view(scrabble_board_obj.board[row][col]) 
-                scrabble_board_wrapper[row][col]["tile"] = map_tile_to_view(scrabble_board_obj.board[row][col]) 
-        '''
+        scrabble_board = scrabble_board(scrabble_gaddag, scrabble_bag)
+            
+        human_player = scrabble_player("You", IS_HUMAN, scrabble_board)  
+        computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
+        
+        scrabble_game_play = scrabble_game_play(scrabble_board, human_player, computer_player)    
 
-    #make normal move 
+        scrabble_game_play.draw_tiles_end_of_turn(human_player, RACK_MAX_NUM_TILES)
+        scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES)
+        computer_player.rack = list('AAHINGXY')
+        
+    #read in the latest data and make the next move
     else:
-        scrabble_board_wrapper = data[0]
-        scrabble_board_obj = data[1]
-        scrabble_score_dict = data[2]
-    #temporary for testing  
-    rack = list('FOXES')
-    rack.extend(['A', 'B'])
-    scrabble_board_obj.place_word(CENTER_ROW, CENTER_COL, HORIZONTAL, list('FOXES'), rack)
+        #scrabble_board_wrapper = data["scrabble_board_wrapper"]
+        #scrabble_score_dict = data["scrabble_score_dict"]
+        scrabble_game_play = data["scrabble_game_play"]
+        
+        (score, input_word) = scrabble_game_play.scrabble_board.make_computer_move(computer_player.rack)
+        #if the computer is unable to find a move, exchange tiles
+        if not input_word:
+            scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)    
+                
+    scrabble_board = scrabble_game_play.scrabble_board
     scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board_obj.board[row][col]), \
                                 "tile": map_tile_to_view(scrabble_board_obj.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
                                 for row in range(MAX_ROW)] 
-    return (scrabble_board_wrapper, scrabble_board_obj, scrabble_score_dict)
-    
+    return {"scrabble_board_wrapper": scrabble_board_wrapper, "scrabble_game_play": scrabble_game_play, "scrabble_score_dict": scrabble_score_dict}
+    '''
+    #change to pass in the rack 
+    #class has to also flag who just played the tile....
+    score = self.scrabble_board.make_human_move(input_row, input_col, input_dir, input_word, player.rack)
+    player.words_played.append((input_word, score))
+    player.running_score += score   
+    self.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
+    '''
+        
 def map_bonus_to_view(cell):
     if cell == TRIPLE_LETTER:
         return 'Triple Letter'
@@ -320,7 +329,7 @@ def map_bonus_to_view(cell):
     if cell == NO_BONUS:
         return ''
     #TBD have to see if bonusess get replaced by letters 
-    print('WARNING: returning blank for {0}'.format(cell))
+    #print('WARNING: returning blank for {0}'.format(cell))
     return ''
     
 def map_tile_to_view(cell, player_type, scrabble_score_dict):

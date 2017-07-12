@@ -19,17 +19,17 @@ def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
     global SCRABBLE_APPRENTICE_RESPONSE 
-    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_make_computer_move(SCRABBLE_APPRENTICE_RESPONSE)
+    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
-    board_obj = SCRABBLE_APPRENTICE_RESPONSE[0]
+    board_obj = SCRABBLE_APPRENTICE_RESPONSE["scrabble_board_wrapper"]
     socketio.emit('begin play', board_obj)
     
 @socketio.on('human play')
 def handle_event(data):
     global SCRABBLE_APPRENTICE_RESPONSE 
-    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_make_computer_move(SCRABBLE_APPRENTICE_RESPONSE)
+    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
-    board_obj = SCRABBLE_APPRENTICE_RESPONSE[0]
+    board_obj = SCRABBLE_APPRENTICE_RESPONSE["scrabble_board_wrapper"]
     emit('begin play', board_obj) 
     
     
