@@ -36,6 +36,9 @@ var sourceForTile;
 socket.on ('begin play', function(data) {
     refreshBoard(data);
     
+    //create audio element
+    var soundEffects = document.createElement("audio");
+    
     //selecting/unselecting tiles
     $(".tileNotFixed").click(function () {
         if ($(this).hasClass('tileHuman')) {
@@ -82,7 +85,7 @@ socket.on ('begin play', function(data) {
                 clicked.append(sourceForTile);
             };
             //sound effect 
-            playSoundTileMoved();
+            playSoundTileMoved(soundEffects);
             //unselect tile 
             $(".tileSelected").toggleClass('tileUnselected tileSelected');
             //reset source 
@@ -133,10 +136,10 @@ function refreshBoard(data) {
     $("#board").append(table_whole);
 };
 
-function playSoundTileMoved() {    
-    var audio = document.createElement("audio");
-    audio.src = "static/sound/click2.mp3";
-    audio.play();
+function playSoundTileMoved(audioDOM) {    
+    audioDOM.src = "static/sound/click2.mp3";
+    audioDOM.load();
+    audioDOM.play();
 };
 /*
     document.body.onclick = function(evt) {
