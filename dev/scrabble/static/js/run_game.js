@@ -72,8 +72,17 @@ socket.on ('begin play', function(data) {
     $("#board").append(table_whole);
 
     $(".tileNotFixed").click(function () {
-        if ($(this).hasClass('tileHuman'))
-            $(this).toggleClass('tileUnselected tileSelected');
+        if ($(this).hasClass('tileHuman')) {
+            if ($(this).hasClass('tileUnselected')) {
+                //untoggle any other tile that was selected 
+                $(".tileSelected").not(this).toggleClass('tileUnselected tileSelected');
+                //select this current tile 
+                $(this).toggleClass('tileUnselected tileSelected');
+            } else {
+                $(this).toggleClass('tileUnselected tileSelected');
+            };
+            //$(this).toggleClass('tileUnselected tileSelected');
+        };
     });
     $(".tileNotFixed").click(function(event) {
         event.stopPropagation(); //only select the topmost element
@@ -89,17 +98,19 @@ socket.on ('begin play', function(data) {
             };
         };
     });
-    $(".boardCell").click(function(event) {
+    $(".boardCell, .rackCell").click(function(event) {
         event.stopPropagation(); //only select the topmost element
         var clicked = $(event.target);
         if (sourceForTile != undefined) {
             if (clicked.hasClass('bonusOverlay')) {
                 if (clicked.parent().hasClass('boardCell')) {
+                    playSoundTileMoved();
                     clicked.parent().append(sourceForTile);
                     clicked.remove();
                 };
             }
-            else {
+            else if (clicked.hasClass('boardCell')) {
+                playSoundTileMoved();
                 clicked.append(sourceForTile);
             };
             
@@ -107,6 +118,12 @@ socket.on ('begin play', function(data) {
         } 
     });
 });
+
+function playSoundTileMoved() {    
+    var audio = document.createElement("audio");
+    audio.src = "static/sound/click2.mp3";
+    audio.play();
+};
 /*
     document.body.onclick = function(evt) {
         var evt = window.event || evt;

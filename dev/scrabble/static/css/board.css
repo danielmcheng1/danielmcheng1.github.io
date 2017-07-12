@@ -74,22 +74,22 @@
 	z-index: 10; /*stack order -- higher = element in front*/
 }
 .tileFixed  {
+    cursor: default;
 }
 .tileNotFixed {
+    cursor: pointer;
 }
 
 .tileHuman {
 	border: 3px solid #d4c491;
     background-color: #ead89f;
     border-style: solid;
-    cursor: pointer;
 }
 
 .tileComputer {
 	border: 3px solid #843a3a;
     background-color: #cc6d6d;
     border-style: solid;
-    cursor: default;
 }
 .tilePoints {
     font-size: 8px;
