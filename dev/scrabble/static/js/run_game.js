@@ -78,18 +78,31 @@ socket.on ('begin play', function(data) {
     });
     $(".tile").click(function(event) {
         event.stopPropagation(); //only select the topmost element
-        console.log("tile", event.target, "source", source);
-        if (source == undefined) 
-            source = event.target;
+        var clicked = $(event.target);
+        console.log("tile", clicked, "source", source);
+        if (source == undefined) {
+            if (clicked.attr('class') == 'tilePoints') {
+                source = clicked.parent();
+                console.log("Parent", source)
+            } 
+            else {
+                source = clicked;
+            };
+        };
     });
     $(".boardCell").click(function(event) {
         event.stopPropagation(); //only select the topmost element
-        console.log( "source", source, "board target", event.target);
+        var target = $(event.target);
+        console.log( "source", source, "board target", target);
         if (source != undefined) {
-            console.log("target class", $(event.target).attr('class'))
-            event.target.append(source);
-            if ($(event.target).attr('class') == "bonusOverlay") {
-                $(event.target).remove();
+            console.log("target class", target.attr('class'))
+            if (target.attr('class') == "bonusOverlay") {
+                console.log("parent", target.parent())
+                target.parent().append(source);
+                target.remove();
+            }
+            else {
+                target.append(source);
             };
             
             source = undefined;
