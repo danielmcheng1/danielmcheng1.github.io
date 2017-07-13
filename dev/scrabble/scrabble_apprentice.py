@@ -285,9 +285,7 @@ def wrapper_play_next_move(data):
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
         
-        scrabble_game_play = game_play(scrabble_board, human_player, computer_player)    
-
-        computer_player.rack = list('ABALONE')
+        scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
         
     #read in the latest data and make the next move
     else:
