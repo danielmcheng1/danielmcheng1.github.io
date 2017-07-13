@@ -279,7 +279,7 @@ def wrapper_play_next_move(data):
     #initialize board 
     if data == {}:
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_gaddag = gaddag(scrabble_corpus[0:10])
+        scrabble_gaddag = gaddag(scrabble_corpus[0:100])
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("You", IS_HUMAN, scrabble_board)  
@@ -289,19 +289,20 @@ def wrapper_play_next_move(data):
 
         scrabble_game_play.draw_tiles_end_of_turn(human_player, RACK_MAX_NUM_TILES)
         scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES)
-        computer_player.rack = list('AAHINGXY')
+        computer_player.rack = list('ABALONE')
         
     #read in the latest data and make the next move
     else:
         scrabble_game_play = data["scrabble_game_play"]
         computer_player = scrabble_game_play.play_order[1]
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
-        print("computer: " + input_word) 
+        print("computer: {0}".format(input_word) )
         #if the computer is unable to find a move, exchange tiles
         if not input_word:
             scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)    
                 
     scrabble_board = scrabble_game_play.board
+    scrabble_score_dict = scrabble_board.scrabble_score_dict
     scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board.board[row][col]), \
                                 "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
@@ -357,7 +358,7 @@ class board:
         self.num_words_placed = 0
         self.gaddag = gaddag
         self.bag = bag
-        self.scrabble_score_dict = scrabble_score_dict
+        self.scrabble_score_dict = score_dict
         
     def clear_comp(self):
         self.comp_max_score = 0

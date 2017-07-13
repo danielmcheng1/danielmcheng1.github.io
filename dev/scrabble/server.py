@@ -20,7 +20,6 @@ def server_originates_message():
     #hence broadcast=True assumed 
     global SCRABBLE_APPRENTICE_RESPONSE 
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
-    print(    SCRABBLE_APPRENTICE_RESPONSE )
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
     board_obj = SCRABBLE_APPRENTICE_RESPONSE["scrabble_board_wrapper"]
