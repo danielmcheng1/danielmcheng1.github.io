@@ -19,6 +19,19 @@ DATA STRUCTURES
                 .bonus 
              if blank then attribute is N/A
  To Do
+    fix game bugs 
+        why going twice? probably sending message twice?
+        too many tiles drawn at beginning? 
+        some words not in dict? 
+        handl eerrors 
+        exchange rack
+    show game info
+    other 
+        add delay to computer move
+        instructions while waiting
+        confident enough to show tiles
+        refreshing page/starting game over
+        https://www.soundsnap.com/tags/scrabble Scrabble game tile down 2 and Scrabble game with hand in bag
     Make this data structure better..
     Move to FLASK template 
         https://stackoverflow.com/questions/11178426/how-can-i-pass-data-from-flask-to-javascript-in-a-template
@@ -50,11 +63,15 @@ var sourceTile;
 var sourceCell;
 var placedTilesHuman;
     
+$("#playMoveHuman").addClass("buttonClicked");
+$("#swapTilesHuman").addClass("buttonClicked");
 $("#startGame").click (function(event) {
-    console.log("starting game...");
-    socket.emit('moveDoneHuman', {});
+    if (!$(this).hasClass("buttonClicked")) {
+        console.log("starting game...");
+        socket.emit('moveDoneHuman', {});  
+        $(this).addClass("buttonClicked");
+    };
 });
-
 socket.on('moveDoneComputer', function(data) {
     console.log(data);
     
@@ -66,6 +83,14 @@ socket.on('moveDoneComputer', function(data) {
     //create audio element
     var soundEffects = document.createElement("audio");
     
+    $("#playMoveHuman").removeClass("buttonClicked");
+    $("#playMoveHuman").click (function(event) {
+        if (!$(this).hasClass("buttonClicked")) {
+            console.log("emitting move", placedTilesHuman);
+            socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
+            $(this).addClass("buttonClicked");
+        };
+    });
     //selecting/unselecting tiles
     $(".tileNotFixed").click(function () {
         if ($(this).hasClass('tileHuman')) {
@@ -138,10 +163,6 @@ socket.on('moveDoneComputer', function(data) {
                 sourceTile = undefined;
             };
         } 
-    });
-    $("#playMoveHuman").click (function(event) {
-        console.log(placedTilesHuman);
-        socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
     });
 });
 

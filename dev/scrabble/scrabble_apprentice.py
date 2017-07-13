@@ -284,7 +284,8 @@ def wrapper_play_next_move(data):
             
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
-        
+        human_player.rack = list("WHINELDI")
+        computer_player.rack =  list("USADDLE")
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
         
     #read in the latest data and make the next move
@@ -307,7 +308,7 @@ def wrapper_play_next_move(data):
         
         #similar to the pull_valid_crossword_score function...
         (curr_row, curr_col) = (first_placed_row, first_placed_col)
-        word = []
+        word = [placed_tiles_human[first_placed_row][first_placed_col]]
         if direction == HORIZONTAL:
             (row_delta, col_delta) = (0, 1)
         else:
@@ -320,6 +321,7 @@ def wrapper_play_next_move(data):
                     letter = scrabble_board.board[curr_row][curr_col]
                 else:
                     letter = placed_tiles_human[curr_row][curr_col]
+                print(curr_row, curr_col, letter) 
                 if letter != "":
                     word.insert(0, letter) #insert in front
                 else:
@@ -332,6 +334,7 @@ def wrapper_play_next_move(data):
         while True:
             (curr_row, curr_col) = (curr_row + row_delta, curr_col + col_delta)
             if curr_row < MAX_ROW and curr_col < MAX_COL:
+                print(curr_row, curr_col, letter) 
                 if scrabble_board.is_scrabble_tile(curr_row, curr_col):
                     letter = scrabble_board.board[curr_row][curr_col]
                 else:
@@ -376,7 +379,6 @@ def wrapper_end_turn(player, word, score, game_play):
 def find_filled_rows_and_cols(placed_tiles):
     rows = set([])
     cols = set([])
-    print(placed_tiles)
     for row in range(MIN_ROW, MAX_ROW):
         for col in range(MIN_COL, MAX_COL):
             if placed_tiles[row][col] != "":
