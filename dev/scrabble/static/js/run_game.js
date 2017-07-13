@@ -36,6 +36,7 @@ var sourceTile;
 var sourceCell;
 var placedTiles = [];
 socket.on ('begin play', function(data) {
+    console.log(data)
     var board = data;
     refreshBoard(board);
     

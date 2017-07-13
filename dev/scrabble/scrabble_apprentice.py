@@ -275,12 +275,12 @@ class board_config:
 '''    
 
 #wrapper to replace scrabble_game.game_play method so that we can interface with flask/web app
-def wrapper_play_next_move(data = None):
+def wrapper_play_next_move(data):
     #initialize board 
-    if data[0] is None:
+    if data == {}:
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
         scrabble_gaddag = gaddag(scrabble_corpus[0:10])
-        scrabble_board = board(scrabble_gaddag, scrabble_bag)
+        scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("You", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
@@ -293,11 +293,10 @@ def wrapper_play_next_move(data = None):
         
     #read in the latest data and make the next move
     else:
-        #board_wrapper = data["board_wrapper"]
-        #scrabble_score_dict = data["scrabble_score_dict"]
         scrabble_game_play = data["scrabble_game_play"]
-        
+        computer_player = scrabble_game_play.play_order[1]
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
+        print("computer: " + input_word) 
         #if the computer is unable to find a move, exchange tiles
         if not input_word:
             scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)    
@@ -307,11 +306,13 @@ def wrapper_play_next_move(data = None):
                                 "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
                                 for row in range(MAX_ROW)] 
-    return {"scrabble_board_wrapper": scrabble_board_wrapper, "scrabble_game_play": game_play, "scrabble_score_dict": scrabble_score_dict}
+    return {"scrabble_board_wrapper": scrabble_board_wrapper, "scrabble_game_play": scrabble_game_play}
     '''
     #change to pass in the rack 
     #class has to also flag who just played the tile....
     #capitalize classes
+    #make move each time -- 
+        computer_player = scrabble_game_play.play_order[1]
     score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player.rack)
     player.words_played.append((input_word, score))
     player.running_score += score   
@@ -351,11 +352,12 @@ class tile:
         
 class board:
     #highest for loop appears first!! http://rhodesmill.org/brandon/2009/nested-comprehensions/
-    def __init__(self, gaddag, bag):
+    def __init__(self, gaddag, bag, score_dict):
         self.board = [[self.add_premium(row, col) for col in range(MAX_COL)] for row in range(MAX_ROW)]
         self.num_words_placed = 0
         self.gaddag = gaddag
         self.bag = bag
+        self.scrabble_score_dict = scrabble_score_dict
         
     def clear_comp(self):
         self.comp_max_score = 0
@@ -560,7 +562,7 @@ class board:
                 else:
                     curr_bonus = NO_BONUS #technically includes letter tiles--can remove this when printing is no longer done
                                
-                total_score += letter_multiplier * scrabble_score_dict[curr_letter]
+                total_score += letter_multiplier * self.scrabble_score_dict[curr_letter]
                 letter_multiplier = 1
         
                 #add in crossword score
@@ -573,10 +575,10 @@ class board:
                 
                 #TBD printing for debugging
                 if valid_crossword_score_dict and DEBUG_PULL_VALID_CROSSWORD:
-                    print(str(curr_letter) + ": " + str(scrabble_score_dict[curr_letter]) + "pts" + \
+                    print(str(curr_letter) + ": " + str(self.scrabble_score_dict[curr_letter]) + "pts" + \
                       " --> bonus : " + str(curr_bonus) + " pts at " + str(curr_row) + "," + str(curr_col))                                  
                 elif DEBUG_PULL_VALID_CROSSWORD:
-                    print("\t" + str(curr_letter) + ": " + str(scrabble_score_dict[curr_letter]) + "pts" + \
+                    print("\t" + str(curr_letter) + ": " + str(self.scrabble_score_dict[curr_letter]) + "pts" + \
                       " --> bonus : " + str(curr_bonus) + " pts at " + str(curr_row) + "," + str(curr_col))                                  
                 
         #final word multiplier bonus
@@ -1178,17 +1180,15 @@ if __name__ == "__main__":
     
     (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
     scrabble_gaddag = gaddag(scrabble_corpus)
-    board = board(scrabble_gaddag, scrabble_bag)
+    scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
  
         
     scrabble_player_1 = scrabble_player("Computer 1", IS_HUMAN, board)  
-    scrabble_player_2 = scrabble_player("Computer 2", IS_COMPUTER, board)  
-    #scrabble_player_3 = scrabble_player("Computer 3", IS_COMPUTER, board)   
-    #scrabble_player_4 = scrabble_player("Computer 4", IS_COMPUTER, board) 
-    print(board.board)
-    #game_play = game_play(board, scrabble_player_1, scrabble_player_2)    
+    scrabble_player_2 = scrabble_player("Computer 2", IS_COMPUTER, board)   
+    print(scrabble_board.board)
+    #scrabble_game_play = scrabble_game_play(scrabble_board, scrabble_player_1, scrabble_player_2)    
 
-    #game_play.play_game()
+    #scrabble_game_play.play_game()
 
 
     

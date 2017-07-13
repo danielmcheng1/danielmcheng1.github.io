@@ -9,7 +9,7 @@ import scrabble_apprentice
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-SCRABBLE_APPRENTICE_RESPONSE = (None, None, None)
+SCRABBLE_APPRENTICE_RESPONSE = {}
 @app.route('/',methods=['GET','POST'])
 def index():
     return render_template('index.html')
@@ -19,6 +19,8 @@ def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
     global SCRABBLE_APPRENTICE_RESPONSE 
+    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
+    print(    SCRABBLE_APPRENTICE_RESPONSE )
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
     board_obj = SCRABBLE_APPRENTICE_RESPONSE["scrabble_board_wrapper"]
