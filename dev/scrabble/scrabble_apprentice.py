@@ -344,6 +344,7 @@ def wrapper_play_next_move(data):
                     break
             else:
                 break 
+        print(word)
                 
         score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
         wrapper_end_turn(human_player, word, score, scrabble_game_play)
@@ -377,6 +378,7 @@ def wrapper_end_turn(player, word, score, game_play):
 def find_filled_rows_and_cols(placed_tiles):
     rows = set([])
     cols = set([])
+    print(placed_tiles)
     for row in range(MIN_ROW, MAX_ROW):
         for col in range(MIN_COL, MAX_COL):
             if placed_tiles[row][col] != "":

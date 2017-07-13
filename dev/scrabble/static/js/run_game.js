@@ -51,6 +51,7 @@ var sourceCell;
 var placedTilesHuman;
     
 $("#startGame").click (function(event) {
+    console.log("starting game...");
     socket.emit('moveDoneHuman', {});
 });
 
