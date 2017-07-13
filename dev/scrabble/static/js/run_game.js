@@ -37,6 +37,9 @@ DATA STRUCTURES
                                 "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
                                 for row in range(MAX_ROW)] 
+   
+    //TBD try removing table in rack --spacing changes
+    //bonus text not centered 
     '''
  */
  
@@ -51,7 +54,10 @@ var sourceCell;
 var placedTiles = [];
 socket.on ('begin play', function(data) {
     console.log(data);
+    
     refreshBoard(data);
+    refreshRack(data, 'Human');
+    refreshRack(data, 'Computer');
     
     //create audio element
     var soundEffects = document.createElement("audio");
@@ -134,7 +140,6 @@ socket.on ('begin play', function(data) {
                         });
                         placedTiles.splice(existingIndex, 1)
                     };
-                    console.log(placedTiles);
                 };
                 updatePlacedTiles(sourceId, targetId);
                 //unselect tile 
@@ -164,7 +169,20 @@ function pullLetterAtCellId(id) {
     //return (document.getElementById(targetId).childNodes);
 };
 
-
+function refreshRack(data, player) {
+    var tiles = data["rack" + player];
+    var rack = "<table><tr>";
+    for (var i = 0; i < tiles.length; i++) {
+        var letter = tiles[i];
+        var points = 3;
+        var span = '<span class = "tile tileNotFixed tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span';
+        var cell = '<td class = "rackCell">' + span + '</td>';
+        rack = rack + cell;
+    };
+    rack = rack + "</tr></table>";
+    $("#rack" + player).empty();
+    $("#rack" + player).append(rack);
+};
 function refreshBoard(data) {
     var tiles = data["tiles"];
     var board = data["board"];

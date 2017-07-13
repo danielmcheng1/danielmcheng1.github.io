@@ -308,8 +308,8 @@ def wrapper_play_next_move(data):
     scrabble_score_dict = scrabble_board.scrabble_score_dict
     scrabble_game_play_wrapper = {"board": [[map_bonus_to_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "tiles": [[map_tile_to_view(scrabble_board.board[row][col], 'Computer', scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
-                              "humanRack": human_player.rack, \
-                              "computerRack": computer_player.rack, \
+                              "rackHuman": human_player.rack, \
+                              "rackComputer": computer_player.rack, \
                               "gameState": {}\
                               }
     return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
