@@ -282,7 +282,7 @@ def wrapper_play_next_move(data):
         scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
-        human_player = scrabble_player("You", IS_HUMAN, scrabble_board)  
+        human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
         
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player)    
@@ -345,14 +345,10 @@ def wrapper_play_next_move(data):
             else:
                 break 
                 
-        print(word)
-        print(direction) 
-        print(start_row)
-        print(start_col)
-        scrabble_board.make_human_move(start_row, start_col, direction, word, human_player.rack)
+        scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
         
         #make computer move 
-        (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
+        (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player)
         #replenish rack after placing word 
         if input_word:
             scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES - len(computer_player.rack))
@@ -364,8 +360,8 @@ def wrapper_play_next_move(data):
     computer_player = scrabble_game_play.play_order[1]
     scrabble_board = scrabble_game_play.board
     scrabble_score_dict = scrabble_board.scrabble_score_dict
-    scrabble_game_play_wrapper = {"board": [[map_bonus_to_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
-                              "tiles": [[map_tile_to_view(scrabble_board.board[row][col], 'Computer', scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
+    scrabble_game_play_wrapper = {"board": [[map_cell_to_bonus_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
+                              "tiles": [[map_cell_to_tile_view(scrabble_board.board[row][col], map_cell_to_player_view(row, col, scrabble_board), scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "rackHuman": human_player.rack, \
                               "rackComputer": computer_player.rack, \
                               "gameInfo": {}\
@@ -383,7 +379,7 @@ def find_filled_rows_and_cols(placed_tiles):
                 cols.add(col)
     return (rows, cols) 
     
-def map_bonus_to_view(cell):
+def map_cell_to_bonus_view(cell):
     if cell == TRIPLE_LETTER:
         return 'Triple Letter'
     if cell == TRIPLE_WORD:
@@ -398,12 +394,14 @@ def map_bonus_to_view(cell):
     #print('WARNING: returning blank for {0}'.format(cell))
     return ''
     
-def map_tile_to_view(cell, player_type, scrabble_score_dict):
+def map_cell_to_tile_view(cell, player_type, scrabble_score_dict):
     #TBD flip to the is_scrabble_tile method? 
     if cell.isalpha():
         return tile(cell, player_type, scrabble_score_dict).get_tile()
     return ''
-
+def map_cell_to_player_view(row, col, scrabble_board):
+    return scrabble_board.board_to_player[row][col]
+    
 #TBD player name, type, or ID?    
 class tile:
     def __init__(self, letter, player_type, scrabble_score_dict):
@@ -417,7 +415,8 @@ class tile:
 class board:
     #highest for loop appears first!! http://rhodesmill.org/brandon/2009/nested-comprehensions/
     def __init__(self, gaddag, bag, score_dict):
-        self.board = [[self.add_premium(row, col) for col in range(MAX_COL)] for row in range(MAX_ROW)]
+        self.board = [[self.add_premium(row, col) for col in range(MIN_COL, MAX_COL)] for row in range(MIN_ROW, MAX_ROW)]
+        self.board_to_player = [["" for col in range(MIN_COL, MAX_COL)] for row in range(MIN_ROW, MAX_ROW)]
         self.num_words_placed = 0
         self.gaddag = gaddag
         self.bag = bag
@@ -542,7 +541,7 @@ class board:
     #(this is called at the end of the move sequence...seems silly to abort NOW, but TBD if this can be improved)
     #e.g. two of the checks below can be moved out at least to the beginning of the move
         #...and maybe checking if is a word
-    def place_word(self, start_row, start_col, direction, word, rack):
+    def place_word(self, start_row, start_col, direction, word, player):
         num_tiles = len(word) 
         if direction == HORIZONTAL:
             end_row = start_row + 1
@@ -559,7 +558,6 @@ class board:
             
         #place in this given row or col, 
         #but break if you overlap an existing tile (and your input letters do not match up with those tiles)
-        
         (saved_row, saved_col) = (self.board[start_row][:], self.board[:][start_col])
         for curr_row in range(start_row, end_row):
             for curr_col in range(start_col, end_col):
@@ -573,7 +571,8 @@ class board:
                 #remove from rack and place if this isn't an existing tile on the board
                 if self.board[curr_row][curr_col] != to_place:
                     self.board[curr_row][curr_col] = to_place
-                    rack.remove(to_place)
+                    player.rack.remove(to_place)
+                    self.board_to_player[curr_row][curr_col] = player.name #stamp tile with this player's name
         self.num_words_placed += 1
         
     #http://www.csc.kth.se/utbildning/kth/kurser/DD143X/dkand12/Group3Johan/report/berntsson_ericsson_report.pdf example scoring
@@ -1010,15 +1009,15 @@ class board:
         
     #functions for making a move on the board
     #these return the score so that the game_play and player classes can keep a running score for each player
-    def make_computer_move(self, rack): 
+    def make_computer_move(self, player):
         self.clear_comp()
-        self.generate_all_possible_moves(rack)
+        self.generate_all_possible_moves(player.rack)
         #self.print_max_move()
         if self.comp_max_word:
-            self.place_word(self.comp_max_row, self.comp_max_col, self.comp_max_direction, self.comp_max_word, rack)
+            self.place_word(self.comp_max_row, self.comp_max_col, self.comp_max_direction, self.comp_max_word, player)
         return (self.comp_max_score, self.comp_max_word)
     
-    def make_human_move(self, start_row, start_col, direction, word, rack):
+    def make_human_move(self, start_row, start_col, direction, word, player):
         num_tiles = len(word)
         if direction == HORIZONTAL:
             end_row = start_row + 1
@@ -1031,7 +1030,7 @@ class board:
         if self.is_valid_word(word):
             #pull these regardless of whether words have been placed, b/c we need these to calculate the score
             (valid_hook_spots, valid_crossword_score_dict) = \
-            self.pull_hooks_and_crosswords(start_row, start_col, direction, rack)
+            self.pull_hooks_and_crosswords(start_row, start_col, direction, player.rack)
             #exception for first move
             if self.num_words_placed == 0:
                 if not self.intersect_center_tile(start_row, start_col, direction, word):
@@ -1068,7 +1067,7 @@ class board:
                         
         #score and place word
         human_score = self.calc_word_score(start_row, start_col, direction, word, valid_crossword_score_dict)
-        self.place_word(start_row, start_col, direction, word, rack)
+        self.place_word(start_row, start_col, direction, word, player)
         return human_score
     
 #instantiates a player bound to a particular board and common scrabble bag
@@ -1194,7 +1193,7 @@ class game_play:
                 (input_row, input_col, input_dir, input_word) = self.request_human_move(player)
                 if input_word:
                     try:
-                        score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player.rack)
+                        score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player)
                         break
                     except:
                         print("Invalid move. Let's try again.")
@@ -1207,7 +1206,7 @@ class game_play:
                     return
         else:
             print("Computer thinking through move....")
-            (score, input_word) = self.board.make_computer_move(player.rack)
+            (score, input_word) = self.board.make_computer_move(player)
             #if the computer is unable to find a move, exchange tiles
             if input_word:
                 self.exchange_tiles_during_turn(player, player.rack)
