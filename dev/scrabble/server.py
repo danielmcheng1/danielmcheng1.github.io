@@ -26,7 +26,8 @@ def server_originates_message():
     
 @socketio.on('humanPlay')
 def handle_event(data):
-    print(data)
+    placedTiles = data["placedTiles"]
+    sortedTiles = sorted(placedTiles, lambda x: int(x["row"]))
     global SCRABBLE_APPRENTICE_RESPONSE 
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
