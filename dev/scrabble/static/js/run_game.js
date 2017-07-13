@@ -50,7 +50,7 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
 
 var sourceTile;
 var sourceCell;
-var placedTilesHuman = [];
+var placedTilesHuman;
     
 $("#startGame").click (function(event) {
     socket.emit('moveDoneHuman', {});
@@ -60,6 +60,7 @@ socket.on('moveDoneComputer', function(data) {
     console.log(data);
     
     refreshBoard(data);
+    refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
     refreshRack(data, 'Computer');
     
@@ -130,22 +131,7 @@ socket.on('moveDoneComputer', function(data) {
                 };
                 
                 //save the row, col of the target 
-                function updateplacedTilesHuman(sourceId, targetId) {
-                    if ($("#" + targetId).hasClass("boardCell")) {
-                        var idParsed = parseIntoRowCol(targetId);
-                        var letter = pullLetterAtCellId(targetId);
-                        //push target onto list of placed tiles
-                        placedTilesHuman.push({"row": idParsed["row"], "col": idParsed["col"], "letter": letter});                        
-                    };
-                    if ($("#" + sourceId).hasClass("boardCell")) {
-                        var idParsed = parseIntoRowCol(sourceId);
-                        var existingIndex = placedTilesHuman.findIndex(function(elem) {
-                            return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
-                        });
-                        placedTilesHuman.splice(existingIndex, 1)
-                    };
-                };
-                updateplacedTilesHuman(sourceId, targetId);
+                updatePlacedTilesHuman(sourceId, targetId);
                 //unselect tile 
                 $(".tileSelected").toggleClass('tileUnselected tileSelected');
                 
@@ -177,6 +163,23 @@ function pullLetterAtCellId(id) {
     //return (document.getElementById(targetId).childNodes);
 };
 
+function updatePlacedTilesHuman(sourceId, targetId) {
+    if ($("#" + targetId).hasClass("boardCell")) {
+        var idParsed = parseIntoRowCol(targetId);
+        var letter = pullLetterAtCellId(targetId);
+        //push target onto list of placed tiles
+        placedTilesHuman[idParsed["row"]][idParsed["col"]] = letter;                        
+    };
+    if ($("#" + sourceId).hasClass("boardCell")) {
+        var idParsed = parseIntoRowCol(sourceId);
+        placedTilesHuman[idParsed["row"]][idParsed["col"]] = "";
+        //var existingIndex = placedTilesHuman.findIndex(function(elem) {
+        //    return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
+        //});
+        //placedTilesHuman.splice(existingIndex, 1)
+    };
+};
+
 function refreshRack(data, player) {
     var tiles = data["rack" + player];
     var rack = "<table><tr>";
@@ -190,6 +193,16 @@ function refreshRack(data, player) {
     rack = rack + "</tr></table>";
     $("#rack" + player).empty();
     $("#rack" + player).append(rack);
+};
+
+function refreshPlacedTilesHuman(data) {
+    for (var i = 0; i < data["board"].length; i++) {
+        var thisRow = [];
+        for (var j = 0; j < data["board"][0].length; j++) {
+            thisRow.push("");
+        };
+        placedTilesHuman.push(thisRow);
+    };
 };
 function refreshBoard(data) {
     var tiles = data["tiles"];

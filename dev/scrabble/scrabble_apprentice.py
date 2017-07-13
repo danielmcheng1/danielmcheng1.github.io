@@ -292,12 +292,66 @@ def wrapper_play_next_move(data):
     #read in the latest data and make the next move
     else:
         scrabble_game_play = data["scrabble_game_play"]
-        placed_tiles_human = data["placed_tiles_human"]
-        sorted_tiles = sorted(placed_tiles_human, key = lambda x: (int(x["row"]), int(x["col"])))
-        print(sorted_tiles) 
-        
-        #this is just for testing 
+        human_player = scrabble_game_play.play_order[0]
         computer_player = scrabble_game_play.play_order[1]
+        
+        #TBD add validation 
+        (filled_rows, filled_cols) = find_filled_rows_and_cols(placed_tiles_human)
+        if len(filled_rows) == 1:
+            direction = HORIZONTAL 
+        else if len(filled_cols) == 1: 
+            direction = VERTICAL 
+        else:
+            raise ValueError("You can only place in one row or column!!!")        
+        first_placed_row = min(filled_rows)
+        first_placed_col = min(filled_cols)
+        scrabble_board = scrabble_game_play.board
+        
+        #similar to the pull_valid_crossword_score function...
+        (curr_row, curr_col) = (first_placed_row, first_placed_col)
+        word = []
+        if direction == HORIZONTAL:
+            (row_delta, col_delta) = (0, 1)
+        else:
+            (row_delta, col_delta) = (1, 0)
+        #find the start of the word 
+        while True:
+            (curr_row, curr_col) = (curr_row - row_delta, curr_col - col_delta)
+            if curr_row >= MIN_ROW and curr_col >= MIN_COL:
+                if scrabble_board.is_scrabble_tile(curr_row, curr_col):
+                    letter = scrabble_board.board[curr_row][curr_col]
+                else:
+                    letter = placed_tiles_human[curr_row][curr_col]
+                if letter != "":
+                    word.insert(0, letter) #insert in front
+                else:
+                    break
+            else:
+                break
+        (start_row, start_col) = (curr_row + row_delta, curr_col + col_delta) 
+        
+        #find the end of the word 
+        while True:
+            (curr_row, curr_col) = (curr_row + row_delta, curr_col + col_delta)
+            if curr_row < MAX_ROW and curr_col < MAX_COL:
+                if scrabble_board.is_scrabble_tile(curr_row, curr_col):
+                    letter = scrabble_board.board[curr_row][curr_col]
+                else:
+                    letter = placed_tiles_human[curr_row][curr_col]
+                if letter != "":
+                    word.append(letter)
+                else:
+                    break
+            else:
+                break 
+                
+        print(word)
+        print(direction) 
+        print(start_row)
+        print(start_col)
+        scrabble_game_play.make_human_move(self, start_row, start_col, direction, word, human_player.rack):
+        
+        #make computer move 
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
         #replenish rack after placing word 
         if input_word:
@@ -319,6 +373,16 @@ def wrapper_play_next_move(data):
     return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
 
         
+def find_filled_rows_and_cols(placed_tiles):
+    rows = set([])
+    cols = set([])
+    for row in range(MIN_ROW, MAX_ROW):
+        for col in range(MIN_COL, MAX_COL):
+            if placed_tiles[row][col] != "":
+                rows.add(row)
+                cols.add(col)
+    return (rows, cols) 
+    
 def map_bonus_to_view(cell):
     if cell == TRIPLE_LETTER:
         return 'Triple Letter'
