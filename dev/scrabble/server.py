@@ -9,30 +9,29 @@ import scrabble_apprentice
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-SCRABBLE_APPRENTICE_RESPONSE = {}
+SCRABBLE_APPRENTICE_DATA = {}
 @app.route('/',methods=['GET','POST'])
 def index():
     return render_template('index.html')
 
-@socketio.on('connect')
+@socketio.on('startGame')
 def server_originates_message():
     #no client context like when emitting/sending in response to server 
     #hence broadcast=True assumed 
-    global SCRABBLE_APPRENTICE_RESPONSE 
-    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
+    global SCRABBLE_APPRENTICE_DATA
+    SCRABBLE_APPRENTICE_DATA = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_DATA)
+    print("connecting")
+    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_DATA["scrabble_game_play_wrapper"]
+    socketio.emit('moveDoneComputer',scrabble_game_play_wrapper)
     
-    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
-    socketio.emit('beginPlay',scrabble_game_play_wrapper)
-    
-@socketio.on('humanPlay')
+@socketio.on('moveDoneHuman')
 def handle_event(data):
-    placedTiles = data["placedTiles"]
-    sortedTiles = sorted(placedTiles, lambda x: int(x["row"]))
-    global SCRABBLE_APPRENTICE_RESPONSE 
-    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
+    global SCRABBLE_APPRENTICE_DATA 
+    SCRABBLE_APPRENTICE_DATA["placed_tiles_human"] = data.get("placedTilesHuman", {})
+    SCRABBLE_APPRENTICE_DATA = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_DATA)
    
-    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
-    emit('beginPlay', scrabble_game_play_wrapper ) 
+    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_DATA["scrabble_game_play_wrapper"]
+    emit('moveDoneComputer', scrabble_game_play_wrapper) 
     
     
 

@@ -277,7 +277,7 @@ class board_config:
 #wrapper to replace scrabble_game.game_play method so that we can interface with flask/web app
 def wrapper_play_next_move(data):
     #initialize board 
-    if data == {}:
+    if data.get("scrabble_game_play", {}) == {}:
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
         scrabble_gaddag = gaddag(scrabble_corpus[0:100])
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
@@ -292,10 +292,13 @@ def wrapper_play_next_move(data):
     #read in the latest data and make the next move
     else:
         scrabble_game_play = data["scrabble_game_play"]
+        placed_tiles_human = data["placed_tiles_human"]
+        sorted_tiles = sorted(placed_tiles_human, key = lambda x: (int(x["row"]), int(x["col"])))
+        print(sorted_tiles) 
+        
         #this is just for testing 
         computer_player = scrabble_game_play.play_order[1]
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
-        print("computer move: {0}".format(input_word))
         #replenish rack after placing word 
         if input_word:
             scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES - len(computer_player.rack))

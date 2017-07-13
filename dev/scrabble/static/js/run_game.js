@@ -50,8 +50,13 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
 
 var sourceTile;
 var sourceCell;
-var placedTiles = [];
-socket.on ('beginPlay', function(data) {
+var placedTilesHuman = [];
+    
+$("#startGame").click (function(event) {
+    socket.emit('moveDoneHuman', {});
+});
+
+socket.on('moveDoneComputer', function(data) {
     console.log(data);
     
     refreshBoard(data);
@@ -125,22 +130,22 @@ socket.on ('beginPlay', function(data) {
                 };
                 
                 //save the row, col of the target 
-                function updatePlacedTiles(sourceId, targetId) {
+                function updateplacedTilesHuman(sourceId, targetId) {
                     if ($("#" + targetId).hasClass("boardCell")) {
                         var idParsed = parseIntoRowCol(targetId);
                         var letter = pullLetterAtCellId(targetId);
                         //push target onto list of placed tiles
-                        placedTiles.push({"row": idParsed["row"], "col": idParsed["col"], "letter": letter});                        
+                        placedTilesHuman.push({"row": idParsed["row"], "col": idParsed["col"], "letter": letter});                        
                     };
                     if ($("#" + sourceId).hasClass("boardCell")) {
                         var idParsed = parseIntoRowCol(sourceId);
-                        var existingIndex = placedTiles.findIndex(function(elem) {
+                        var existingIndex = placedTilesHuman.findIndex(function(elem) {
                             return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
                         });
-                        placedTiles.splice(existingIndex, 1)
+                        placedTilesHuman.splice(existingIndex, 1)
                     };
                 };
-                updatePlacedTiles(sourceId, targetId);
+                updateplacedTilesHuman(sourceId, targetId);
                 //unselect tile 
                 $(".tileSelected").toggleClass('tileUnselected tileSelected');
                 
@@ -149,11 +154,10 @@ socket.on ('beginPlay', function(data) {
             };
         } 
     });
-    $("#humanPlay").click (function(event) {
-        console.log(placedTiles);
-        socket.emit('humanPlay', {"placedTiles": placedTiles});
+    $("#playMoveHuman").click (function(event) {
+        console.log(placedTilesHuman);
+        socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
     });
-    
 });
 
 function parseIntoRowCol(id) {
