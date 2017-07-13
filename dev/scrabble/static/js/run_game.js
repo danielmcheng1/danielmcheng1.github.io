@@ -46,13 +46,12 @@ DATA STRUCTURES
  
  /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
-//socket.emit('human message', {"message": data['message']});
 
 
 var sourceTile;
 var sourceCell;
 var placedTiles = [];
-socket.on ('begin play', function(data) {
+socket.on ('beginPlay', function(data) {
     console.log(data);
     
     refreshBoard(data);
@@ -150,6 +149,11 @@ socket.on ('begin play', function(data) {
             };
         } 
     });
+    $("#humanPlay").click (function(event) {
+        console.log(placedTiles);
+        socket.emit('humanPlay', {"placedTiles": placedTiles});
+    });
+    
 });
 
 function parseIntoRowCol(id) {

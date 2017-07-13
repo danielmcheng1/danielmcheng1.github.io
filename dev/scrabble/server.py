@@ -20,18 +20,18 @@ def server_originates_message():
     #hence broadcast=True assumed 
     global SCRABBLE_APPRENTICE_RESPONSE 
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
-    SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
-   
-    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
-    socketio.emit('begin play',scrabble_game_play_wrapper)
     
-@socketio.on('human play')
+    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
+    socketio.emit('beginPlay',scrabble_game_play_wrapper)
+    
+@socketio.on('humanPlay')
 def handle_event(data):
+    print(data)
     global SCRABBLE_APPRENTICE_RESPONSE 
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
     scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
-    emit('begin play', scrabble_game_play_wrapper ) 
+    emit('beginPlay', scrabble_game_play_wrapper ) 
     
     
 

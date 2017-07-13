@@ -311,7 +311,7 @@ def wrapper_play_next_move(data):
                               "tiles": [[map_tile_to_view(scrabble_board.board[row][col], 'Computer', scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "rackHuman": human_player.rack, \
                               "rackComputer": computer_player.rack, \
-                              "gameState": {}\
+                              "gameInfo": {}\
                               }
     return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
 
