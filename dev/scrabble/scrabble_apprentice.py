@@ -303,14 +303,20 @@ def wrapper_play_next_move(data):
                 
     scrabble_board = scrabble_game_play.board
     scrabble_score_dict = scrabble_board.scrabble_score_dict
+    scrabble_board_wrapper = {"bonus": [[map_bonus_to_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
+                              "tile": [[map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
+                              "humanRack": scrabble_board.play_order[0].rack, \
+                              "computerRack": scrabble_board.play_order[1].rack, \
+                              "gameState": {}\
+                              }
     scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board.board[row][col]), \
                                 "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
                                 for row in range(MAX_ROW)] 
     return {"scrabble_board_wrapper": scrabble_board_wrapper, "scrabble_game_play": scrabble_game_play}
     '''
-    #change to pass in the rack 
     #class has to also flag who just played the tile....
+    #clean up functions 
     #capitalize classes
     #make move each time -- 
         computer_player = scrabble_game_play.play_order[1]
