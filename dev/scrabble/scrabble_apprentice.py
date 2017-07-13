@@ -297,10 +297,13 @@ def wrapper_play_next_move(data):
         #this is just for testing 
         computer_player = scrabble_game_play.play_order[1]
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
-        print("computer: {0}".format(input_word) )
+        print("computer move: {0}".format(input_word))
+        #replenish rack after placing word 
+        if input_word:
+            scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES - len(computer_player.rack))
         #if the computer is unable to find a move, exchange tiles
-        if not input_word:
-            scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)    
+        else:
+            scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
                 
     human_player = scrabble_game_play.play_order[0]
     computer_player = scrabble_game_play.play_order[1]
@@ -1141,7 +1144,7 @@ class game_play:
             print("Computer thinking through move....")
             (score, input_word) = self.board.make_computer_move(player.rack)
             #if the computer is unable to find a move, exchange tiles
-            if not input_word:
+            if input_word:
                 self.exchange_tiles_during_turn(player, player.rack)
                 
 
