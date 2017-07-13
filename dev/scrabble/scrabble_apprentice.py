@@ -279,7 +279,7 @@ def wrapper_play_next_move(data):
     #initialize board 
     if data.get("scrabble_game_play", {}) == {}:
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_gaddag = gaddag(scrabble_corpus[0:100])
+        scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("You", IS_HUMAN, scrabble_board)  
@@ -294,18 +294,18 @@ def wrapper_play_next_move(data):
         scrabble_game_play = data["scrabble_game_play"]
         human_player = scrabble_game_play.play_order[0]
         computer_player = scrabble_game_play.play_order[1]
-        
+        scrabble_board = scrabble_game_play.board
+        placed_tiles_human = data["placed_tiles_human"]
         #TBD add validation 
         (filled_rows, filled_cols) = find_filled_rows_and_cols(placed_tiles_human)
         if len(filled_rows) == 1:
             direction = HORIZONTAL 
-        else if len(filled_cols) == 1: 
+        elif len(filled_cols) == 1: 
             direction = VERTICAL 
         else:
             raise ValueError("You can only place in one row or column!!!")        
         first_placed_row = min(filled_rows)
         first_placed_col = min(filled_cols)
-        scrabble_board = scrabble_game_play.board
         
         #similar to the pull_valid_crossword_score function...
         (curr_row, curr_col) = (first_placed_row, first_placed_col)
@@ -349,7 +349,7 @@ def wrapper_play_next_move(data):
         print(direction) 
         print(start_row)
         print(start_col)
-        scrabble_game_play.make_human_move(self, start_row, start_col, direction, word, human_player.rack):
+        scrabble_board.make_human_move(start_row, start_col, direction, word, human_player.rack)
         
         #make computer move 
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)

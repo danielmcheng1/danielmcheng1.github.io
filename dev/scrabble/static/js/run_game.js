@@ -196,6 +196,7 @@ function refreshRack(data, player) {
 };
 
 function refreshPlacedTilesHuman(data) {
+    placedTilesHuman = [];
     for (var i = 0; i < data["board"].length; i++) {
         var thisRow = [];
         for (var j = 0; j < data["board"][0].length; j++) {
