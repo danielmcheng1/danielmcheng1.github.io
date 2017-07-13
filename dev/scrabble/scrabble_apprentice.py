@@ -287,8 +287,6 @@ def wrapper_play_next_move(data):
         
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player)    
 
-        scrabble_game_play.draw_tiles_end_of_turn(human_player, RACK_MAX_NUM_TILES)
-        scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES)
         computer_player.rack = list('ABALONE')
         
     #read in the latest data and make the next move
