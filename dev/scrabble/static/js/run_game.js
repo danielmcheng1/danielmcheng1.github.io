@@ -25,19 +25,17 @@ DATA STRUCTURES
     TBDs in python apprentice module 
         '''
     #class has to also flag who just played the tile....
-    #clean up functions 
+    #clean up functions --should really recreate everything in the class --
     #capitalize classes
     #make move each time -- 
         computer_player = scrabble_game_play.play_order[1]
     score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player.rack)
-    player.words_played.append((input_word, score))
-    player.running_score += score   
-    self.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
     scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board.board[row][col]), \
                                 "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
                                 for col in range(MAX_COL)] \
                                 for row in range(MAX_ROW)] 
    
+    TBD add validatoin 
     //TBD try removing table in rack --spacing changes
     //bonus text not centered 
     '''

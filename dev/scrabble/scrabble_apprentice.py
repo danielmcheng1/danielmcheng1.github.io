@@ -296,7 +296,7 @@ def wrapper_play_next_move(data):
         computer_player = scrabble_game_play.play_order[1]
         scrabble_board = scrabble_game_play.board
         placed_tiles_human = data["placed_tiles_human"]
-        #TBD add validation 
+        
         (filled_rows, filled_cols) = find_filled_rows_and_cols(placed_tiles_human)
         if len(filled_rows) == 1:
             direction = HORIZONTAL 
@@ -345,17 +345,16 @@ def wrapper_play_next_move(data):
             else:
                 break 
                 
-        scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
+        score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
+        wrapper_end_turn(human_player, word, score, scrabble_game_play)
         
         #make computer move 
-        (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player)
-        #replenish rack after placing word 
-        if input_word:
-            scrabble_game_play.draw_tiles_end_of_turn(computer_player, RACK_MAX_NUM_TILES - len(computer_player.rack))
+        (score, word) = scrabble_game_play.board.make_computer_move(computer_player)
         #if the computer is unable to find a move, exchange tiles
-        else:
+        if not word:
             scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
-                
+        wrapper_end_turn(computer_player, word, score, scrabble_game_play)
+        
     human_player = scrabble_game_play.play_order[0]
     computer_player = scrabble_game_play.play_order[1]
     scrabble_board = scrabble_game_play.board
@@ -364,11 +363,17 @@ def wrapper_play_next_move(data):
                               "tiles": [[map_cell_to_tile_view(scrabble_board.board[row][col], map_cell_to_player_view(row, col, scrabble_board), scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "rackHuman": human_player.rack, \
                               "rackComputer": computer_player.rack, \
-                              "gameInfo": {}\
+                              "gameInfo": {"scoreHuman": human_player.running_score, "scoreComputer": computer_player.running_score, \
+                                           "wordsPlayedHuman": human_player.words_played, "wordsPlayedComputer": computer_player.words_played,
+                                           "tilesLeft": len(scrabble_board.bag)}\
                               }
     return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
 
-        
+def wrapper_end_turn(player, word, score, game_play):
+    player.words_played.append((word, score))
+    player.running_score += score   
+    game_play.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
+    
 def find_filled_rows_and_cols(placed_tiles):
     rows = set([])
     cols = set([])

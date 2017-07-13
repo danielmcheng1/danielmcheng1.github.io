@@ -20,7 +20,6 @@ def server_originates_message():
     #hence broadcast=True assumed 
     global SCRABBLE_APPRENTICE_DATA
     SCRABBLE_APPRENTICE_DATA = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_DATA)
-    print("connecting")
     scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_DATA["scrabble_game_play_wrapper"]
     socketio.emit('moveDoneComputer',scrabble_game_play_wrapper)
     
