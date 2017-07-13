@@ -22,16 +22,16 @@ def server_originates_message():
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
-    board_obj = SCRABBLE_APPRENTICE_RESPONSE["scrabble_board_wrapper"]
-    socketio.emit('begin play', board_obj)
+    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
+    socketio.emit('begin play',scrabble_game_play_wrapper)
     
 @socketio.on('human play')
 def handle_event(data):
     global SCRABBLE_APPRENTICE_RESPONSE 
     SCRABBLE_APPRENTICE_RESPONSE = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_RESPONSE)
    
-    board_obj = SCRABBLE_APPRENTICE_RESPONSE["scrabble_board_wrapper"]
-    emit('begin play', board_obj) 
+    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_RESPONSE["scrabble_game_play_wrapper"]
+    emit('begin play', scrabble_game_play_wrapper ) 
     
     
 

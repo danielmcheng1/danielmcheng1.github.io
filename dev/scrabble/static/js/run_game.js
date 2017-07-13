@@ -23,7 +23,21 @@ DATA STRUCTURES
     Move to FLASK template 
         https://stackoverflow.com/questions/11178426/how-can-i-pass-data-from-flask-to-javascript-in-a-template
     TBDs in python apprentice module 
-    
+        '''
+    #class has to also flag who just played the tile....
+    #clean up functions 
+    #capitalize classes
+    #make move each time -- 
+        computer_player = scrabble_game_play.play_order[1]
+    score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player.rack)
+    player.words_played.append((input_word, score))
+    player.running_score += score   
+    self.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
+    scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board.board[row][col]), \
+                                "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
+                                for col in range(MAX_COL)] \
+                                for row in range(MAX_ROW)] 
+    '''
  */
  
  
@@ -36,9 +50,8 @@ var sourceTile;
 var sourceCell;
 var placedTiles = [];
 socket.on ('begin play', function(data) {
-    console.log(data)
-    var board = data;
-    refreshBoard(board);
+    console.log(data);
+    refreshBoard(data);
     
     //create audio element
     var soundEffects = document.createElement("audio");
@@ -99,7 +112,7 @@ socket.on ('begin play', function(data) {
                 if ($("#" + sourceId).hasClass("boardCell")) {
                     var sourceIdParsed = parseIntoRowCol(sourceId);
                     var targetIdParsed = parseIntoRowCol(targetId);
-                    var bonus = board[sourceIdParsed["row"]][sourceIdParsed["col"]]["bonus"];
+                    var bonus = data["board"][sourceIdParsed["row"]][sourceIdParsed["col"]];
                     if (bonus != '') {
                         bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
                         $("#" + sourceId).append($(bonusSpan));
@@ -153,7 +166,8 @@ function pullLetterAtCellId(id) {
 
 
 function refreshBoard(data) {
-    var board = data;
+    var tiles = data["tiles"];
+    var board = data["board"];
     
     var BOARD_MAX_ROW = board.length;
     var BOARD_MAX_COL = board[0].length;
@@ -165,7 +179,7 @@ function refreshBoard(data) {
         var table_row = "<tr>";
         for (var j = 0; j < BOARD_MAX_COL; j++) {
             var table_cell = '';
-            var tile_obj = board[i][j]["tile"];
+            var tile_obj = tiles[i][j];
             if (tile_obj != '') {
                 var player_type = tile_obj["player_type"];
                 var letter = tile_obj["letter"];
@@ -174,7 +188,7 @@ function refreshBoard(data) {
                 table_cell = '<td class="boardCell noBonusFill" id=boardCell_' + i + '_' + j + '>' + tile_span;         
             } 
             else {
-                var bonus = board[i][j]["bonus"];
+                var bonus = board[i][j];
                 if (bonus != '') {
                     bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
                     table_cell = '<td class="boardCell bonusFill' + bonus.replace(" ", "") + '" id=board_' + i + '_' + j + '>' + bonusSpan;

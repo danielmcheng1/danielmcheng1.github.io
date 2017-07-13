@@ -294,6 +294,7 @@ def wrapper_play_next_move(data):
     #read in the latest data and make the next move
     else:
         scrabble_game_play = data["scrabble_game_play"]
+        #this is just for testing 
         computer_player = scrabble_game_play.play_order[1]
         (score, input_word) = scrabble_game_play.board.make_computer_move(computer_player.rack)
         print("computer: {0}".format(input_word) )
@@ -301,30 +302,18 @@ def wrapper_play_next_move(data):
         if not input_word:
             scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)    
                 
+    human_player = scrabble_game_play.play_order[0]
+    computer_player = scrabble_game_play.play_order[1]
     scrabble_board = scrabble_game_play.board
     scrabble_score_dict = scrabble_board.scrabble_score_dict
-    scrabble_board_wrapper = {"bonus": [[map_bonus_to_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
-                              "tile": [[map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
-                              "humanRack": scrabble_board.play_order[0].rack, \
-                              "computerRack": scrabble_board.play_order[1].rack, \
+    scrabble_game_play_wrapper = {"board": [[map_bonus_to_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
+                              "tiles": [[map_tile_to_view(scrabble_board.board[row][col], 'Computer', scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
+                              "humanRack": human_player.rack, \
+                              "computerRack": computer_player.rack, \
                               "gameState": {}\
                               }
-    scrabble_board_wrapper = [[{"bonus": map_bonus_to_view(scrabble_board.board[row][col]), \
-                                "tile": map_tile_to_view(scrabble_board.board[row][col], 'Human', scrabble_score_dict)} \
-                                for col in range(MAX_COL)] \
-                                for row in range(MAX_ROW)] 
-    return {"scrabble_board_wrapper": scrabble_board_wrapper, "scrabble_game_play": scrabble_game_play}
-    '''
-    #class has to also flag who just played the tile....
-    #clean up functions 
-    #capitalize classes
-    #make move each time -- 
-        computer_player = scrabble_game_play.play_order[1]
-    score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player.rack)
-    player.words_played.append((input_word, score))
-    player.running_score += score   
-    self.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
-    '''
+    return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
+
         
 def map_bonus_to_view(cell):
     if cell == TRIPLE_LETTER:
