@@ -287,12 +287,6 @@ def wrapper_play_next_move(data):
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
-        human_player.rack = list("WHINELDI")
-        computer_player.rack =  list("USADDLE")
-        last_move = {
-            "move": {"passed", "placed_tiles"}
-            "player": {"Human", "Computer"}
-            "placed_tiles": [[]]}
         
     #read in the latest data and make the next move
     else:
@@ -303,19 +297,35 @@ def wrapper_play_next_move(data):
         computer_player = scrabble_game_play.play_order[1]
         scrabble_board = scrabble_game_play.board
         placed_tiles_human = data["placed_tiles_human"]
-        
+            player.words_played.append((word, score))
+            exchange_tiles
         #make human move
         (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(placed_tiles_human)
-        score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
-        wrapper_end_turn(human_player, word, score, scrabble_game_play)
-        
+        try: 
+            score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
+            wrapper_end_turn(human_player, word, score, scrabble_game_play)
+            last_move["action"] = "Placed Tiles"
+            last_move["details"] = word 
+            
+        except ValueError as e:       
+            last_move["action"] = "Invalid Move" 
+            last_move["details"] = e.args
+        last_move["player"] = "Human"
+            
+    if last_move["action"] != "Invalid Move":
         #make computer move 
-        (score, word) = scrabble_game_play.board.make_computer_move(computer_player)
-        
+        (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
         #if the computer is unable to find a move, exchange tiles
         if not word:
-            scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
+            scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack) 
+            last_move["action"] = "Exchanged Tiles"
+            last_move["details"] = "" #could return tiles exchanged instead
+        else: 
+            last_move["action"] = "Placed Tiles" 
+            last_move["details"] = word
+        last_move["player"] = "Computer"
         wrapper_end_turn(computer_player, word, score, scrabble_game_play)
+    
     print("wrapping")
     
     human_player = scrabble_game_play.play_order[0]
@@ -989,12 +999,11 @@ class board:
         if self.is_valid_word(word):
             #pull these regardless of whether words have been placed, b/c we need these to calculate the score
             (valid_hook_spots, valid_crossword_score_dict) = \
-            self.pull_hooks_and_crosswords(start_row, start_col, direction, player.rack)
+                self.pull_hooks_and_crosswords(start_row, start_col, direction, player.rack)
             #exception for first move
             if self.num_words_placed == 0:
                 if not self.intersect_center_tile(start_row, start_col, direction, word):
-                    print("The first move on the board must intersect the center tile")
-                    raise ValueError()
+                    raise ValueError("The first move on the board must intersect the center tile")
             #all other moves
             else:
                 hooks_onto_tile = False
@@ -1003,26 +1012,21 @@ class board:
                         to_place = word[curr_row - start_row + curr_col - start_col] #the extra blank padding only appears when printing
                         if self.is_scrabble_tile(curr_row, curr_col):
                             if self.board[curr_row][curr_col] != to_place:
-                                print("You are trying to overlap existing tiles at " + str((curr_row, curr_col)))
-                                raise ValueError()
+                                raise ValueError("You are trying to overlap existing tiles at " + str((curr_row, curr_col)))
                             else:
                                 hooks_onto_tile = True
                         else:
                             if (curr_row, curr_col) not in valid_crossword_score_dict.keys():
-                                print("Your word fails to form a valid crossword at " + str((curr_row, curr_col)))
-                                raise ValueError()
+                                raise ValueError("Letter {0} fails to form a valid crossword".format(self.board[curr_row][curr_col]))
                             elif to_place not in valid_crossword_score_dict[(curr_row, curr_col)].keys():
-                                print("Your word fails to form a valid crossword at " + str((curr_row, curr_col)))
-                                raise ValueError()
+                                raise ValueError("Letter {0} fails to form a valid crossword".format(self.board[curr_row][curr_col]))
                             if (curr_row, curr_col) in valid_hook_spots:
                                 hooks_onto_tile = True
                 #check if we connected to a tile at some point in the word
                 if not hooks_onto_tile:
-                    print("Your word must hook onto an existing tile")
-                    raise ValueError()
+                    raise ValueError("Your word must hook onto an existing tile")
         else:
-            print("Your word is not in the dictionary")
-            raise ValueError()
+            raise ValueError("Your word is not in the dictionary")
                         
         #score and place word
         human_score = self.calc_word_score(start_row, start_col, direction, word, valid_crossword_score_dict)

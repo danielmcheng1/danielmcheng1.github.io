@@ -34,6 +34,7 @@ DATA STRUCTURES
     Make this data structure better..
     Move to FLASK template 
         https://stackoverflow.com/questions/11178426/how-can-i-pass-data-from-flask-to-javascript-in-a-template
+    improve error handling 
     TBDs in python apprentice module 
         '''
     scrabble move class ? 
