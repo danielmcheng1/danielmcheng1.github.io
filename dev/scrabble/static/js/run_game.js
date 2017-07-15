@@ -21,13 +21,10 @@ DATA STRUCTURES
  To Do
     fix game bugs 
         why going twice? probably sending message twice?
-            LLANES --also tiles not placed properly--can double
-            why can't I set racks at beignning...somehow getting drawn 2.5 times
-        too many tiles drawn at beginning? 
         some words not in dict? 
-        handl eerrors 
-        exchange rack
     show game info
+        handl eerrors 
+        exchange rack for both
     other 
         add delay to computer move
         instructions while waiting
@@ -39,6 +36,7 @@ DATA STRUCTURES
         https://stackoverflow.com/questions/11178426/how-can-i-pass-data-from-flask-to-javascript-in-a-template
     TBDs in python apprentice module 
         '''
+    scrabble move class ? 
     #class has to also flag who just played the tile....
     #clean up functions --should really recreate everything in the class --
     #capitalize classes

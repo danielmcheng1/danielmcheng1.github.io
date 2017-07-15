@@ -276,8 +276,8 @@ class board_config:
 
 #wrapper to replace scrabble_game.game_play method so that we can interface with flask/web app
 def wrapper_play_next_move(data):
-    #initialize board 
     print("Received data in scrabble_apprentice: {0}".format(str(data)))
+    #initialize board 
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
@@ -289,6 +289,10 @@ def wrapper_play_next_move(data):
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
         human_player.rack = list("WHINELDI")
         computer_player.rack =  list("USADDLE")
+        last_move = {
+            "move": {"passed", "placed_tiles"}
+            "player": {"Human", "Computer"}
+            "placed_tiles": [[]]}
         
     #read in the latest data and make the next move
     else:
@@ -300,18 +304,20 @@ def wrapper_play_next_move(data):
         scrabble_board = scrabble_game_play.board
         placed_tiles_human = data["placed_tiles_human"]
         
-        #could be a move class? 
+        #make human move
         (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(placed_tiles_human)
         score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
         wrapper_end_turn(human_player, word, score, scrabble_game_play)
         
         #make computer move 
         (score, word) = scrabble_game_play.board.make_computer_move(computer_player)
+        
         #if the computer is unable to find a move, exchange tiles
         if not word:
             scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
         wrapper_end_turn(computer_player, word, score, scrabble_game_play)
     print("wrapping")
+    
     human_player = scrabble_game_play.play_order[0]
     computer_player = scrabble_game_play.play_order[1]
     scrabble_board = scrabble_game_play.board
