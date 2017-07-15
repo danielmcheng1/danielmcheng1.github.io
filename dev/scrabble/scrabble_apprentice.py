@@ -1023,7 +1023,7 @@ class board:
         self.place_word(start_row, start_col, direction, word, player)
         return human_score
         
-    def find_filled_rows_and_cols(placed_tiles):
+    def find_filled_rows_and_cols(self, placed_tiles):
         rows = set([])
         cols = set([])
         for row in range(MIN_ROW, MAX_ROW):
@@ -1090,6 +1090,7 @@ class board:
             else:
                 break 
         print(word)
+        return (start_row, start_col, direction, word)
         
 #instantiates a player bound to a particular board and common scrabble bag
 IS_HUMAN = True

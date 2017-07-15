@@ -86,11 +86,14 @@ socket.on('moveDoneComputer', function(data) {
     var soundEffects = document.createElement("audio");
     
     $("#playMoveHuman").removeClass("buttonClicked");
-    $("#playMoveHuman").click (function(event) {
-        if (!$(this).hasClass("buttonClicked")) {
+    $("#playMoveHuman").on ('keypress click', function(event) {
+        //enter key or click 
+        if (event.which === 13 || event.type === 'click') {
+            (!$(this).hasClass("buttonClicked")) {
             console.log("emitting move", placedTilesHuman);
             socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
             $(this).addClass("buttonClicked");
+            };
         };
     });
     //selecting/unselecting tiles
