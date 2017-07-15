@@ -21,6 +21,8 @@ DATA STRUCTURES
  To Do
     fix game bugs 
         why going twice? probably sending message twice?
+            LLANES --also tiles not placed properly--can double
+            why can't I set racks at beignning...somehow getting drawn 2.5 times
         too many tiles drawn at beginning? 
         some words not in dict? 
         handl eerrors 
