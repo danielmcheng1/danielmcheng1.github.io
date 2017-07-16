@@ -19,11 +19,16 @@ def index():
 @socketio.on('moveDoneHuman')
 def process_human_move(data):
     print("Received human move", file = sys.stderr)
-    global SCRABBLE_APPRENTICE_DATA 
     print("Data: {0}".format(str(data)), file = sys.stderr) 
+    
+    global SCRABBLE_APPRENTICE_DATA 
+    #guarantee reset if user refreshes page -- could also check if last_move fille din in the scrabble module?
+    if data == {}:
+        SCRABBLE_APPRENTICE_DATA = {}
+        
     SCRABBLE_APPRENTICE_DATA["scrabble_game_play_wrapper"] = {} 
     SCRABBLE_APPRENTICE_DATA["scrabble_game_play_wrapper"]["last_move"] = data.get("last_move", {})
-    print("Sending over: {0}".format(str(SCRABBLE_APPRENTICE_DATA)), file = sys.stderr) 
+    
     SCRABBLE_APPRENTICE_DATA = scrabble_apprentice.wrapper_play_next_move(SCRABBLE_APPRENTICE_DATA)
    
     scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_DATA["scrabble_game_play_wrapper"]

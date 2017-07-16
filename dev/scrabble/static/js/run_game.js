@@ -32,6 +32,7 @@ DATA STRUCTURES
         refreshing page/starting game over
         https://www.soundsnap.com/tags/scrabble Scrabble game tile down 2 and Scrabble game with hand in bag
     Make this data structure better..
+    naming conventions
     Move to FLASK template 
         https://stackoverflow.com/questions/11178426/how-can-i-pass-data-from-flask-to-javascript-in-a-template
     improve error handling 
@@ -81,6 +82,8 @@ socket.on('moveDoneComputer', function(data) {
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
     refreshRack(data, 'Computer');
+    refreshGameInfo(data);
+    refreshLastMove(data);
     
     //create audio element
     var soundEffects = document.createElement("audio");
@@ -282,6 +285,28 @@ function refreshBoard(data) {
     
     $("#board").empty();
     $("#board").append(table_whole);
+};
+
+function refreshGameInfo(data) {
+    var gameInfo = data["gameInfo"];          
+    if (gameInfo != undefined) {
+        $("#scoreComputer").text("Computer Score: " + gameInfo["scoreComputer"] + " points");
+        $("#scoreHuman").text("Human Score: " + gameInfo["scoreHuman"] + " points");
+        $("#tilesLeft").text("Tiles Left: " + gameInfo["tilesLeft"] + " tiles");
+        $("#wordsPlayedComputer").text("Words Played by Computer: " + gameInfo["wordsPlayedComputer"]);
+        $("#wordsPlayedHuman").text("Words Played by Computer: " + gameInfo["wordsPlayedHuman"]);
+    };
+};
+function refreshLastMove(data) {
+    $("#lastMove").text(function () {
+        console.log("refreshing last move", data["lastMove"]);
+        if (data["lastMove"] != undefined && data["lastMove"]["action"] == "Invalid Move") {
+            return data["lastMove"]["detail"];
+        }
+        else {
+            return "";
+        };
+    });
 };
 
 function playSoundTileMoved(audioDOM) {    
