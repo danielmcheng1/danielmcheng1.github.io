@@ -298,7 +298,7 @@ def wrapper_play_next_move(data):
         scrabble_board = scrabble_game_play.board 
         
         #make human move    
-        if data["last_move"]["action"] = "Try Exchanging Tiles":
+        if data["last_move"]["action"] == "Try Exchanging Tiles":
             tiles_to_exchange = data["last_move"]["detail"]
             scrabble_game_play.exchange_tiles_during_turn(human_player, tiles_to_exchange) 
             human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
@@ -306,7 +306,7 @@ def wrapper_play_next_move(data):
             last_move["action"] = "Exchanged Tiles"
             last_move["detail"] = ""
         
-        elif data["last_move"]["action"] = "Try Placing Tiles":
+        elif data["last_move"]["action"] == "Try Placing Tiles":
             tiles_to_place = data["last_move"]["detail"]
             (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(tiles_to_place)
             try: 

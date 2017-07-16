@@ -88,10 +88,10 @@ socket.on('moveDoneComputer', function(data) {
     $("#playMoveHuman").on ('keypress click', function(event) {
         //enter key or click 
         if (event.which === 13 || event.type === 'click') {
-            (!$(this).hasClass("buttonClicked")) {
-            console.log("emitting move", placedTilesHuman);
-            socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
-            $(this).addClass("buttonClicked");
+            if (!$(this).hasClass("buttonClicked")) {
+                console.log("emitting move", placedTilesHuman);
+                socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
+                $(this).addClass("buttonClicked");
             };
         };
     });
