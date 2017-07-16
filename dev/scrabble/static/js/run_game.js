@@ -294,7 +294,7 @@ function refreshGameInfo(data) {
         $("#scoreHuman").text("Human Score: " + gameInfo["scoreHuman"] + " points");
         $("#tilesLeft").text("Tiles Left: " + gameInfo["tilesLeft"] + " tiles");
         $("#wordsPlayedComputer").text("Words Played by Computer: " + gameInfo["wordsPlayedComputer"]);
-        $("#wordsPlayedHuman").text("Words Played by Computer: " + gameInfo["wordsPlayedHuman"]);
+        $("#wordsPlayedHuman").text("Words Played by Human: " + gameInfo["wordsPlayedHuman"]);
     };
 };
 function refreshLastMove(data) {

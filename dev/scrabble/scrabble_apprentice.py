@@ -308,8 +308,8 @@ def wrapper_play_next_move(data):
         
         elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
             tiles_to_place = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
-            (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(tiles_to_place)
             try: 
+                (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(tiles_to_place)
                 score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
                 wrapper_end_turn(human_player, word, score, scrabble_game_play)
                 last_move_to_send["player"] = "Human"
@@ -1028,9 +1028,9 @@ class board:
                                 hooks_onto_tile = True
                         else:
                             if (curr_row, curr_col) not in valid_crossword_score_dict.keys():
-                                raise ValueError("Letter {0} fails to form a valid crossword".format(self.board[curr_row][curr_col]))
+                                raise ValueError("Your placed tile {0} fails to form a valid crossword".format(to_place))
                             elif to_place not in valid_crossword_score_dict[(curr_row, curr_col)].keys():
-                                raise ValueError("Letter {0} fails to form a valid crossword".format(self.board[curr_row][curr_col]))
+                                raise ValueError("Your placed tile {0} fails to form a valid crossword".format(to_place))
                             if (curr_row, curr_col) in valid_hook_spots:
                                 hooks_onto_tile = True
                 #check if we connected to a tile at some point in the word
