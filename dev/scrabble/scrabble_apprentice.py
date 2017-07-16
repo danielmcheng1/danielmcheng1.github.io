@@ -281,13 +281,13 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_gaddag = gaddag(scrabble_corpus)
+        scrabble_gaddag = gaddag(scrabble_corpus[0:1000])
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
-        
+        last_move_to_send = {"action": "Start Game", "player": "", "detail": ""}
     #read in the latest data and make the next move
     else:
         print("making move")
@@ -296,46 +296,46 @@ def wrapper_play_next_move(data):
         human_player = scrabble_game_play.play_order[0]
         computer_player = scrabble_game_play.play_order[1]
         scrabble_board = scrabble_game_play.board 
-        
+        last_move_to_send = {}
         #make human move    
-        if data["last_move"]["action"] == "Try Exchanging Tiles":
-            tiles_to_exchange = data["last_move"]["detail"]
+        if data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Exchanging Tiles":
+            tiles_to_exchange = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             scrabble_game_play.exchange_tiles_during_turn(human_player, tiles_to_exchange) 
             human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
-            last_move["player"] = "Human"
-            last_move["action"] = "Exchanged Tiles"
-            last_move["detail"] = ""
+            last_move_to_send["player"] = "Human"
+            last_move_to_send["action"] = "Exchanged Tiles"
+            last_move_to_send["detail"] = ""
         
-        elif data["last_move"]["action"] == "Try Placing Tiles":
-            tiles_to_place = data["last_move"]["detail"]
+        elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
+            tiles_to_place = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(tiles_to_place)
             try: 
                 score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
                 wrapper_end_turn(human_player, word, score, scrabble_game_play)
-                last_move["player"] = "Human"
-                last_move["action"] = "Placed Tiles"
-                last_move["detail"] = word 
+                last_move_to_send["player"] = "Human"
+                last_move_to_send["action"] = "Placed Tiles"
+                last_move_to_send["detail"] = word 
             except ValueError as e:       
-                last_move["player"] = "Human"
-                last_move["action"] = "Invalid Move" 
-                last_move["detail"] = e.args
+                last_move_to_send["player"] = "Human"
+                last_move_to_send["action"] = "Invalid Move" 
+                last_move_to_send["detail"] = "".join(e.args)
             
-    if last_move["action"] != "Invalid Move":
-        #make computer move 
-        (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
-        #if the computer is unable to find a move, exchange tiles
-        if not word:
-            scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
-            computer_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
-            last_move["player"] = "Computer"
-            last_move["action"] = "Exchanged Tiles"
-            last_move["detail"] = "" #could return tiles exchanged instead
-        else: 
-            last_move["player"] = "Computer"
-            last_move["action"] = "Placed Tiles" 
-            last_move["details"] = word
-            wrapper_end_turn(computer_player, word, score, scrabble_game_play)
-    
+        if last_move_to_send["action"] != "Invalid Move":
+            #make computer move 
+            (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
+            #if the computer is unable to find a move, exchange tiles
+            if not word:
+                scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
+                computer_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
+                last_move_to_send["player"] = "Computer"
+                last_move_to_send["action"] = "Exchanged Tiles"
+                last_move_to_send["detail"] = "" #could return tiles exchanged instead
+            else: 
+                last_move_to_send["player"] = "Computer"
+                last_move_to_send["action"] = "Placed Tiles" 
+                last_move_to_send["detail"] = word
+                wrapper_end_turn(computer_player, word, score, scrabble_game_play)
+    #change to be last move object separate....
     print("wrapping")
     
     human_player = scrabble_game_play.play_order[0]
@@ -348,7 +348,8 @@ def wrapper_play_next_move(data):
                               "rackComputer": computer_player.rack, \
                               "gameInfo": {"scoreHuman": human_player.running_score, "scoreComputer": computer_player.running_score, \
                                            "wordsPlayedHuman": human_player.words_played, "wordsPlayedComputer": computer_player.words_played,
-                                           "tilesLeft": len(scrabble_board.bag)}\
+                                           "tilesLeft": len(scrabble_board.bag)}, \
+                              "lastMove": last_move_to_send
                               }
     return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
 

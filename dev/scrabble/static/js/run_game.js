@@ -64,6 +64,7 @@ var sourceTile;
 var sourceCell;
 var placedTilesHuman;
     
+//prevent this from being clicked until game has started 
 $("#playMoveHuman").addClass("buttonClicked");
 $("#swapTilesHuman").addClass("buttonClicked");
 $("#startGame").click (function(event) {
@@ -84,13 +85,25 @@ socket.on('moveDoneComputer', function(data) {
     //create audio element
     var soundEffects = document.createElement("audio");
     
+    //once data has refreshed, allow player to send move 
     $("#playMoveHuman").removeClass("buttonClicked");
-    $("#playMoveHuman").on ('keypress click', function(event) {
-        //enter key or click 
+    $("#playMoveHuman").on('keypress click', function(event) {
+        //enter key or mouse click 
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
                 console.log("emitting move", placedTilesHuman);
-                socket.emit('moveDoneHuman', {"placedTilesHuman": placedTilesHuman});
+                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
+                $(this).addClass("buttonClicked");
+            };
+        };
+    });
+    $("#swapTilesHuman").removeClass("buttonClicked");
+    $("#swapTilesHuman").on('keypress click', function(event) {
+        //enter key or mouse click 
+        if (event.which === 13 || event.type === 'click') {
+            if (!$(this).hasClass("buttonClicked")) {
+                console.log("emitting move", "TEST");
+                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": "TEST"}});
                 $(this).addClass("buttonClicked");
             };
         };
