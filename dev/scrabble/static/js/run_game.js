@@ -219,14 +219,25 @@ function updatePlacedTilesHuman(sourceId, targetId) {
 function refreshRack(data, player) {
     var tiles = data["rack" + player];
     var rack = "<table><tr>";
+    //rack tiles 
     for (var i = 0; i < tiles.length; i++) {
-        var letter = tiles[i];
-        var points = 3;
+        var letter = tiles[i]["letter"];
+        var points = tiles[i]["points"];
         var span = '<span class = "tile tileNotFixed tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span';
         var cell = '<td class = "rackCell">' + span + '</td>';
         rack = rack + cell;
     };
-    rack = rack + "<td><span></span></td>" + "</tr></table>";
+    //padding 
+    var dummy = "<td><span></span></td>";
+    rack = rack + dummy; 
+    
+    //add in slots for exchanging 
+    for (var i = 0; i < tiles.length; i++) {
+        var exchange = '<td class = "exchangeCell"></td>';
+        rack = rack + exchange;
+    };
+        
+    rack = rack + "</tr></table>";
     $("#rack" + player).empty();
     $("#rack" + player).append(rack);
 };
@@ -350,4 +361,19 @@ function playSoundTileMoved(audioDOM) {
         ['', '', '', '', '', '', '', 'S', 'L', 'E', 'E', 'P', 'I', 'N', 'G'],
         ['', '', '', '', '', 'D', 'O', 'G', 'S', '', '', '', '', '', '']
     ];
+*/
+
+/*
+function refreshExchangeTiles(data, player) {
+    var exchange = "<tr>";
+    for (var i = 0; i < data["rack" + player].length; i++) {
+        var span = '';
+        var cell = '<td class = "exchangeCell">' + span + '</td>';
+        exchange = exchange + cell; 
+    };
+    exchange = '<table>' + exchange + '</tr>' + '</table>';
+    $("#exchangeTiles" + player).empty();
+    $("#exchangeTiles" + player).append(exchange);
+    
+};
 */

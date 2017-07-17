@@ -10,9 +10,12 @@
 	border: none;
 }
 
-.buttonClicked {
-    opacity: 0.5;
+.exchangeCell {
+	height: 32px;
+	width: 36px;
+	border: solid;
 }
+
 
 #boardAndGameInfo {
     /*height:510px;*/
@@ -113,6 +116,12 @@
 .tileUnselected {
     opacity: 1;
 }
+
+
+.buttonClicked {
+    opacity: 0.5;
+}
+
 
 /*
 https://stackoverflow.com/questions/20456694/grid-of-responsive-squares
