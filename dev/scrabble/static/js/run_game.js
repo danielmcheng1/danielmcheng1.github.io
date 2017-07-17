@@ -19,11 +19,7 @@ DATA STRUCTURES
                 .bonus 
              if blank then attribute is N/A
  To Do
-    fix game bugs 
-        why going twice? probably sending message twice?
-        some words not in dict? 
-    show game info
-        handl eerrors 
+   
         exchange rack for both
     other 
         add delay to computer move
@@ -230,7 +226,7 @@ function refreshRack(data, player) {
         var cell = '<td class = "rackCell">' + span + '</td>';
         rack = rack + cell;
     };
-    rack = rack + "</tr></table>";
+    rack = rack + "<td><span></span></td>" + "</tr></table>";
     $("#rack" + player).empty();
     $("#rack" + player).append(rack);
 };

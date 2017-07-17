@@ -10,14 +10,22 @@
 	border: none;
 }
 
-#gameInfo {    
-}
 .buttonClicked {
     opacity: 0.5;
 }
 
+#boardAndGameInfo {
+    /*height:510px;*/
+}
+#gameInfo {  
+    vertical-align:center;
+    /*float:right*/
+}
 #board{
 	table-layout:fixed;
+    /*position:absolute;
+    left:0;
+    float:left;*/
 }
 
 .boardCell {
