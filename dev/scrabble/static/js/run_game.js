@@ -227,14 +227,14 @@ function refreshRack(data, player) {
         var cell = '<td class = "rackCell">' + span + '</td>';
         rack = rack + cell;
     };
-    //padding 
-    var dummy = "<td><span></span></td>";
-    rack = rack + dummy; 
     
-    //add in slots for exchanging 
-    for (var i = 0; i < tiles.length; i++) {
-        var exchange = '<td class = "exchangeCell"></td>';
-        rack = rack + exchange;
+    
+    //add in slots for swapping tiles
+    if (player === "Human") {
+            for (var i = 0; i < tiles.length; i++) {
+            var swap = '<td class = "swapCell"></td>';
+            rack = rack + swap;
+        };
     };
         
     rack = rack + "</tr></table>";
@@ -361,19 +361,4 @@ function playSoundTileMoved(audioDOM) {
         ['', '', '', '', '', '', '', 'S', 'L', 'E', 'E', 'P', 'I', 'N', 'G'],
         ['', '', '', '', '', 'D', 'O', 'G', 'S', '', '', '', '', '', '']
     ];
-*/
-
-/*
-function refreshExchangeTiles(data, player) {
-    var exchange = "<tr>";
-    for (var i = 0; i < data["rack" + player].length; i++) {
-        var span = '';
-        var cell = '<td class = "exchangeCell">' + span + '</td>';
-        exchange = exchange + cell; 
-    };
-    exchange = '<table>' + exchange + '</tr>' + '</table>';
-    $("#exchangeTiles" + player).empty();
-    $("#exchangeTiles" + player).append(exchange);
-    
-};
 */
