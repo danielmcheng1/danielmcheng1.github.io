@@ -96,6 +96,7 @@ socket.on('moveDoneComputer', function(data) {
             };
         };
     });
+    
     $("#exchangeTilesHuman").removeClass("buttonClicked");
     $("#exchangeTilesHuman").on('keypress click', function(event) {
         //enter key or mouse click 
@@ -225,9 +226,9 @@ function refreshRack(data, player) {
         rack = rack + cell;
     };
     
-    //add in slots for exchanging tiles
+    //add in slots for exchanging tiles;
     if (player === "Human") {
-            for (var i = 0; i < tiles.length; i++) {
+        for (var i = 0; i < tiles.length; i++) {
             var exchange = '<td class = "exchangeCell"></td>';
             rack = rack + exchange;
         };
