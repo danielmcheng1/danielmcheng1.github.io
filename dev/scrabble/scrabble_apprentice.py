@@ -344,13 +344,14 @@ def wrapper_play_next_move(data):
     scrabble_score_dict = scrabble_board.scrabble_score_dict
     scrabble_game_play_wrapper = {"board": [[map_cell_to_bonus_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "tiles": [[map_cell_to_tile_view(scrabble_board.board[row][col], map_cell_to_player_view(row, col, scrabble_board), scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
-                              "rackHuman": human_player.rack, \
-                              "rackComputer": computer_player.rack, \
+                              "rackHuman": map_rack_to_tile_view(human_player.rack, "Human", scrabble_score_dict)   \
+                              "rackComputer": map_rack_to_tile_view(computer_player.rack, "Computer", scrabble_score_dict), \
                               "gameInfo": {"scoreHuman": human_player.running_score, "scoreComputer": computer_player.running_score, \
                                            "wordsPlayedHuman": human_player.words_played, "wordsPlayedComputer": computer_player.words_played,
                                            "tilesLeft": len(scrabble_board.bag)}, \
                               "lastMove": last_move_to_send
                               }
+                              
     return {"scrabble_game_play_wrapper": scrabble_game_play_wrapper, "scrabble_game_play": scrabble_game_play}
 
 def wrapper_end_turn(player, word, score, game_play):
@@ -376,12 +377,18 @@ def map_cell_to_bonus_view(cell):
     
 def map_cell_to_tile_view(cell, player_type, scrabble_score_dict):
     #TBD flip to the is_scrabble_tile method? 
+    #TBD player type vs. player vs. player name
+    #cell is actually a tile...
     if cell.isalpha():
         return tile(cell, player_type, scrabble_score_dict).get_tile()
     return ''
+    
 def map_cell_to_player_view(row, col, scrabble_board):
     return scrabble_board.board_to_player[row][col]
-    
+
+def map_rack_to_tile_view(rack, player_type, scrabble_score_dict):
+    return [tile(letter, player_type, scrabble_score_dict).get_tile() for tile in rack]
+        
 #TBD player name, type, or ID?    
 class tile:
     def __init__(self, letter, player_type, scrabble_score_dict):
