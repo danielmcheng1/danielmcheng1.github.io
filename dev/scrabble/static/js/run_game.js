@@ -63,7 +63,7 @@ var placedTilesHuman;
     
 //prevent this from being clicked until game has started 
 $("#playMoveHuman").addClass("buttonClicked");
-$("#swapTilesHuman").addClass("buttonClicked");
+$("#exchangeTilesHuman").addClass("buttonClicked");
 $("#startGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         console.log("starting game...");
@@ -96,8 +96,8 @@ socket.on('moveDoneComputer', function(data) {
             };
         };
     });
-    $("#swapTilesHuman").removeClass("buttonClicked");
-    $("#swapTilesHuman").on('keypress click', function(event) {
+    $("#exchangeTilesHuman").removeClass("buttonClicked");
+    $("#exchangeTilesHuman").on('keypress click', function(event) {
         //enter key or mouse click 
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
@@ -138,7 +138,7 @@ socket.on('moveDoneComputer', function(data) {
     });
     
     //click to place tile
-    $(".boardCell, .rackCell").click(function(event) {
+    $(".boardCell, .rackCell, .exchangeCell").click(function(event) {
         event.stopPropagation(); //only select the topmost element
         var clicked = $(event.target);
         var targetCell;
@@ -147,7 +147,7 @@ socket.on('moveDoneComputer', function(data) {
                 targetCell = clicked.parent();
                 clicked.remove();
             }
-            else if (clicked.hasClass('boardCell') || clicked.hasClass('rackCell')) {
+            else if (clicked.hasClass('boardCell') || clicked.hasClass('rackCell') || clicked.hasClass('exchangeCell')) {
                 targetCell = clicked;
             };
             if (targetCell) {
@@ -172,6 +172,7 @@ socket.on('moveDoneComputer', function(data) {
                 
                 //save the row, col of the target 
                 updatePlacedTilesHuman(sourceId, targetId);
+                
                 //unselect tile 
                 $(".tileSelected").toggleClass('tileUnselected tileSelected');
                 
@@ -209,10 +210,6 @@ function updatePlacedTilesHuman(sourceId, targetId) {
     if ($("#" + sourceId).hasClass("boardCell")) {
         var idParsed = parseIntoRowCol(sourceId);
         placedTilesHuman[idParsed["row"]][idParsed["col"]] = "";
-        //var existingIndex = placedTilesHuman.findIndex(function(elem) {
-        //    return elem["row"] == idParsed["row"] && elem["col"] == idParsed["col"];
-        //});
-        //placedTilesHuman.splice(existingIndex, 1)
     };
 };
 
@@ -228,12 +225,11 @@ function refreshRack(data, player) {
         rack = rack + cell;
     };
     
-    
-    //add in slots for swapping tiles
+    //add in slots for exchanging tiles
     if (player === "Human") {
             for (var i = 0; i < tiles.length; i++) {
-            var swap = '<td class = "swapCell"></td>';
-            rack = rack + swap;
+            var exchange = '<td class = "exchangeCell"></td>';
+            rack = rack + exchange;
         };
     };
         
