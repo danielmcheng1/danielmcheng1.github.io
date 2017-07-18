@@ -281,7 +281,7 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_gaddag = gaddag(scrabble_corpus[0:1000])
+        scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
@@ -320,7 +320,9 @@ def wrapper_play_next_move(data):
                 last_move_to_send["action"] = "Invalid Move" 
                 last_move_to_send["detail"] = "".join(e.args)
             
+        print("last move:", last_move_to_send["action"]);
         if last_move_to_send["action"] != "Invalid Move":
+            print("Computer move")
             #make computer move 
             (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
             #if the computer is unable to find a move, exchange tiles

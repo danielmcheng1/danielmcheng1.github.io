@@ -20,7 +20,8 @@ DATA STRUCTURES
              if blank then attribute is N/A
  To Do
    
-        exchange rack for both
+        exchange rack for both tests--why comp exchanging
+        game end
     other 
         add delay to computer move
         instructions while waiting
@@ -102,8 +103,16 @@ socket.on('moveDoneComputer', function(data) {
         //enter key or mouse click 
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
-                console.log("emitting move", "TEST");
-                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": "TEST"}});
+                var toExchange = $(".exchangeCell").map(function(index, elem) {
+                    if ($(this).text() != "") 
+                        return  $(this).text()[0]; 
+                    else 
+                        return $(this).text();
+                }).filter(function(index, elem) {
+                    return elem != "";
+                }).toArray();
+                console.log("Exchanging: ", toExchange);
+                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
                 $(this).addClass("buttonClicked");
             };
         };
