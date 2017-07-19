@@ -9,11 +9,17 @@
 	width: 36px;
 	border: none;
 }
+.rackCellHuman {
+    background-image: url(../img/wooden_rack.png)
+}
+.rackCellComputer {
+}
 
 .exchangeCell {
 	height: 32px;
 	width: 36px;
-	border: solid;
+    background-image: url(../img/wooden_rack.png);
+    opacity:0.3
 }
 
 

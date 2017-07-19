@@ -20,12 +20,14 @@ DATA STRUCTURES
              if blank then attribute is N/A
  To Do
    
-        exchange rack for both tests--why comp exchanging
+        full rack tests 
         game end
+        why randomly shifts letters/wrong click and place e.g. triple word @bottom
+        bot set up
     other 
         add delay to computer move
         instructions while waiting
-        confident enough to show tiles
+            say comop confident enough to show tiles
         refreshing page/starting game over
         https://www.soundsnap.com/tags/scrabble Scrabble game tile down 2 and Scrabble game with hand in bag
     Make this data structure better..
@@ -231,7 +233,7 @@ function refreshRack(data, player) {
         var letter = tiles[i]["letter"];
         var points = tiles[i]["points"];
         var span = '<span class = "tile tileNotFixed tileUnselected tile' + player + '">' + letter + '<sub class="tilePoints">' + points + '</sub></span';
-        var cell = '<td class = "rackCell">' + span + '</td>';
+        var cell = '<td class = "rackCell rackCell' + player + '">' + span + '</td>';
         rack = rack + cell;
     };
     
