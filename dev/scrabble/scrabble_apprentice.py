@@ -315,7 +315,7 @@ def wrapper_play_next_move(data):
         elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
             tiles_to_place = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             try: 
-                (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(tiles_to_place)
+                (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_placement(tiles_to_place)
                 score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Placed Tiles"
@@ -819,7 +819,7 @@ class board:
    
         return (valid_hook_spots, valid_crossword_score_dict)
  
-    def find_ends_of_word(self, curr_offset, hook_row, hook_col, direction, word):
+    def find_coordinate_bounds_of_word(self, curr_offset, hook_row, hook_col, direction, word):
         if direction == HORIZONTAL:
             #either we were offset to the beginning of the word (i.e. we hit eow on a reversed prefix)
             if curr_offset <= 0:
@@ -840,7 +840,7 @@ class board:
         #that there is NOT a tile to the left (above) or to the right (below) of this eow
     def ends_are_filled(self, curr_offset, hook_row, hook_col, direction, word, front_or_back):
         (start_row, start_col, end_row, end_col) = \
-            self.find_ends_of_word(curr_offset, hook_row, hook_col, direction, word)
+            self.find_coordinate_bounds_of_word(curr_offset, hook_row, hook_col, direction, word)
         #print(word)
         #print(str((start_row, start_col, end_row, end_col)))
         if direction == HORIZONTAL:
@@ -858,7 +858,7 @@ class board:
     
     #this is called once we hit the end of a word     
     def save_word_and_score(self, curr_offset, hook_row, hook_col, direction, word, valid_crossword_score_dict, indent):
-        (start_row, start_col, end_row, end_col) = self.find_ends_of_word(curr_offset, hook_row, hook_col, direction, word)
+        (start_row, start_col, end_row, end_col) = self.find_coordinate_bounds_of_word(curr_offset, hook_row, hook_col, direction, word)
         
         if DEBUG_FINAL_CALC_SCORE:
             global DEBUG_PULL_VALID_CROSSWORD
@@ -1076,7 +1076,7 @@ class board:
                 if not hooks_onto_tile:
                     raise ValueError("Your word must hook onto an existing tile")
         else:
-            raise ValueError("The word {0} is not in the dictionary".format("".join(word)))
+            raise ValueError("{0} is not a valid word in the dictionary".format("".join(word)))
                         
         #score and place word
         human_score = self.calc_word_score(start_row, start_col, direction, word, valid_crossword_score_dict)
@@ -1093,7 +1093,7 @@ class board:
                     cols.add(col)
         return (rows, cols) 
         
-    def convert_placed_tiles_to_full_move(self, placed_tiles):
+    def convert_placed_tiles_to_full_placement(self, placed_tiles):
         (filled_rows, filled_cols) = self.find_filled_rows_and_cols(placed_tiles)
         if len(filled_rows) == 0:
             raise ValueError("You must place at least one tile! If you cannot move, exchange tiles or pass your turn")
@@ -1103,56 +1103,55 @@ class board:
             direction = VERTICAL 
         else:
             raise ValueError("You can only place in one row or column!!!")        
-        first_placed_row = min(filled_rows)
-        first_placed_col = min(filled_cols)
+        anchor_row = min(filled_rows)
+        anchor_col = min(filled_cols)
         
         #similar to the pull_valid_crossword_score function...
-        word = [placed_tiles[first_placed_row][first_placed_col]]
+        prefix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'PREFIX')
+        suffix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'SUFFIX')
+        word = prefix + [placed_tiles[anchor_row][anchor_col]] + suffix
         
+        #exception for one tile placements--the official direction is the direction that creates the longer word 
+        if len(word) == 1:
+            prefix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'PREFIX')
+            suffix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'SUFFIX')
+            flipped_word = prefix + [placed_tiles[anchor_row][anchor_col]] + suffix
+            if len(flipped_word) > 1:
+                word = flipped_word 
+                direction = direction * -1
+            
+        return (anchor_row - len(word) + 1, anchor_col - len(word) + 1, direction, word) 
+        
+    #given the starting placement--i.e. the anchor tile--determine the prefix and suffix (since the full word may include tiles on the board) 
+    def find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, prefix_or_suffix):
         if direction == HORIZONTAL:
             (row_delta, col_delta) = (0, 1)
         else:
             (row_delta, col_delta) = (1, 0)
+        if prefix_or_suffix == 'PREFIX':
+            (row_delta, col_delta) = (row_delta * -1, col_delta * -1)
         
-        #find the start of the word 
+        word_fix = []
         (curr_row, curr_col) = (first_placed_row, first_placed_col)
-        print("Find start for {0} at {1} {2}".format(word, curr_row, curr_col))
+        print("Find start for {0} at {1} {2}".format(word_fix, curr_row, curr_col))
         while True:
-            (curr_row, curr_col) = (curr_row - row_delta, curr_col - col_delta)
-            if curr_row >= MIN_ROW and curr_col >= MIN_COL:
+            (curr_row, curr_col) = (curr_row + row_delta, curr_col + col_delta)
+            if curr_row >= MIN_ROW and curr_row < MAX_ROW and curr_col >= MIN_COL and curr_col < MAX_COL:
                 if self.is_scrabble_tile(curr_row, curr_col):
                     letter = self.board[curr_row][curr_col]
                 else:
                     letter = placed_tiles[curr_row][curr_col]
                 print(curr_row, curr_col, letter) 
                 if letter != "":
-                    word.insert(0, letter) #insert in front
+                    word_fix.append(0, letter) #insert in front
                 else:
                     break
             else:
                 break
-        #either we hit a blank or moved past the start of the word, so increment by one to get the leftmost tile 
-        (start_row, start_col) = (curr_row + row_delta, curr_col + col_delta) 
-        
-        #find the end of the word 
-        (curr_row, curr_col) = (first_placed_row, first_placed_col)
-        print("Find end for {0} at {1} {2}".format(word, curr_row, curr_col))
-        while True:
-            (curr_row, curr_col) = (curr_row + row_delta, curr_col + col_delta)
-            if curr_row < MAX_ROW and curr_col < MAX_COL:
-                if self.is_scrabble_tile(curr_row, curr_col):
-                    letter = self.board[curr_row][curr_col]
-                else:
-                    letter = placed_tiles[curr_row][curr_col]
-                print(curr_row, curr_col, letter) 
-                if letter != "":
-                    word.append(letter)
-                else:
-                    break
-            else:
-                break 
-        print(word)
-        return (start_row, start_col, direction, word)
+        if prefix_or_suffix == 'PREFIX':
+            return word_fix.reverse()
+        return word_fix 
+
         
 #instantiates a player bound to a particular board and common scrabble bag
 IS_HUMAN = True
