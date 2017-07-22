@@ -10,7 +10,7 @@
 	border: none;
 }
 .rackCellHuman {
-    background-image: url(../img/wooden_rack.png)
+    /*background-image: url(../img/wooden_rack.png)*/
 }
 .rackCellComputer {
 }

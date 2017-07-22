@@ -298,48 +298,68 @@ def wrapper_play_next_move(data):
         scrabble_board = scrabble_game_play.board 
         last_move_to_send = {}
         #make human move    
-        if data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Exchanging Tiles":
-            tiles_to_exchange = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
-            scrabble_game_play.exchange_tiles_during_turn(human_player, tiles_to_exchange) 
-            human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
+        if data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Passing":
             last_move_to_send["player"] = "Human"
-            last_move_to_send["action"] = "Exchanged Tiles"
-            last_move_to_send["detail"] = ""
-        
+            last_move_to_send["action"] = "Passed"
+            last_move_to_send["detail"] = ""           
+        elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Exchanging Tiles":
+            tiles_to_exchange = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
+            try:
+                scrabble_game_play.exchange_tiles_during_turn(human_player, tiles_to_exchange) 
+                human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
+                last_move_to_send["player"] = "Human"
+                last_move_to_send["action"] = "Exchanged Tiles"
+                last_move_to_send["detail"] = ""
+                wrapper_end_turn(human_player, word, score, scrabble_game_play)
+            except ValueError as e:
+                log_invalid_move(last_move_to_send, e)
         elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
             tiles_to_place = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             try: 
                 (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_move(tiles_to_place)
                 score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
-                wrapper_end_turn(human_player, word, score, scrabble_game_play)
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Placed Tiles"
                 last_move_to_send["detail"] = word 
-            except ValueError as e:       
-                last_move_to_send["player"] = "Human"
-                last_move_to_send["action"] = "Invalid Move" 
-                last_move_to_send["detail"] = "".join(e.args)
-            
+                wrapper_end_turn(human_player, word, score, scrabble_game_play)
+            except ValueError as e:   
+                log_invalid_move(last_move_to_send, e)
+                
         print("last move:", last_move_to_send["action"]);
         if last_move_to_send["action"] != "Invalid Move":
-            print("Computer move")
+            if last_move_to_send["action"] == "Passed":
+                scrabble_game_play.num_turns_passed += 1
+            else:
+                scrabble_game_play.num_turns_passed = 0
+            print("num turns passed: {0}".format(scrabble_game_play.num_turns_passed))
+            
             #make computer move 
+            print("Computer move")
             (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
             #if the computer is unable to find a move, exchange tiles
             if not word:
-                scrabble_game_play.exchange_tiles_during_turn(computer_player, computer_player.rack)
-                computer_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
+                try: 
+                    scrabble_game_play.exchange_tiles_during_turn_capped(computer_player, computer_player.rack)
+                    last_move_to_send["action"] = "Exchanged Tiles"
+                except:
+                    last_move_to_send["action"] = "Passed"
                 last_move_to_send["player"] = "Computer"
-                last_move_to_send["action"] = "Exchanged Tiles"
                 last_move_to_send["detail"] = "" #could return tiles exchanged instead
+                (score, word) = (0, "EXCHANGED TILES")
             else: 
                 last_move_to_send["player"] = "Computer"
                 last_move_to_send["action"] = "Placed Tiles" 
                 last_move_to_send["detail"] = word
-                wrapper_end_turn(computer_player, word, score, scrabble_game_play)
+            wrapper_end_turn(computer_player, word, score, scrabble_game_play)
     #change to be last move object separate....
     print("wrapping")
     
+    #if len(scrabble_game_play.board.bag == 0 and  
+    '''
+        if len(self.board.bag) == 0:
+        if comp = EXCHANGED TILES and 0 and playe r= EXCHANGED TILES and 0 
+        "GAME ENDED"
+            '''
     human_player = scrabble_game_play.play_order[0]
     computer_player = scrabble_game_play.play_order[1]
     scrabble_board = scrabble_game_play.board
@@ -360,7 +380,11 @@ def wrapper_end_turn(player, word, score, game_play):
     player.words_played.append({"word": word, "score": score})
     player.running_score += score   
     game_play.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
-    
+   
+def log_invalid_move(last_move_to_send, e):
+    last_move_to_send["player"] = "Human"
+    last_move_to_send["action"] = "Invalid Move" 
+    last_move_to_send["detail"] = "".join(e.args)
     
 def map_cell_to_bonus_view(cell):
     if cell == TRIPLE_LETTER:
@@ -1064,6 +1088,8 @@ class board:
         return (rows, cols) 
         
     def convert_placed_tiles_to_full_move(self, placed_tiles):
+        if len(placed_tiles) == 0:
+            raise ValueError("You must place at least one tile! If you cannot move, exchange tiles insetad")
         (filled_rows, filled_cols) = self.find_filled_rows_and_cols(placed_tiles)
         if len(filled_rows) == 1:
             direction = HORIZONTAL 
@@ -1154,7 +1180,8 @@ class game_play:
                  scrabble_player_4 = None):
         self.board = board
         self.current_player = scrabble_player_1
-        self.round_num = 1
+        self.round_num = 1 
+        self.num_turns_passed = 0
         self.play_order = []
         #set the play order, and draw tiles for each player
         for player in [scrabble_player_1, scrabble_player_2, scrabble_player_3, scrabble_player_4]:
@@ -1175,16 +1202,27 @@ class game_play:
     def draw_tiles_end_of_turn(self, player, num_tiles):
         self.draw_from_scrabble_bag(player, num_tiles)
         
+    #exchange up to the # of tiles remaining in the bag (the first n tiles in tiles_to_exchange are used)
+    def exchange_tiles_during_turn_capped(self, player, tiles_to_exchange):
+        tiles_left_in_bag = len(self.board.bag)
+        if tiles_left_in_bag == 0:
+            raise ValueError("Nothing can be exchanged because no tiles are left in the bag")
+        if len(tiles_to_exchange) > tiles_left_in_bag:
+            exchange_tiles_during_turn(self, player, tiles_to_exchange[0:tiles_left_in_bag])
+        else:
+            exchange_tiles_during_turn(self, player, tiles_to_exchange)
+            
     def exchange_tiles_during_turn(self, player, tiles_to_exchange):
         self.draw_from_scrabble_bag(player, len(tiles_to_exchange), tiles_to_exchange)
              
     def draw_from_scrabble_bag(self, player, num_tiles, tiles_to_exchange = None):
         if tiles_to_exchange and num_tiles != len(tiles_to_exchange):
             raise ValueError("Attempting to draw more tiles than are being exchanged")
+        if num_tiles < 1 or num_tiles > RACK_MAX_NUM_TILES:
+            raise ValueError("You must exchange between 1 and {0} tiles".format(RACK_MAX_NUM_TILES))
         num_tiles_left = len(self.board.bag)
         if num_tiles > num_tiles_left:
-            print("Not enough tiles left--only " + str(num_tiles_left) + " tiles will be drawn")
-            num_tiles = num_tiles_left
+            raise ValueError("Not enough tiles left--you can only draw up to {0} tiles".format(num_tiles_left))
         if tiles_to_exchange:
             new_rack = player.rack[:]
             for tile in tiles_to_exchange:
@@ -1260,7 +1298,7 @@ class game_play:
             print("Computer thinking through move....")
             (score, input_word) = self.board.make_computer_move(player)
             #if the computer is unable to find a move, exchange tiles
-            if input_word:
+            if not input_word:
                 self.exchange_tiles_during_turn(player, player.rack)
                 
 

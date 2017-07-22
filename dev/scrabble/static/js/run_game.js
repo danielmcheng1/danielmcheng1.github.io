@@ -67,6 +67,8 @@ var placedTilesHuman;
 //prevent this from being clicked until game has started 
 $("#playMoveHuman").addClass("buttonClicked");
 $("#exchangeTilesHuman").addClass("buttonClicked");
+$("#passHuman").addClass("buttonClicked");
+
 $("#startGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         console.log("starting game...");
@@ -119,6 +121,18 @@ socket.on('moveDoneComputer', function(data) {
             };
         };
     });
+    
+    $("#passHuman").removeClass("buttonClicked");
+    $("#passHuman").on('keypress click', function(event) {
+        //enter key or mouse click 
+        if (event.which === 13 || event.type === 'click') {
+            if (!$(this).hasClass("buttonClicked")) {
+                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}});
+                $(this).addClass("buttonClicked");                    
+            };            
+        };
+    };
+    
     //selecting/unselecting tiles
     $(".tileNotFixed").click(function () {
         if ($(this).hasClass('tileHuman')) {
