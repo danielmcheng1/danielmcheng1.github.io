@@ -310,7 +310,6 @@ def wrapper_play_next_move(data):
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Exchanged Tiles"
                 last_move_to_send["detail"] = ""
-                wrapper_end_turn(human_player, word, score, scrabble_game_play)
             except ValueError as e:
                 log_invalid_move(last_move_to_send, e)
         elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
@@ -327,12 +326,10 @@ def wrapper_play_next_move(data):
                 
         print("last move:", last_move_to_send["action"]);
         if last_move_to_send["action"] != "Invalid Move":
-            if last_move_to_send["action"] == "Passed":
-                scrabble_game_play.num_turns_passed += 1
-            else:
-                scrabble_game_play.num_turns_passed = 0
+            #increment for human passing 
+            increment_turns_passed(scrabble_game_play, last_move_to_send)
+                
             print("num turns passed: {0}".format(scrabble_game_play.num_turns_passed))
-            
             #make computer move 
             print("Computer move")
             (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
@@ -351,6 +348,7 @@ def wrapper_play_next_move(data):
                 last_move_to_send["action"] = "Placed Tiles" 
                 last_move_to_send["detail"] = word
             wrapper_end_turn(computer_player, word, score, scrabble_game_play)
+            increment_turns_passed(scrabble_game_play, last_move_to_send)
     #change to be last move object separate....
     print("wrapping")
     
@@ -380,7 +378,13 @@ def wrapper_end_turn(player, word, score, game_play):
     player.words_played.append({"word": word, "score": score})
     player.running_score += score   
     game_play.draw_tiles_end_of_turn(player, RACK_MAX_NUM_TILES - len(player.rack)) 
-   
+    
+def increment_turns_passed(scrabble_game_play, move):
+    if move["action"] == "Passed":
+        scrabble_game_play.num_turns_passed += 1
+    else:
+        scrabble_game_play.num_turns_passed = 0 
+        
 def log_invalid_move(last_move_to_send, e):
     last_move_to_send["player"] = "Human"
     last_move_to_send["action"] = "Invalid Move" 
@@ -1035,9 +1039,11 @@ class board:
         if direction == HORIZONTAL:
             end_row = start_row + 1
             end_col = start_col + num_tiles
+            cross_direction_description = "vertically"
         else:
             end_row = start_row + num_tiles
             end_col = start_col + 1
+            cross_direction_description = "horizontally"
     
         #validity checks
         if self.is_valid_word(word):
@@ -1061,16 +1067,16 @@ class board:
                                 hooks_onto_tile = True
                         else:
                             if (curr_row, curr_col) not in valid_crossword_score_dict.keys():
-                                raise ValueError("Your placed tile {0} fails to form a valid crossword".format(to_place))
+                                raise ValueError("Your placed tile {0} fails to form a valid crossword going {1}".format(to_place, cross_direction_description))
                             elif to_place not in valid_crossword_score_dict[(curr_row, curr_col)].keys():
-                                raise ValueError("Your placed tile {0} fails to form a valid crossword".format(to_place))
+                                raise ValueError("Your placed tile {0} fails to form a valid crossword going {1}".format(to_place, cross_direction_description))
                             if (curr_row, curr_col) in valid_hook_spots:
                                 hooks_onto_tile = True
                 #check if we connected to a tile at some point in the word
                 if not hooks_onto_tile:
                     raise ValueError("Your word must hook onto an existing tile")
         else:
-            raise ValueError("Your word is not in the dictionary")
+            raise ValueError("The word {0} is not in the dictionary".format("".join(word)))
                         
         #score and place word
         human_score = self.calc_word_score(start_row, start_col, direction, word, valid_crossword_score_dict)
@@ -1088,10 +1094,10 @@ class board:
         return (rows, cols) 
         
     def convert_placed_tiles_to_full_move(self, placed_tiles):
-        if len(placed_tiles) == 0:
-            raise ValueError("You must place at least one tile! If you cannot move, exchange tiles insetad")
         (filled_rows, filled_cols) = self.find_filled_rows_and_cols(placed_tiles)
-        if len(filled_rows) == 1:
+        if len(filled_rows) == 0:
+            raise ValueError("You must place at least one tile! If you cannot move, exchange tiles or pass your turn")
+        elif len(filled_rows) == 1:
             direction = HORIZONTAL 
         elif len(filled_cols) == 1: 
             direction = VERTICAL 

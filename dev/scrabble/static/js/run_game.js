@@ -131,7 +131,7 @@ socket.on('moveDoneComputer', function(data) {
                 $(this).addClass("buttonClicked");                    
             };            
         };
-    };
+    });
     
     //selecting/unselecting tiles
     $(".tileNotFixed").click(function () {
