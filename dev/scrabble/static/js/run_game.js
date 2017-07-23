@@ -329,7 +329,8 @@ function refreshGameInfo(data) {
 function refreshLastMove(data) {
     $("#lastMove").text(function () {
         console.log("refreshing last move", data["lastMove"]);
-        if (data["lastMove"] != undefined && data["lastMove"]["action"] == "Invalid Move") {
+        // && data["lastMove"]["action"] == "Invalid Move"
+        if (data["lastMove"] != undefined) {
             return data["lastMove"]["detail"];
         }
         else {

@@ -281,7 +281,7 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_gaddag = gaddag(scrabble_corpus)
+        scrabble_gaddag = gaddag(scrabble_corpus[0:1000])
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
@@ -315,8 +315,8 @@ def wrapper_play_next_move(data):
         elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
             tiles_to_place = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             try: 
-                (start_row, start_col, direction, word) = scrabble_board.convert_placed_tiles_to_full_placement(tiles_to_place)
-                score = scrabble_board.make_human_move(start_row, start_col, direction, word, human_player)
+                full_placement = scrabble_board.convert_placed_tiles_to_full_placement(tiles_to_place)
+                score = scrabble_board.make_human_move(full_placement["start_row"], full_placement["start_col"], full_placement["direction"], full_placement["word"], human_player)
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Placed Tiles"
                 last_move_to_send["detail"] = word 
@@ -334,20 +334,22 @@ def wrapper_play_next_move(data):
             print("Computer move")
             (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
             #if the computer is unable to find a move, exchange tiles
-            if not word:
+            print("score: {0}, word {1}".format(score, str(word)))
+            if word == []:
                 try: 
                     scrabble_game_play.exchange_tiles_during_turn_capped(computer_player, computer_player.rack)
                     last_move_to_send["action"] = "Exchanged Tiles"
+                    human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
                 except:
                     last_move_to_send["action"] = "Passed"
+                    human_player.words_played.append({"word": "PASSED", "score": 0})
                 last_move_to_send["player"] = "Computer"
                 last_move_to_send["detail"] = "" #could return tiles exchanged instead
-                (score, word) = (0, "EXCHANGED TILES")
             else: 
                 last_move_to_send["player"] = "Computer"
                 last_move_to_send["action"] = "Placed Tiles" 
                 last_move_to_send["detail"] = word
-            wrapper_end_turn(computer_player, word, score, scrabble_game_play)
+                wrapper_end_turn(computer_player, word, score, scrabble_game_play)
             increment_turns_passed(scrabble_game_play, last_move_to_send)
     #change to be last move object separate....
     print("wrapping")
@@ -1107,20 +1109,19 @@ class board:
         anchor_col = min(filled_cols)
         
         #similar to the pull_valid_crossword_score function...
-        prefix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'PREFIX')
-        suffix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'SUFFIX')
+        prefix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'PREFIX')
+        suffix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'SUFFIX')
         word = prefix + [placed_tiles[anchor_row][anchor_col]] + suffix
         
         #exception for one tile placements--the official direction is the direction that creates the longer word 
         if len(word) == 1:
-            prefix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'PREFIX')
-            suffix = find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'SUFFIX')
+            prefix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'PREFIX')
+            suffix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'SUFFIX')
             flipped_word = prefix + [placed_tiles[anchor_row][anchor_col]] + suffix
             if len(flipped_word) > 1:
                 word = flipped_word 
                 direction = direction * -1
-            
-        return (anchor_row - len(word) + 1, anchor_col - len(word) + 1, direction, word) 
+        return {"start_row": anchor_row - len(word) + 1, "start_col": anchor_col - len(word) + 1, "direction": direction, "word": word}
         
     #given the starting placement--i.e. the anchor tile--determine the prefix and suffix (since the full word may include tiles on the board) 
     def find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, prefix_or_suffix):
@@ -1210,19 +1211,25 @@ class game_play:
     #exchange up to the # of tiles remaining in the bag (the first n tiles in tiles_to_exchange are used)
     def exchange_tiles_during_turn_capped(self, player, tiles_to_exchange):
         tiles_left_in_bag = len(self.board.bag)
+        print(tiles_left_in_bag)
+        print(tiles_to_exchange)
+        print(len(tiles_to_exchange))
         if tiles_left_in_bag == 0:
             raise ValueError("Nothing can be exchanged because no tiles are left in the bag")
         if len(tiles_to_exchange) > tiles_left_in_bag:
-            exchange_tiles_during_turn(self, player, tiles_to_exchange[0:tiles_left_in_bag])
+            print("truncating") 
+            self.exchange_tiles_during_turn(self, player, tiles_to_exchange[0:tiles_left_in_bag])
         else:
-            exchange_tiles_during_turn(self, player, tiles_to_exchange)
+            self.exchange_tiles_during_turn(self, player, tiles_to_exchange)
             
     def exchange_tiles_during_turn(self, player, tiles_to_exchange):
+        print("in exchange tiles during turn: {0}".format(str(tiles_to_exchange)))
         self.draw_from_scrabble_bag(player, len(tiles_to_exchange), tiles_to_exchange)
              
     def draw_from_scrabble_bag(self, player, num_tiles, tiles_to_exchange = None):
         if tiles_to_exchange and num_tiles != len(tiles_to_exchange):
             raise ValueError("Attempting to draw more tiles than are being exchanged")
+        print("Num_tiles: {0}, tiles_to_exchange: {1}".format(num_tiles, str(tiles_to_exchange)))
         if num_tiles < 1 or num_tiles > RACK_MAX_NUM_TILES:
             raise ValueError("You must exchange between 1 and {0} tiles".format(RACK_MAX_NUM_TILES))
         num_tiles_left = len(self.board.bag)
