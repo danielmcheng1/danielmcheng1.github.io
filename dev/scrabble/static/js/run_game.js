@@ -19,7 +19,7 @@ DATA STRUCTURES
                 .bonus 
              if blank then attribute is N/A
  To Do
-   
+   logging
         full rack tests 
         game end
         why randomly shifts letters/wrong click and place e.g. triple word @bottom
@@ -329,9 +329,10 @@ function refreshGameInfo(data) {
 function refreshLastMove(data) {
     $("#lastMove").text(function () {
         console.log("refreshing last move", data["lastMove"]);
-        // && data["lastMove"]["action"] == "Invalid Move"
-        if (data["lastMove"] != undefined) {
-            return data["lastMove"]["detail"];
+        var lastMove = data["lastMove"]
+        if (lastMove!= undefined) {
+            var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
+            return lastMove["player"] + " " + lastMove["action"].toLowerCase() + detail;
         }
         else {
             return "";

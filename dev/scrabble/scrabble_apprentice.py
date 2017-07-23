@@ -287,7 +287,7 @@ def wrapper_play_next_move(data):
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
-        last_move_to_send = {"action": "Start Game", "player": "", "detail": ""}
+        last_move_to_send = {"action": "Game Started", "player": "", "detail": ""}
     #read in the latest data and make the next move
     else:
         print("making move")
@@ -311,7 +311,7 @@ def wrapper_play_next_move(data):
                 last_move_to_send["action"] = "Exchanged Tiles"
                 last_move_to_send["detail"] = ""
             except ValueError as e:
-                log_invalid_move(last_move_to_send, e)
+                log_illegal_move(last_move_to_send, e)
         elif data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Placing Tiles":
             tiles_to_place = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             try: 
@@ -322,10 +322,10 @@ def wrapper_play_next_move(data):
                 last_move_to_send["detail"] = word 
                 wrapper_end_turn(human_player, word, score, scrabble_game_play)
             except ValueError as e:   
-                log_invalid_move(last_move_to_send, e)
+                log_illegal_move(last_move_to_send, e)
                 
         print("last move:", last_move_to_send["action"]);
-        if last_move_to_send["action"] != "Invalid Move":
+        if last_move_to_send["action"] != "Made Illegal Move":
             #increment for human passing 
             increment_turns_passed(scrabble_game_play, last_move_to_send)
                 
@@ -340,7 +340,7 @@ def wrapper_play_next_move(data):
                     scrabble_game_play.exchange_tiles_during_turn_capped(computer_player, computer_player.rack)
                     last_move_to_send["action"] = "Exchanged Tiles"
                     human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
-                except:
+                except ValueError as e:
                     last_move_to_send["action"] = "Passed"
                     human_player.words_played.append({"word": "PASSED", "score": 0})
                 last_move_to_send["player"] = "Computer"
@@ -387,9 +387,9 @@ def increment_turns_passed(scrabble_game_play, move):
     else:
         scrabble_game_play.num_turns_passed = 0 
         
-def log_invalid_move(last_move_to_send, e):
+def log_illegal_move(last_move_to_send, e):
     last_move_to_send["player"] = "Human"
-    last_move_to_send["action"] = "Invalid Move" 
+    last_move_to_send["action"] = "Made Illegal Move" 
     last_move_to_send["detail"] = "".join(e.args)
     
 def map_cell_to_bonus_view(cell):
@@ -1111,6 +1111,7 @@ class board:
         #similar to the pull_valid_crossword_score function...
         prefix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'PREFIX')
         suffix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'SUFFIX')
+        print("prefix: {0}, suffix: {1}, placed_tiles {2}, anchor_row {3}, anchor_col {4}".format(prefix, suffix, placed_tiles, anchor_row, anchor_col))
         word = prefix + [placed_tiles[anchor_row][anchor_col]] + suffix
         
         #exception for one tile placements--the official direction is the direction that creates the longer word 
@@ -1124,16 +1125,16 @@ class board:
         return {"start_row": anchor_row - len(word) + 1, "start_col": anchor_col - len(word) + 1, "direction": direction, "word": word}
         
     #given the starting placement--i.e. the anchor tile--determine the prefix and suffix (since the full word may include tiles on the board) 
-    def find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, prefix_or_suffix):
+    def find_word_from_anchor(self, placed_tiles, anchor_row, anchor_col, direction, prefix_or_suffix):
         if direction == HORIZONTAL:
             (row_delta, col_delta) = (0, 1)
         else:
             (row_delta, col_delta) = (1, 0)
         if prefix_or_suffix == 'PREFIX':
             (row_delta, col_delta) = (row_delta * -1, col_delta * -1)
-        
+            
         word_fix = []
-        (curr_row, curr_col) = (first_placed_row, first_placed_col)
+        (curr_row, curr_col) = (anchor_row, anchor_col)
         print("Find start for {0} at {1} {2}".format(word_fix, curr_row, curr_col))
         while True:
             (curr_row, curr_col) = (curr_row + row_delta, curr_col + col_delta)
@@ -1144,13 +1145,14 @@ class board:
                     letter = placed_tiles[curr_row][curr_col]
                 print(curr_row, curr_col, letter) 
                 if letter != "":
-                    word_fix.append(0, letter) #insert in front
+                    word_fix.append(letter) #insert in front
                 else:
                     break
             else:
                 break
+        print(word_fix) 
         if prefix_or_suffix == 'PREFIX':
-            return word_fix.reverse()
+            return word_fix[::-1]
         return word_fix 
 
         
@@ -1212,21 +1214,22 @@ class game_play:
     def exchange_tiles_during_turn_capped(self, player, tiles_to_exchange):
         tiles_left_in_bag = len(self.board.bag)
         print(tiles_left_in_bag)
-        print(tiles_to_exchange)
-        print(len(tiles_to_exchange))
+        print("exchange_tiles_during_turn_capped: tiles_to_exchange {0}, tiles_left_in_bag {1}".format(tiles_to_exchange, tiles_left_in_bag))
         if tiles_left_in_bag == 0:
             raise ValueError("Nothing can be exchanged because no tiles are left in the bag")
         if len(tiles_to_exchange) > tiles_left_in_bag:
             print("truncating") 
-            self.exchange_tiles_during_turn(self, player, tiles_to_exchange[0:tiles_left_in_bag])
+            self.exchange_tiles_during_turn(player, tiles_to_exchange[0:tiles_left_in_bag])
         else:
-            self.exchange_tiles_during_turn(self, player, tiles_to_exchange)
+            print("regular")
+            self.exchange_tiles_during_turn(player, tiles_to_exchange)
             
     def exchange_tiles_during_turn(self, player, tiles_to_exchange):
         print("in exchange tiles during turn: {0}".format(str(tiles_to_exchange)))
         self.draw_from_scrabble_bag(player, len(tiles_to_exchange), tiles_to_exchange)
              
     def draw_from_scrabble_bag(self, player, num_tiles, tiles_to_exchange = None):
+        print("drawing from scrabble bag: num_tiles {0}, tiles_to_exchange {1}".format(num_tiles, tiles_to_exchange))
         if tiles_to_exchange and num_tiles != len(tiles_to_exchange):
             raise ValueError("Attempting to draw more tiles than are being exchanged")
         print("Num_tiles: {0}, tiles_to_exchange: {1}".format(num_tiles, str(tiles_to_exchange)))
@@ -1298,7 +1301,7 @@ class game_play:
                         score = self.board.make_human_move(input_row, input_col, input_dir, input_word, player)
                         break
                     except:
-                        print("Invalid move. Let's try again.")
+                        print("Made Illegal Move. Let's try again.")
                         num_attempts += 1
                         if num_attempts == MAX_NUM_ATTEMPTED_MOVES:
                             print("You fail at entering moves on a Scrabble board. Your turn will be skipped.")
