@@ -319,7 +319,7 @@ def wrapper_play_next_move(data):
                 score = scrabble_board.make_human_move(full_placement["start_row"], full_placement["start_col"], full_placement["direction"], full_placement["word"], human_player)
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Placed Tiles"
-                last_move_to_send["detail"] = word 
+                last_move_to_send["detail"] = full_placement["word"] 
                 wrapper_end_turn(human_player, full_placement["word"], score, scrabble_game_play)
             except ValueError as e:   
                 log_illegal_move(last_move_to_send, e)
@@ -1117,17 +1117,20 @@ class board:
         
         #exception for one tile placements--the official direction is the direction that creates the longer word 
         if len(word) == 1:
-            prefix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'PREFIX')
-            suffix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction * -1, 'SUFFIX')
-            flipped_word = prefix + [placed_tiles[anchor_row][anchor_col]] + suffix
+            flipped_direction = direction * - 1
+            flipped_prefix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, flipped_direction, 'PREFIX')
+            flipped_suffix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, flipped_direction, 'SUFFIX')
+            flipped_word = flipped_prefix + [placed_tiles[anchor_row][anchor_col]] + flipped_suffix
             if len(flipped_word) > 1:
                 word = flipped_word 
-                direction = direction * -1
+                direction = flipped_direction 
+                prefix = flipped_prefix
+                suffix = flipped_suffix
         if direction == HORIZONTAL:
             start_row = anchor_row 
-            start_col = anchor_col - len(word) + 1
+            start_col = anchor_col - len(prefix)
         else:
-            start_row = anchor_row - len(word) + 1 
+            start_row = anchor_row - len(prefix)
             start_col = anchor_col 
         return {"start_row": start_row, "start_col": start_col, "direction": direction, "word": word}
         
