@@ -281,7 +281,7 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_gaddag = gaddag(scrabble_corpus[0:1000])
+        scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
@@ -320,7 +320,7 @@ def wrapper_play_next_move(data):
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Placed Tiles"
                 last_move_to_send["detail"] = word 
-                wrapper_end_turn(human_player, word, score, scrabble_game_play)
+                wrapper_end_turn(human_player, full_placement["word"], score, scrabble_game_play)
             except ValueError as e:   
                 log_illegal_move(last_move_to_send, e)
                 
@@ -1037,6 +1037,7 @@ class board:
         return (self.comp_max_score, self.comp_max_word)
     
     def make_human_move(self, start_row, start_col, direction, word, player):
+        print(start_row, start_col, direction, word) 
         num_tiles = len(word)
         if direction == HORIZONTAL:
             end_row = start_row + 1
@@ -1122,7 +1123,13 @@ class board:
             if len(flipped_word) > 1:
                 word = flipped_word 
                 direction = direction * -1
-        return {"start_row": anchor_row - len(word) + 1, "start_col": anchor_col - len(word) + 1, "direction": direction, "word": word}
+        if direction == HORIZONTAL:
+            start_row = anchor_row 
+            start_col = anchor_col - len(word) + 1
+        else:
+            start_row = anchor_row - len(word) + 1 
+            start_col = anchor_col 
+        return {"start_row": start_row, "start_col": start_col, "direction": direction, "word": word}
         
     #given the starting placement--i.e. the anchor tile--determine the prefix and suffix (since the full word may include tiles on the board) 
     def find_word_from_anchor(self, placed_tiles, anchor_row, anchor_col, direction, prefix_or_suffix):
