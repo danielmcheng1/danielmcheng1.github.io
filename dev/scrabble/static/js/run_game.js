@@ -64,7 +64,7 @@ var sourceTile;
 var sourceCell;
 var placedTilesHuman;
     
-//prevent this from being clicked until game has started 
+//prevent these from being clicked until game has started 
 $("#playMoveHuman").addClass("buttonClicked");
 $("#exchangeTilesHuman").addClass("buttonClicked");
 $("#passHuman").addClass("buttonClicked");
@@ -83,8 +83,8 @@ socket.on('moveDoneComputer', function(data) {
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
     refreshRack(data, 'Computer');
-    refreshGameInfo(data);
     refreshLastMove(data);
+    refreshGameInfo(data);
     
     //create audio element
     var soundEffects = document.createElement("audio");
@@ -324,6 +324,14 @@ function refreshGameInfo(data) {
         $("#tilesLeft").text("Tiles Left: " + gameInfo["tilesLeft"] + " tiles");
         $("#wordsPlayedComputer").text("Words Played by Computer: " + gameInfo["wordsPlayedComputer"]);
         $("#wordsPlayedHuman").text("Words Played by Human: " + gameInfo["wordsPlayedHuman"]);
+        
+        var gameEndReason = gameInfo["gameEndReason"] 
+        if (gameEndReason != "") {
+            $("#playMoveHuman").addClass("buttonClicked");
+            $("#exchangeTilesHuman").addClass("buttonClicked");
+            $("#passHuman").addClass("buttonClicked");
+            $("#gameEndReason").text(gameEndReason);
+        };
     };
 };
 function refreshLastMove(data) {

@@ -111,6 +111,7 @@ def load_scrabble_bag(scrabble_freq_dict):
     scrabble_bag = []
     for letter in scrabble_freq_dict.keys():
         scrabble_bag = scrabble_bag + [letter] * scrabble_freq_dict[letter]
+    random.shuffle(scrabble_bag)
     return scrabble_bag
 
 def load_all():
@@ -254,6 +255,7 @@ BINGO_BONUS = 50
 RACK_MAX_NUM_TILES = 7
 (MIN_ROW, MAX_ROW) = (0, 15)
 (MIN_COL, MAX_COL) = (0, 15)
+MAX_TURNS_PASSED = 6
 (CENTER_ROW, CENTER_COL) = (7, 7)
 
 FRONT_END = 1 #for checking if the spot before the first tile is filled
@@ -281,6 +283,9 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
+        scrabble_bag = scrabble_bag[0:20] 
+        scrabble_corpus = scrabble_corpus[0:1000]
+        
         scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
             
@@ -328,8 +333,12 @@ def wrapper_play_next_move(data):
         if last_move_to_send["action"] != "Made Illegal Move":
             #increment for human passing 
             increment_turns_passed(scrabble_game_play, last_move_to_send)
-                
             print("num turns passed: {0}".format(scrabble_game_play.num_turns_passed))
+               
+            print("Game has ended: {0}, game end reason: {1}".format(scrabble_game_play.game_has_ended(), scrabble_game_play.game_end_reason()))
+            if scrabble_game_play.game_has_ended():
+                return wrapper_save_game_play(scrabble_game_play, last_move_to_send)
+                
             #make computer move 
             print("Computer move")
             (score, word) = scrabble_game_play.board.make_computer_move(computer_player)     
@@ -351,26 +360,25 @@ def wrapper_play_next_move(data):
                 last_move_to_send["detail"] = word
                 wrapper_end_turn(computer_player, word, score, scrabble_game_play)
             increment_turns_passed(scrabble_game_play, last_move_to_send)
+                
     #change to be last move object separate....
-    print("wrapping")
+    return wrapper_save_game_play(scrabble_game_play, last_move_to_send)
     
-    #if len(scrabble_game_play.board.bag == 0 and  
-    '''
-        if len(self.board.bag) == 0:
-        if comp = EXCHANGED TILES and 0 and playe r= EXCHANGED TILES and 0 
-        "GAME ENDED"
-            '''
+def wrapper_save_game_play(scrabble_game_play, last_move_to_send):   
+    print("wrapping") 
     human_player = scrabble_game_play.play_order[0]
     computer_player = scrabble_game_play.play_order[1]
     scrabble_board = scrabble_game_play.board
     scrabble_score_dict = scrabble_board.scrabble_score_dict
+    
     scrabble_game_play_wrapper = {"board": [[map_cell_to_bonus_view(scrabble_board.board[row][col]) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "tiles": [[map_cell_to_tile_view(scrabble_board.board[row][col], map_cell_to_player_view(row, col, scrabble_board), scrabble_score_dict) for col in range(MAX_COL)] for row in range(MAX_ROW)], \
                               "rackHuman": map_rack_to_tile_view(human_player.rack, "Human", scrabble_score_dict),   \
                               "rackComputer": map_rack_to_tile_view(computer_player.rack, "Computer", scrabble_score_dict), \
-                              "gameInfo": {"scoreHuman": human_player.running_score, "scoreComputer": computer_player.running_score, \
+                              "gameInfo": {"scoreHuman": human_player.running_score, "scoreComputer": computer_player.running_score,
                                            "wordsPlayedHuman": human_player.words_played, "wordsPlayedComputer": computer_player.words_played,
-                                           "tilesLeft": len(scrabble_board.bag)}, \
+                                           "tilesLeft": len(scrabble_board.bag),
+                                           "gameEndReason": scrabble_game_play.game_end_reason()}, \
                               "lastMove": last_move_to_send
                               }
                               
@@ -1106,8 +1114,9 @@ class board:
             direction = VERTICAL 
         else:
             raise ValueError("You can only place in one row or column!!!")        
+        #the leftmost / uppermost point of adjacency 
         anchor_row = min(filled_rows)
-        anchor_col = min(filled_cols)
+        anchor_col = min(filled_cols)        
         
         #similar to the pull_valid_crossword_score function...
         prefix = self.find_word_from_anchor(placed_tiles, anchor_row, anchor_col, direction, 'PREFIX')
@@ -1126,12 +1135,18 @@ class board:
                 direction = flipped_direction 
                 prefix = flipped_prefix
                 suffix = flipped_suffix
+        #the actual start of the word -- since there would be existing tiles to the left / top of the anchor tile 
         if direction == HORIZONTAL:
             start_row = anchor_row 
             start_col = anchor_col - len(prefix)
         else:
             start_row = anchor_row - len(prefix)
             start_col = anchor_col 
+            
+        #check that there aren't extra tiles placed beyond the end of the word (since we walked down until finding an empty spot 
+        if (max(filled_rows) > start_row + len(word) - 1) or (max(filled_cols) > start_col + len(word) - 1):
+            raise ValueError("All of your placed tiles must be connected!") 
+            
         return {"start_row": start_row, "start_col": start_col, "direction": direction, "word": word}
         
     #given the starting placement--i.e. the anchor tile--determine the prefix and suffix (since the full word may include tiles on the board) 
@@ -1242,30 +1257,41 @@ class game_play:
         print("drawing from scrabble bag: num_tiles {0}, tiles_to_exchange {1}".format(num_tiles, tiles_to_exchange))
         if tiles_to_exchange and num_tiles != len(tiles_to_exchange):
             raise ValueError("Attempting to draw more tiles than are being exchanged")
+        
         print("Num_tiles: {0}, tiles_to_exchange: {1}".format(num_tiles, str(tiles_to_exchange)))
         if num_tiles < 1 or num_tiles > RACK_MAX_NUM_TILES:
             raise ValueError("You must exchange between 1 and {0} tiles".format(RACK_MAX_NUM_TILES))
+        
+        ending_tiles = len(player.rack) if tiles_to_exchange else num_tiles + len(player.rack)
+        if ending_tiles != RACK_MAX_NUM_TILES:
+            raise ValueError("When exchanging/drawing tiles, you must end up with exactly {0} tiles in your rack".format(RACK_MAX_NUM_TILES)) 
+            
         num_tiles_left = len(self.board.bag)
         if num_tiles > num_tiles_left:
             raise ValueError("Not enough tiles left--you can only draw up to {0} tiles".format(num_tiles_left))
+        #if exchanging tiles, first remove these from rack and append back to the bag 
         if tiles_to_exchange:
+            #create a copy first to validate that all requested tiles can actually be exchanged
             new_rack = player.rack[:]
+            new_bag = self.board.bag[:]
             for tile in tiles_to_exchange:
                 try:
                     new_rack.remove(tile)
-                    print(tile + " removed-->" + str(new_rack))
+                    new_bag.append(tile)
+                    print(tile + " added back to bag")
                 except:
                     print("Attempted to exchange tiles that are not in your rack. Don't cheat!")
                     return
             player.rack = new_rack[:]
+            self.board.bag = new_bag[:]
+            random.shuffle(self.board.bag)
+        
+        #now draw to fill back up the player's rack    
         for i in range(0, num_tiles):
             letter = random.choice(self.board.bag)
             self.board.bag.remove(letter)
             player.rack.append(letter)
-        if tiles_to_exchange:
-            print(str(num_tiles) + "tiles have been exchanged for " + player.name)
-        else:
-            print(str(num_tiles) + " new tiles have been drawn to fill rack for " + player.name)
+            print("Drew tile {0}".format(letter))
         
     def request_human_move(self, player):
         input_exchange = input("Would you like to exchange tiles? Type 'Yes' to exchange (otherwise, you will make your move)")
@@ -1338,14 +1364,21 @@ class game_play:
             for player in self.play_order:
                 self.play_move(player)
             self.round_num += 1
-            if self.end_condition():
+            if self.game_has_ended():
                 break
                 
-    def end_condition(self):
+    def game_has_ended(self):
+        return self.game_end_reason() != ""
+    
+    #game ends if (1) six turns have ended in passes or (2) a player has no tiles left and there are no tiles left in the bag 
+    def game_end_reason(self):
+        if self.num_turns_passed == MAX_TURNS_PASSED: 
+            return "Game over: {0} turns have ended in passes".format(MAX_TURNS_PASSED)
         if len(self.board.bag) == 0:
-            self.print_end_state()
-            return True
-        return False
+            for player in self.play_order: 
+                if len(player.rack) == 0: 
+                    return "Game over: {0} used up all tiles in rack, and no tiles are left in the bag".format(player.name)
+        return ""
     
     def print_end_state(self):
         print("Game has ended!")
