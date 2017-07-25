@@ -283,8 +283,7 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_bag = scrabble_bag[0:20] 
-        scrabble_corpus = scrabble_corpus[0:1000]
+        scrabble_corpus = scrabble_corpus
         
         scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
@@ -304,6 +303,7 @@ def wrapper_play_next_move(data):
         last_move_to_send = {}
         #make human move    
         if data["scrabble_game_play_wrapper"]["last_move"]["action"] == "Try Passing":
+            human_player.words_played.append({"word": list("PASSED"), "score": 0})
             last_move_to_send["player"] = "Human"
             last_move_to_send["action"] = "Passed"
             last_move_to_send["detail"] = ""           
@@ -311,7 +311,7 @@ def wrapper_play_next_move(data):
             tiles_to_exchange = data["scrabble_game_play_wrapper"]["last_move"]["detail"]
             try:
                 scrabble_game_play.exchange_tiles_during_turn(human_player, tiles_to_exchange) 
-                human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
+                human_player.words_played.append({"word": list("EXCHANGED"), "score": 0})
                 last_move_to_send["player"] = "Human"
                 last_move_to_send["action"] = "Exchanged Tiles"
                 last_move_to_send["detail"] = ""
@@ -348,10 +348,10 @@ def wrapper_play_next_move(data):
                 try: 
                     scrabble_game_play.exchange_tiles_during_turn_capped(computer_player, computer_player.rack)
                     last_move_to_send["action"] = "Exchanged Tiles"
-                    human_player.words_played.append({"word": "EXCHANGED TILES", "score": 0})
+                    human_player.words_played.append({"word": list("EXCHANGED"), "score": 0})
                 except ValueError as e:
                     last_move_to_send["action"] = "Passed"
-                    human_player.words_played.append({"word": "PASSED", "score": 0})
+                    human_player.words_played.append({list("PASSED"), "score": 0})
                 last_move_to_send["player"] = "Computer"
                 last_move_to_send["detail"] = "" #could return tiles exchanged instead
             else: 
@@ -1250,25 +1250,28 @@ class game_play:
             self.exchange_tiles_during_turn(player, tiles_to_exchange)
             
     def exchange_tiles_during_turn(self, player, tiles_to_exchange):
-        print("in exchange tiles during turn: {0}".format(str(tiles_to_exchange)))
+        if len(tiles_to_exchange) == 0:
+            raise ValueError("You must exchange at least 1 tile")
         self.draw_from_scrabble_bag(player, len(tiles_to_exchange), tiles_to_exchange)
              
-    def draw_from_scrabble_bag(self, player, num_tiles, tiles_to_exchange = None):
-        print("drawing from scrabble bag: num_tiles {0}, tiles_to_exchange {1}".format(num_tiles, tiles_to_exchange))
-        if tiles_to_exchange and num_tiles != len(tiles_to_exchange):
-            raise ValueError("Attempting to draw more tiles than are being exchanged")
+    def draw_from_scrabble_bag(self, player, num_tiles_to_draw, tiles_to_exchange = None):
+        if tiles_to_exchange and num_tiles_to_draw != len(tiles_to_exchange):
+            raise ValueError("Don't cheat. You're trying to draw more tiles than you are exchanging")
         
-        print("Num_tiles: {0}, tiles_to_exchange: {1}".format(num_tiles, str(tiles_to_exchange)))
-        if num_tiles < 1 or num_tiles > RACK_MAX_NUM_TILES:
-            raise ValueError("You must exchange between 1 and {0} tiles".format(RACK_MAX_NUM_TILES))
+        print("num_tiles_to_draw: {0}, tiles_to_exchange: {1}".format(num_tiles_to_draw, str(tiles_to_exchange)))
+        if num_tiles_to_draw < 1 or num_tiles_to_draw > RACK_MAX_NUM_TILES:
+            raise ValueError("You must {0} between 1 and {1} tiles".format("exchange" if tiles_to_exchange else "draw", RACK_MAX_NUM_TILES))
         
-        ending_tiles = len(player.rack) if tiles_to_exchange else num_tiles + len(player.rack)
-        if ending_tiles != RACK_MAX_NUM_TILES:
-            raise ValueError("When exchanging/drawing tiles, you must end up with exactly {0} tiles in your rack".format(RACK_MAX_NUM_TILES)) 
-            
-        num_tiles_left = len(self.board.bag)
-        if num_tiles > num_tiles_left:
-            raise ValueError("Not enough tiles left--you can only draw up to {0} tiles".format(num_tiles_left))
+        num_tiles_left = len(self.board.bag) 
+        if num_tiles_to_draw > num_tiles_left and tiles_to_exchange:
+            raise ValueError("Not enough tiles left--you can only exchange up to {0} tiles".format(num_tiles_left))
+        num_tiles_to_draw = min(num_tiles_to_draw, num_tiles_left) 
+        
+        #not true in game end conditions 
+        #ending_tiles = len(player.rack) if tiles_to_exchange else num_tiles_to_draw + len(player.rack)
+        #if ending_tiles != RACK_MAX_NUM_TILES:
+        #    raise ValueError("When {0} tiles, you must end up with exactly {1} tiles in your rack".format("exchanging" if tiles_to_exchange else "drawing", RACK_MAX_NUM_TILES)) 
+             
         #if exchanging tiles, first remove these from rack and append back to the bag 
         if tiles_to_exchange:
             #create a copy first to validate that all requested tiles can actually be exchanged
@@ -1287,7 +1290,7 @@ class game_play:
             random.shuffle(self.board.bag)
         
         #now draw to fill back up the player's rack    
-        for i in range(0, num_tiles):
+        for i in range(0, num_tiles_to_draw):
             letter = random.choice(self.board.bag)
             self.board.bag.remove(letter)
             player.rack.append(letter)

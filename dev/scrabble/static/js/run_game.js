@@ -20,11 +20,8 @@ DATA STRUCTURES
              if blank then attribute is N/A
  To Do
    logging
-        full rack tests 
-        game end
         why randomly shifts letters/wrong click and place e.g. triple word @bottom
         bot set up
-    other 
         add delay to computer move
         instructions while waiting
             say comop confident enough to show tiles
@@ -322,8 +319,9 @@ function refreshGameInfo(data) {
         $("#scoreComputer").text("Computer Score: " + gameInfo["scoreComputer"] + " points");
         $("#scoreHuman").text("Human Score: " + gameInfo["scoreHuman"] + " points");
         $("#tilesLeft").text("Tiles Left: " + gameInfo["tilesLeft"] + " tiles");
-        $("#wordsPlayedComputer").text("Words Played by Computer: " + gameInfo["wordsPlayedComputer"]);
-        $("#wordsPlayedHuman").text("Words Played by Human: " + gameInfo["wordsPlayedHuman"]);
+        
+        refreshWordsPlayed("wordsPlayedComputer", gameInfo["wordsPlayedComputer"], "Computer");
+        refreshWordsPlayed("wordsPlayedHuman", gameInfo["wordsPlayedHuman"], "Human");
         
         var gameEndReason = gameInfo["gameEndReason"] 
         if (gameEndReason != "") {
@@ -334,6 +332,21 @@ function refreshGameInfo(data) {
         };
     };
 };
+function refreshWordsPlayed(id, wordsPlayed, player) {
+    $("#" + id).empty();
+    if (wordsPlayed.length == 0) 
+        return;
+    var table_whole = "<table>";
+    for (var i = 0; i < wordsPlayed.length; i++) {
+        var table_row = "<tr>";
+        var table_cells = "<td>    " + wordsPlayed[i]["word"].join("") + "</td><td>" + wordsPlayed[i]["score"] + "</td>";
+        table_row = table_row + table_cells;
+        table_whole = table_whole + table_row;
+    };
+    table_whole = table_whole + "</table>";
+    $("#" + id).append("Words Played by " + player + table_whole);
+};
+
 function refreshLastMove(data) {
     $("#lastMove").text(function () {
         console.log("refreshing last move", data["lastMove"]);
