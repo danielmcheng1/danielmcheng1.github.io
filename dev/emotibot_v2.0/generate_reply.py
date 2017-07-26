@@ -21,18 +21,21 @@ BOT_CHAT_HISTORY = {}
 def respond_to_user(user_data):
     message = user_data["message"]
     requested_bot = user_data.get("requested_bot", BOT_DEFAULT_NAME).upper()
-    
     #append latest human message to our running log 
-    BOT_CHAT_HISTORY.append(message)
+    #append before processing because keyword processing is based on the current message, and not just previous messages 
+    BOT_CHAT_HISTORY[requested_bot].append(message)
     
-    response = respond_by_requested_bot(message, requested_bot)
+    if len(BOT_CHAT_HISTORY[requested_bot]) == 1:
+        return make_initial_greeting(requested_bot)
+    else:
+        return respond_by_requested_bot(message, requested_bot)
     
 
 def respond_to_message_as_bot(message, requested_bot):
     if requested_bot == 'ELIANA':
         return respond_to_message_as_eliana(message)
     elif requested_bot == 'ANA': #VESTA
- j       return respond_to_message_as_ana(message)
+        return respond_to_message_as_ana(message)
     elif requested_bot == 'OLGA':
         return respond_to_message_as_olga(message)
     else:
@@ -84,8 +87,8 @@ def response_matches_previous(response, history):
         return False 
     return response.upper() == history[-1].upper() 
     
-def make_initial_greeting():
-    return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
+def make_initial_greeting(bot_name = BOT_DEFAULT_NAME):
+    return {"username": bot_name, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
 
 def reflect_emotion(message):
     emotions = get_emotions(message)
