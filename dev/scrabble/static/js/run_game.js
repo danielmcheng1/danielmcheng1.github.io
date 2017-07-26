@@ -21,11 +21,11 @@ DATA STRUCTURES
  To Do
    logging
         why randomly shifts letters/wrong click and place e.g. triple word @bottom
-        bot set up
+            more responsive if child inherits parent
+        start game over 
         add delay to computer move
         instructions while waiting
-            say comop confident enough to show tiles
-        refreshing page/starting game over
+            say comop confident enough to show tile
         https://www.soundsnap.com/tags/scrabble Scrabble game tile down 2 and Scrabble game with hand in bag
     Make this data structure better..
     naming conventions
