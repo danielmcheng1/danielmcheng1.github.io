@@ -13,10 +13,10 @@ BOT_GREETINGS_OPENING = ["It's good to hear from you. How're you feeling today, 
 
 BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
-BOT_MADE_RANDOM_RESPONSE = False 
+BOT_MADE_RANDOM_RESPONSE = {'ELIANA': False, 'ANA': False, 'OLGA': False}
 
 #TBD--should move this into a true backend database 
-BOT_CHAT_HISTORY = []
+BOT_CHAT_HISTORY = {}
 
 def respond_to_user(user_data):
     message = user_data["message"]
@@ -32,7 +32,7 @@ def respond_to_message_as_bot(message, requested_bot):
     if requested_bot == 'ELIANA':
         return respond_to_message_as_eliana(message)
     elif requested_bot == 'ANA': #VESTA
-        return respond_to_message_as_ana(message)
+ j       return respond_to_message_as_ana(message)
     elif requested_bot == 'OLGA':
         return respond_to_message_as_olga(message)
     else:
@@ -41,29 +41,30 @@ def respond_to_message_as_bot(message, requested_bot):
 
 def respond_to_message_as_eliana(message):
     #now parse keywords in message
-    global BOT_MADE_RANDOM_RESPONSE 
-    data = {"username": BOT_NAME, "message": "", "emotions": {}, "history": BOT_CHAT_HISTORY, "keywords": {}}
-    data["keywords"] = get_keywords(BOT_CHAT_HISTORY, 5)
+    global BOT_MADE_RANDOM_RESPONSE  
+    this_bot_name = 'ELIANA'
+    data = {"username": this_bot_name, "message": "", "emotions": {}, "history": this_bot_name], "keywords": {}}
+    data["keywords"] = get_keywords(BOT_CHAT_HISTORY[this_bot_name], 5)
     
     #parse emotions
     (reflection, emotions) = reflect_emotion(message)
     data["emotions"] = emotions
     
     #and respond
-    if BOT_MADE_RANDOM_RESPONSE:
-        BOT_MADE_RANDOM_RESPONSE = False
+    if BOT_MADE_RANDOM_RESPONSE[this_bot_name]:
+        BOT_MADE_RANDOM_RESPONSE[this_bot_name] = False
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_AFTER)
 
     elif reflection != None:
         #include counter as a safety in case module changes s.t. a user message triggers one deterministic response
         counter = 1
         #reflection is a random response, so keep trying until we get something different 
-        while response_matches_previous(reflection) and counter < 15:
+        while response_matches_previous(reflection, BOT_CHAT_HISTORY[this_bot_name]) and counter < 15:
             (reflection, emotions) = reflect_emotion(message)
             counter = counter + 1
         data["message"] = reflection
     
-    elif make_random_response(BOT_CHAT_HISTORY):
+    elif make_random_response(BOT_CHAT_HISTORY[this_bot_name]):
         BOT_MADE_RANDOM_RESPONSE = True 
         data["message"] = random.choice(BOT_RANDOM_RESPONSES_BEFORE)
     
@@ -72,11 +73,16 @@ def respond_to_message_as_eliana(message):
         #include counter as a safety in case module changes s.t. a user message triggers one deterministic response
         counter = 1
         #nltk picks a random response, so keep trying until we get something different 
-        while response_matches_previous(potential_response) and counter < 15:
+        while response_matches_previous(potential_response, BOT_CHAT_HISTORY[this_bot_name]) and counter < 15:
             potential_response = eliza_chatbot.respond(message).capitalize()
             counter = counter + 1
         data["message"] = potential_response
     return data
+
+def response_matches_previous(response, history):
+    if len(history) < 2:
+        return False 
+    return response.upper() == history[-1].upper() 
     
 def make_initial_greeting():
     return {"username": BOT_NAME, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
