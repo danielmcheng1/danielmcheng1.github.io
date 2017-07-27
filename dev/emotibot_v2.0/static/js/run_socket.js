@@ -51,19 +51,17 @@ $("#shout_message").keypress(function(evt) {
 });
 
 //toggle hide/show shout box
-$(".close_btn").click(function (e) {
+$(".chat_header").click(function (e) {
     //get CSS display state of .toggle_chat element
     var toggleState = $('.toggle_chat').css('display');
-
-    //toggle show/hide chat box
-    $('.toggle_chat').slideToggle();
-    
+    console.log(toggleState)
     //use toggleState var to change close/open icon image
-    if(toggleState == 'block')
-    {
-        $(".header div").attr('class', 'open_btn');
-    } else{
-        $(".header div").attr('class', 'close_btn');
-    }
+    if(toggleState == 'none') {
+        $(".chat_header div").attr('class', 'close_btn');
+    } else {
+        $(".chat_header div").attr('class', 'open_btn');
+    };
+    //toggle show/hide chat box (.next to restrict to the current chat window)
+    $(this).next('.toggle_chat').slideToggle();
 });
 

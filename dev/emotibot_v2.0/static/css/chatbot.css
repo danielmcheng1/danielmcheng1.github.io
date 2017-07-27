@@ -1,38 +1,60 @@
 /*
 A from: https://www.sanwebe.com/2013/04/creating-shout-box-facebook-style
 */
-.shout_box {
-background:#627BAE; width:280px; overflow:hidden;
-position:fixed; bottom:0; right:5%; z-index:9;
+
+.closed {
+    
 }
-.shout_box .header .close_btn {
+
+.right_first {
+    right:30px
+}
+
+.right_second {
+    right:320px
+    
+}
+
+.right_third {
+    right:610px
+}
+
+.shout_box {
+    background:#627BAE; 
+    width:280px; 
+    overflow:hidden;
+    position:fixed; 
+    bottom:0; 
+    z-index:9;
+}
+.shout_box .chat_header .close_btn {
 background: url('../img/close_btn.png') no-repeat 0px 0px; 
 background-size: 100% 100%;
 float:right; width:16px;
 height: 16px;
 }
-.shout_box .header .close_btn:hover {
+.shout_box .chat_header .close_btn:hover {
 background: url('../img/close_btn.png') no-repeat 0px -20px;
 background-size: 100% 100%;
 }
-.shout_box .header .open_btn {
+.shout_box .chat_header .open_btn {
 background: url('../img/open_btn.png') no-repeat 0px 0px;
 background-size: 100% 100%;
 float:right; width:16px;
 height:16px;
 }
-.shout_box .header .open_btn:hover {
+.shout_box .chat_header .open_btn:hover {
 background: url('../img/open_btn.png') no-repeat 0px -20px;
 background-size: 100% 100%;
 }
-.shout_box .header{
+.shout_box .chat_header{
 padding: 5px 3px 5px 5px;
 font: 12px 'lucida grande', tahoma, verdana, arial, sans-serif;
 font-weight: bold; color:#fff;
 border: 1px solid rgba(0, 39, 121, .76);
 border-bottom:none; cursor:pointer;
 }
-.shout_box .header:hover{
+.shout_box .chat_header:hover{
 background-color: #627BAE;
 }
 .shout_box .message_box {
