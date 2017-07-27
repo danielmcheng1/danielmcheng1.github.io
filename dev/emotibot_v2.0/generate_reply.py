@@ -9,24 +9,23 @@ import indicoio
 import config_hidden
 indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 
-BOT_DEFAULT_NAME = 'ELIANA'
-
-BOT_GREETINGS_OPENING = {'ELIANA': ["It's good to hear from you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"], \
-                         'ANA': ["I sense your presence here in this room. What would you like to discuss today?", "Shall I enlighten you today regarding your past, your present, your future? Your colleagues, your friends, your family?"],
-                         'OLGA': ["Well well, look at who is it today, sauntering into my office", "Oh. It's you today, my absolute favorite client"]
+BOT_DEFAULT_USERNAME = 'ELIANA'
+BOT_OPENINGS = {'ELIANA': ["It's good to hear from you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"], \
+                'ANA': ["I sense your presence here in this room. What would you like to discuss today?", "Shall I enlighten you today regarding your past, your present, your future? Your colleagues, your friends, your family?"], \
+                'OLGA': ["Well well, look at who is it today, sauntering into my office", "Oh. It's you today, my absolute favorite client"] \
+               }
 BOT_MADE_RANDOM_RESPONSE = {'ELIANA': False, 'ANA': False, 'OLGA': False}
+
 #TBD -- need key for each bot -- move into backend database 
 BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
 
-
+BOT_CHAT_HISTORY = {'ELIANA': [], 'ANA': [], 'OLGA': []}
 #BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better.", "Sorry, you seem to be having a hard time expressing yourself. Can you try rephrasing?", "What you said doesn't make sense. Can you think a different way to phrase that?"]
-#TBD--should move this into a true backend database 
-BOT_CHAT_HISTORY = {}
 
 def respond_to_user(user_data):
     message = user_data["message"]
-    requested_bot = user_data.get("requested_bot", BOT_DEFAULT_NAME).upper()
+    requested_bot = user_data.get("requested_bot", BOT_DEFAULT_USERNAME).upper()
     #append latest human message to our running log 
     #append before processing because keyword processing is based on the current message, and not just previous messages 
     BOT_CHAT_HISTORY[requested_bot].append(message)
@@ -34,7 +33,7 @@ def respond_to_user(user_data):
     if len(BOT_CHAT_HISTORY[requested_bot]) == 1:
         return make_initial_greeting(requested_bot)
     else:
-        return respond_by_requested_bot(message, requested_bot)
+        return respond_to_message_as_bot(message, requested_bot)
     
 
 def respond_to_message_as_bot(message, requested_bot):
@@ -50,7 +49,7 @@ def respond_to_message_as_bot(message, requested_bot):
 def respond_to_message_as_unknown(message, requested_bot): 
     return {"username": requested_bot, "message": requested_bot + " doesn't exist. And I wouldn't recommend talking to ghosts either"}
 
-def respond_to_message_as_olga(message); 
+def respond_to_message_as_olga(message): 
     this_bot_name = 'OLGA' 
     data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
     data["message"] = rude_chatbot.respond(message) 
@@ -108,7 +107,7 @@ def response_matches_previous(response, history):
     return response.upper() == history[-1].upper() 
     
 def make_initial_greeting(requested_bot):
-    return {"username": requested_bot, "message": random.choice(BOT_GREETINGS_OPENING)}
+    return {"username": requested_bot, "message": random.choice(BOT_OPENINGS[requested_bot])}
 
 def reflect_emotion(message):
     emotions = get_emotions(message)

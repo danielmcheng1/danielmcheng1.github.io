@@ -19,19 +19,41 @@
     <div id="show_chat_message"></div>
     <!--button id="show full">Show Full Conversation</button-->
 
-    <!--Popup chat box-->
     <div class="shout_box">
-    <div class="header">Your Virtual Therapist<div class="close_btn">&nbsp;</div></div>
+    <div class="header">Eliana<div class="close_btn">&nbsp;</div></div>
       <div class="toggle_chat">
-      <div class="message_box">
+      <div class="message_box" id = "eliana_message_box">
         </div>
         <div class="user_info">
-            <!--input name="shout_username" id="shout_username" type="text" placeholder="Your Name" maxlength="15" /-->
+            <input name="shout_username" id="shout_username" type="text" placeholder="Your Name" /><!--maxlength = "15"-->
+            <input name="shout_message" id="shout_message" type="text" placeholder="Type Message Hit Enter"/> 
+        </div>
+        </div>
+    </div>
+    
+    <!--div class="shout_box">
+    <div class="header">Ana<div class="close_btn">&nbsp;</div></div>
+      <div class="toggle_chat">
+      <div class="message_box" id = "ana_message_box">
+        </div>
+        <div class="user_info">
             <input name="shout_username" id="shout_username" type="text" placeholder="Your Name" />
             <input name="shout_message" id="shout_message" type="text" placeholder="Type Message Hit Enter"/> 
         </div>
         </div>
     </div>
+    
+    <div class="shout_box">
+    <div class="header">Olga<div class="close_btn">&nbsp;</div></div>
+      <div class="toggle_chat">
+      <div class="message_box" id = "olga_message_box">
+        </div>
+        <div class="user_info">
+            <input name="shout_username" id="shout_username" type="text" placeholder="Your Name" />
+            <input name="shout_message" id="shout_message" type="text" placeholder="Type Message Hit Enter"/> 
+        </div>
+        </div>
+    </div-->
 </body>
 </html>
 <script type="text/javascript" src="../static/js/run_socket.js" charset="utf-8"></script>
