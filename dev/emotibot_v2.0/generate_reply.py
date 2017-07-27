@@ -1,6 +1,8 @@
 #built-in modules 
 import random 
-from nltk.chat.eliza import eliza_chatbot 
+from nltk.chat.eliza import eliza_chatbot
+from nltk.chat.rude import rude_chatbot
+from nltk.chat.zen import zen_chatbot
 
 #api modules 
 import indicoio 
@@ -8,13 +10,17 @@ import config_hidden
 indicoio.config.api_key = config_hidden.INDICOIO_API_KEY
 
 BOT_DEFAULT_NAME = 'ELIANA'
-BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better.", "Sorry, you seem to be having a hard time expressing yourself. Can you try rephrasing?", "What you said doesn't make sense. Can you think a different way to phrase that?"]
-BOT_GREETINGS_OPENING = ["It's good to hear from you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"]
 
+BOT_GREETINGS_OPENING = {'ELIANA': ["It's good to hear from you. How're you feeling today, my friend?", "Hello, good day, and all that jazz. What's on your mind today?", "Seems like ages since we last talked. What's been bothering you lately?"], \
+                         'ANA': ["I sense your presence here in this room. What would you like to discuss today?", "Shall I enlighten you today regarding your past, your present, your future? Your colleagues, your friends, your family?"],
+                         'OLGA': ["Well well, look at who is it today, sauntering into my office", "Oh. It's you today, my absolute favorite client"]
+BOT_MADE_RANDOM_RESPONSE = {'ELIANA': False, 'ANA': False, 'OLGA': False}
+#TBD -- need key for each bot -- move into backend database 
 BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, I'm feeling a bit nervous right now", "Oops, slip of the tongue"]
-BOT_MADE_RANDOM_RESPONSE = {'ELIANA': False, 'ANA': False, 'OLGA': False}
 
+
+#BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better.", "Sorry, you seem to be having a hard time expressing yourself. Can you try rephrasing?", "What you said doesn't make sense. Can you think a different way to phrase that?"]
 #TBD--should move this into a true backend database 
 BOT_CHAT_HISTORY = {}
 
@@ -39,14 +45,28 @@ def respond_to_message_as_bot(message, requested_bot):
     elif requested_bot == 'OLGA':
         return respond_to_message_as_olga(message)
     else:
-        return random.choice(BOT_DEFAULT_RESPONSES)
+        return respond_to_message_as_unknown(message) 
+        
+def respond_to_message_as_unknown(message, requested_bot): 
+    return {"username": requested_bot, "message": requested_bot + " doesn't exist. And I wouldn't recommend talking to ghosts either"}
 
-
+def respond_to_message_as_olga(message); 
+    this_bot_name = 'OLGA' 
+    data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
+    data["message"] = rude_chatbot.respond(message) 
+    return data 
+    
+def respond_to_message_as_ana(message):
+    this_bot_name = 'ANA'
+    data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
+    data["message"] = zen_chatbot.respond(message) 
+    return data 
+    
 def respond_to_message_as_eliana(message):
     #now parse keywords in message
     global BOT_MADE_RANDOM_RESPONSE  
     this_bot_name = 'ELIANA'
-    data = {"username": this_bot_name, "message": "", "emotions": {}, "history": this_bot_name], "keywords": {}}
+    data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name], "emotions": {}, "keywords": {}}
     data["keywords"] = get_keywords(BOT_CHAT_HISTORY[this_bot_name], 5)
     
     #parse emotions
@@ -87,8 +107,8 @@ def response_matches_previous(response, history):
         return False 
     return response.upper() == history[-1].upper() 
     
-def make_initial_greeting(bot_name = BOT_DEFAULT_NAME):
-    return {"username": bot_name, "message": random.choice(BOT_GREETINGS_OPENING), "emotions": {}}
+def make_initial_greeting(requested_bot):
+    return {"username": requested_bot, "message": random.choice(BOT_GREETINGS_OPENING)}
 
 def reflect_emotion(message):
     emotions = get_emotions(message)
