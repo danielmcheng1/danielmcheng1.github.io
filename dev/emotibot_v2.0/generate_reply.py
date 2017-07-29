@@ -24,6 +24,7 @@ BOT_CHAT_HISTORY = {'ELIANA': [], 'ANA': [], 'OLGA': []}
 #BOT_DEFAULT_RESPONSES = ["I don't understand. Please articulate your thoughts better.", "Sorry, you seem to be having a hard time expressing yourself. Can you try rephrasing?", "What you said doesn't make sense. Can you think a different way to phrase that?"]
 
 def respond_to_user(user_data):
+    print(user_data)
     message = user_data["message"]
     requested_bot = user_data.get("requested_bot", BOT_DEFAULT_USERNAME).upper()
     #append latest human message to our running log 
@@ -47,17 +48,17 @@ def respond_to_message_as_bot(message, requested_bot):
         return respond_to_message_as_unknown(message) 
         
 def respond_to_message_as_unknown(message, requested_bot): 
-    return {"username": requested_bot, "message": requested_bot + " doesn't exist. And I wouldn't recommend talking to ghosts either"}
+    return {"username": requested_bot, "requested_bot": requested_bot, "message": requested_bot + " doesn't exist. And I wouldn't recommend talking to ghosts either"}
 
 def respond_to_message_as_olga(message): 
     this_bot_name = 'OLGA' 
-    data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
+    data = {"username": this_bot_name, "requested_bot": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
     data["message"] = rude_chatbot.respond(message) 
     return data 
     
 def respond_to_message_as_ana(message):
     this_bot_name = 'ANA'
-    data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
+    data = {"username": this_bot_name, "requested_bot": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
     data["message"] = zen_chatbot.respond(message) 
     return data 
     
@@ -65,7 +66,7 @@ def respond_to_message_as_eliana(message):
     #now parse keywords in message
     global BOT_MADE_RANDOM_RESPONSE  
     this_bot_name = 'ELIANA'
-    data = {"username": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name], "emotions": {}, "keywords": {}}
+    data = {"username": this_bot_name, "requested_bot": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name], "emotions": {}, "keywords": {}}
     data["keywords"] = get_keywords(BOT_CHAT_HISTORY[this_bot_name], 5)
     
     #parse emotions
@@ -107,7 +108,7 @@ def response_matches_previous(response, history):
     return response.upper() == history[-1].upper() 
     
 def make_initial_greeting(requested_bot):
-    return {"username": requested_bot, "message": random.choice(BOT_OPENINGS[requested_bot])}
+    return {"username": requested_bot, "requested_bot": requested_bot, "message": random.choice(BOT_OPENINGS[requested_bot])}
 
 def reflect_emotion(message):
     emotions = get_emotions(message)
