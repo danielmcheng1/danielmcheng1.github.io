@@ -13,22 +13,15 @@ def index():
     return render_template('index.html')
 
 @socketio.on('human message')
-def handle_event(data):
+def handle_human_message(data):
     response = generate_reply.respond_to_user(data)
     emit('bot message', response) 
-    #send('my send', json=True, callback = acknowledgement()) 
-    
-@socketio.on('connect')
-def server_originates_message():
-    #no client context like when emitting/sending in response to server 
-    #hence broadcast=True assumed 
-    response = generate_reply.make_initial_greeting()
-    socketio.emit('begin chat', response)
-    
-def acknowledgement():
-    print("chat received!")
-    
 
+@socketio.on('begin chat')
+def handle_begin_chat(requested_bot):
+    response = generate_reply.make_initial_greeting(requested_bot) 
+    emit('bot message', response)
+    
 if __name__ == '__main__':
     #app.run()
     socketio.run(app)

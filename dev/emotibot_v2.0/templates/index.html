@@ -9,29 +9,15 @@
     <link rel=stylesheet href="../static/css/chatbot.css">
 </head>
 <body>
-    <!--Charts-->
-    <div id="div_emotions_chart" style = "white-space: nowrap; width: 70%">
-        <canvas id="canvas_emotions_chart"  style = "display: inline; float: left; width: 50%; height: 100%"></canvas>
-        <div id="checkboxes_emotions_chart" style = "display: inline; float: left"></div>
+    <div id="div_emotions_chart" style = "white-space: nowrap; width: 50%; height:100%">
+        <canvas id="canvas_emotions_chart" class = "inline_left" style = "width: 50%; height:45%"></canvas>
+        <div id="checkboxes_emotions_chart" class = "inline_left"></div>
+        <canvas id="canvas_keywords_chart"  class = "inline_right" style= "width: 50%; height:45%"></canvas>
         <br>
-        <canvas id="canvas_keywords_chart"  style = "display: inline; float: right; width: 50%; height: 100%"></canvas>
     </div>
     <div id="show_chat_message"></div>
-    <!--button id="show full">Show Full Conversation</button-->
-
-    <!--Popup chat box-->
-    <div class="shout_box">
-    <div class="header">Your Virtual Therapist<div class="close_btn">&nbsp;</div></div>
-      <div class="toggle_chat">
-      <div class="message_box">
-        </div>
-        <div class="user_info">
-            <!--input name="shout_username" id="shout_username" type="text" placeholder="Your Name" maxlength="15" /-->
-            <input name="shout_username" id="shout_username" type="text" placeholder="Your Name" />
-            <input name="shout_message" id="shout_message" type="text" placeholder="Type Message Hit Enter"/> 
-        </div>
-        </div>
-    </div>
+    <div id="messages_boxes_start"></div>
+    
 </body>
 </html>
 <script type="text/javascript" src="../static/js/run_socket.js" charset="utf-8"></script>
