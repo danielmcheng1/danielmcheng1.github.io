@@ -130,7 +130,8 @@ var chatHistory = [];
 function wrapper_refreshKeywordsChart(newData) {
     keywordsChartConfigData["labels"] = Object.keys(newData);
     keywordsChartConfigData["datasets"][0]["data"] = Object.values(dataToPercent(newData));
-    keywordsChartObject.update();
+    if (keywordsChartConfigData["datasets"][0]["data"].length > 2) 
+        keywordsChartObject.update();
 };
 function wrapper_refreshEmotionsChart(newData) {
     appendNewData(dataToPercent(newData), emotionsDataConfig["dataValues"]);
@@ -247,16 +248,20 @@ window.onload = function() {
         var activeElement = emotionsChartObject.getElementAtEvent(event);
         if (activeElement.length > 0) {
             var responseNum = activeElement[0]._index;
-            $("#show_chat_message").empty().append(
-                '<br><br>' + 
-                '  <b>Selected Response (#' + responseNum + ')</b><br>' + 
-                '  <i>' + chatHistory[responseNum] + '</i>'
-            );
+            if ($("#show_chat_message").text() == "") {
+                $("#show_chat_message").append(
+                    '<br><br>' + 
+                    '  <b>Selected Response (#' + responseNum + ')</b><br>' + 
+                    '  <i>' + chatHistory[responseNum] + '</i>'
+                );
+            } else {
+                $("#show_chat_message").empty();
+            };
         } else {
-            $("#show_chat_message").empty().append(
+            $("#show_chat_message").empty()/*.append(
                 '<br><br>' + 
                 '  <i>Click on a data point to view detail</i>'
-            );
+            );*/
         };
     });
 };

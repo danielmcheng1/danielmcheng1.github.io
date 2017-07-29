@@ -1,11 +1,14 @@
 /*
-A from: https://www.sanwebe.com/2013/04/creating-chat-box-facebook-style
+Adapted from: https://www.sanwebe.com/2013/04/creating-chat-box-facebook-style
 */
-
-.closed {
-    
+.inline_left {
+    display:inline;
+    float:left;
 }
-
+.inline_right {
+    display:inline;
+    float:right;
+}
 
 .chat_box {
     background:#627BAE; 

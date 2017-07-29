@@ -1,19 +1,20 @@
 /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 socket.on ('connect', function(data) {
+    //create the chat boxes for each therapist persona 
+    $("#messages_boxes_start").empty();
     appendMessageBox('ELIANA');
     appendMessageBox('ANA');
     appendMessageBox('OLGA');
+    
     //start these off minimized 
     toggleChat('ANA');
     toggleChat('OLGA');
     
-        
-    socket.on ('begin chat', function(data) {
-        append_to_chat_box(data);
-        refresh_charts(data);
-    });
-    socket.on ('bot message', function(data) {
+    //initiate Eliana chat 
+    socket.emit('begin chat', 'ELIANA');
+    
+    socket.on('bot message', function(data) {
         //add some delay to make conversation more realistic (particularly for the non-ELIANA bots which don't require any API calls 
         var waitSeconds = Math.random() * (data["requested_bot"] == 'ELIANA' ? 0.5 : 1.5);
         setTimeout(function(){
@@ -46,6 +47,11 @@ socket.on ('connect', function(data) {
         var this_id = $(this).attr("id");
         var requested_bot = this_id.match(/chat_header_(.*)/)[1];
         toggleChat(requested_bot);
+        if (!$("#" + this_id).hasClass("chat_began")) {
+            socket.emit('begin chat', requested_bot);
+            $("#" + this_id).addClass("chat_began");
+        };
+        
     });
 });
 /*
