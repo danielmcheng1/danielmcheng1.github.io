@@ -1,5 +1,30 @@
 /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
+socket.on ('connect', function(data) {
+    console.log('here') 
+    appendMessageBox('Eliana', 1)
+    appendMessageBox('Ana', 2)
+    appendMessageBox('Olga', 3);
+});
+function appendMessageBox(username, num_message_boxes) {
+    //var num_message_boxes = 1;
+    console.log($("#shout_box"))
+    var this_message_box = 
+        '<div class="shout_box right_' + num_message_boxes + '">' + 
+            '<div class="chat_header">' + username + '<div class="close_btn">&nbsp;</div></div>' + 
+                '<div class="toggle_chat">' + 
+                '<div class="message_box" id = "message_box_' + username + '"></div>' + 
+                '<div class="user_info">' +
+                    '<input name="shout_username" id="shout_username_"' + username + ' type="text" placeholder="Your Name" />' + 
+                    '<input name="shout_message" id="shout_message_"' + username + ' type="text" placeholder="Type Message Hit Enter"/> ' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+    $("#messages_boxes_start").append(this_message_box);
+  
+};
+
 socket.on ('begin chat', function(data) {
     append_to_chat_box(data);
     refresh_charts(data);
