@@ -351,7 +351,7 @@ def wrapper_play_next_move(data):
                     human_player.words_played.append({"word": list("EXCHANGED"), "score": 0})
                 except ValueError as e:
                     last_move_to_send["action"] = "Passed"
-                    human_player.words_played.append({list("PASSED"), "score": 0})
+                    human_player.words_played.append({"word": list("PASSED"), "score": 0})
                 last_move_to_send["player"] = "Computer"
                 last_move_to_send["detail"] = "" #could return tiles exchanged instead
             else: 

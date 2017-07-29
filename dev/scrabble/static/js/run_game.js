@@ -22,7 +22,7 @@ DATA STRUCTURES
    logging
         why randomly shifts letters/wrong click and place e.g. triple word @bottom
             more responsive if child inherits parent
-        start game over 
+        start game over/not actually ending 
         add delay to computer move
         instructions while waiting
             say comop confident enough to show tile
@@ -68,14 +68,11 @@ $("#passHuman").addClass("buttonClicked");
 
 $("#startGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
-        console.log("starting game...");
         socket.emit('moveDoneHuman', {});  
         $(this).addClass("buttonClicked");
     };
 });
-socket.on('moveDoneComputer', function(data) {
-    console.log(data);
-    
+socket.on('moveDoneComputer', function(data) {    
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
@@ -92,7 +89,6 @@ socket.on('moveDoneComputer', function(data) {
         //enter key or mouse click 
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
-                console.log("emitting move", placedTilesHuman);
                 socket.emit('moveDoneHuman', {"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
                 $(this).addClass("buttonClicked");
             };
@@ -112,7 +108,6 @@ socket.on('moveDoneComputer', function(data) {
                 }).filter(function(index, elem) {
                     return elem != "";
                 }).toArray();
-                console.log("Exchanging: ", toExchange);
                 socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
                 $(this).addClass("buttonClicked");
             };
@@ -323,6 +318,7 @@ function refreshGameInfo(data) {
         refreshWordsPlayed("wordsPlayedComputer", gameInfo["wordsPlayedComputer"], "Computer");
         refreshWordsPlayed("wordsPlayedHuman", gameInfo["wordsPlayedHuman"], "Human");
         
+        console.log(gameInfo)
         var gameEndReason = gameInfo["gameEndReason"] 
         if (gameEndReason != "") {
             $("#playMoveHuman").addClass("buttonClicked");
@@ -349,7 +345,6 @@ function refreshWordsPlayed(id, wordsPlayed, player) {
 
 function refreshLastMove(data) {
     $("#lastMove").text(function () {
-        console.log("refreshing last move", data["lastMove"]);
         var lastMove = data["lastMove"]
         if (lastMove!= undefined) {
             var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
@@ -366,44 +361,3 @@ function playSoundTileMoved(audioDOM) {
     audioDOM.load();
     audioDOM.play();
 };
-/*
-    document.body.onclick = function(evt) {
-        var evt = window.event || evt;
-        if (source != undefined) {
-            evt.target.append(source);
-            source = undefined;
-        } 
-        else {
-            source = evt.target;
-        };
-    };
-*/
-
-/*
-    BOARD_MIN_ROW = 0;
-    BOARD_MAX_ROW = 15;
-    BOARD_MIN_COL = 0;
-    BOARD_MAX_COL = 15;
-    BOARD_CENTER_ROW = 7;
-    BOARD_CENTER_COL = 7;
-    var INPUT_BOARD_TILES = [
-        [ 'T', 'H', 'E', '', 'Q', 'U', 'I', 'C', 'K', '', '', '', '', '', ''],
-        ['B', 'R', 'O', 'W', 'N', '', 'F', 'O', 'X', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        
-        
-        ['', 'J', 'U', 'M', 'P', 'E', 'D', '', 'O', 'V', 'E', 'R', '', '', ''],
-        
-        ['', '', '', 'T', 'H', 'E', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', 'L', 'A', 'Z', 'Y'],
-        ['', '', '', '', '', '', '', 'S', 'L', 'E', 'E', 'P', 'I', 'N', 'G'],
-        ['', '', '', '', '', 'D', 'O', 'G', 'S', '', '', '', '', '', '']
-    ];
-*/
