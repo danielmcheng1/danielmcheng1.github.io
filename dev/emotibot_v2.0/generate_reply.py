@@ -53,14 +53,28 @@ def respond_to_message_as_unknown(message, requested_bot):
 def respond_to_message_as_olga(message): 
     this_bot_name = 'OLGA' 
     data = {"username": this_bot_name, "requested_bot": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
-    data["message"] = rude_chatbot.respond(message) 
+    
+    #TBD abstract this loop out... 
+    counter = 1
+    response = rude_chatbot.respond(message) 
+    while response_matches_previous(response, BOT_CHAT_HISTORY[this_bot_name]) and counter < 15:
+        response = rude_chatbot.respond(message)
+        counter = counter + 1
+    data["message"] = response
     return data 
     
 def respond_to_message_as_ana(message):
     this_bot_name = 'ANA'
     data = {"username": this_bot_name, "requested_bot": this_bot_name, "message": "", "history": BOT_CHAT_HISTORY[this_bot_name]}
-    data["message"] = zen_chatbot.respond(message) 
-    return data 
+    
+    #TBD abstract this loop out... 
+    counter = 1
+    response = zen_chatbot.respond(message) 
+    while response_matches_previous(response, BOT_CHAT_HISTORY[this_bot_name]) and counter < 15:
+        response = zen_chatbot.respond(message)
+        counter = counter + 1
+    data["message"] = response
+    return data
     
 def respond_to_message_as_eliana(message):
     #now parse keywords in message
@@ -125,7 +139,7 @@ def map_emotions_to_response(emotions):
         "fear": ["You seem really [x]", "Don't be [x], I'm here for you", "You sound a bit [x] about this...?"],
         "joy": ["You sound so [x]! That's great.", "You seem [x]! Let's celebrate (toot-toot)", "That's awesome, you seem so [x]"],
         "sadness": ["You make me want to cry with your [x] story", "Sigh, that sounds really hard. I'm sorry.", "You sound so [x]. You're really brave for dealing with this"],
-        "surprise": ["You seem [x]?", "That must have been a bit unexpected", "You sound [x]. I totally would not have seen that happening myself either"]
+        "surprise": ["You seem [x]?", "That was a bit unexpected", "You sound a bit [x]. I'm not sure what to say either..."]
     }
     
     adjective_mapping = {

@@ -6,18 +6,6 @@ A from: https://www.sanwebe.com/2013/04/creating-chat-box-facebook-style
     
 }
 
-.right_1 {
-    right:30px
-}
-
-.right_2 {
-    right:320px
-    
-}
-
-.right_3 {
-    right:610px
-}
 
 .chat_box {
     background:#627BAE; 
@@ -27,26 +15,31 @@ A from: https://www.sanwebe.com/2013/04/creating-chat-box-facebook-style
     bottom:0; 
     z-index:9;
 }
+
 .chat_box .chat_header .close_btn {
 background: url('../img/close_btn.png') no-repeat 0px 0px; 
 background-size: 100% 100%;
 float:right; width:16px;
 height: 16px;
 }
+
 .chat_box .chat_header .close_btn:hover {
 background: url('../img/close_btn.png') no-repeat 0px -20px;
 background-size: 100% 100%;
 }
+
 .chat_box .chat_header .open_btn {
 background: url('../img/open_btn.png') no-repeat 0px 0px;
 background-size: 100% 100%;
 float:right; width:16px;
 height:16px;
 }
+
 .chat_box .chat_header .open_btn:hover {
 background: url('../img/open_btn.png') no-repeat 0px -20px;
 background-size: 100% 100%;
 }
+
 .chat_box .chat_header{
 padding: 5px 3px 5px 5px;
 font: 12px 'lucida grande', tahoma, verdana, arial, sans-serif;
@@ -86,7 +79,18 @@ font: 12px 'lucida grande', tahoma, verdana, arial, sans-serif;
 font-weight: bold; display: block;
 }
 
+/*chat box position relative to rest of page*/
+.offset_1 {
+    right:30px
+}
 
+.offset_2 {
+    right:320px
+}
+
+.offset_3 {
+    right:610px
+}
 /*Adpated from https://www.sitepoint.com/pure-css3-speech-bubbles/*/
 p.bubble
 {

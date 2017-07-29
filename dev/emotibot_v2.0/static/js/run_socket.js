@@ -1,19 +1,25 @@
 /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 socket.on ('connect', function(data) {
-    appendMessageBox('ELIANA', 1)
-    appendMessageBox('ANA', 2)
-    appendMessageBox('OLGA', 3);
+    appendMessageBox('ELIANA');
+    appendMessageBox('ANA');
+    appendMessageBox('OLGA');
+    //start these off minimized 
+    toggleChat('ANA');
+    toggleChat('OLGA');
+    
         
     socket.on ('begin chat', function(data) {
-        console.log('begin', data);
         append_to_chat_box(data);
         refresh_charts(data);
     });
     socket.on ('bot message', function(data) {
-        console.log('message', data);
-        append_to_chat_box(data);
-        refresh_charts(data);
+        //add some delay to make conversation more realistic (particularly for the non-ELIANA bots which don't require any API calls 
+        var waitSeconds = Math.random() * (data["requested_bot"] == 'ELIANA' ? 0.5 : 1.5);
+        setTimeout(function(){
+            append_to_chat_box(data);
+            refresh_charts(data);
+        }, waitSeconds * 1000);
     });
     /*loading data into the chat box*/
     $("input[name=chat_message]").keypress(function(evt) {
@@ -37,29 +43,30 @@ socket.on ('connect', function(data) {
 
     //toggle hide/show chat box
     $(".chat_header").click(function (e) {
-        //get CSS display state of .toggle_chat element
-        var toggleState = $('.toggle_chat').css('display');
-        //use toggleState var to change close/open icon image
-        if(toggleState == 'none') {
-            $(".chat_header div").attr('class', 'close_btn');
-        } else {
-            $(".chat_header div").attr('class', 'open_btn');
-        };
-        //toggle show/hide chat box (.next to restrict to the current chat window)
-        $(this).next('.toggle_chat').slideToggle();
+        var this_id = $(this).attr("id");
+        var requested_bot = this_id.match(/chat_header_(.*)/)[1];
+        toggleChat(requested_bot);
     });
 });
-function appendMessageBox(username, num_message_boxes) {
-    //var num_message_boxes = 1;
+/*
+jQuery.fn.extend({
+    function_name: function() {
+    }
+});
+*/
+function appendMessageBox(username) {
     var this_message_box = 
-        '<div class="chat_box right_' + num_message_boxes + '">' + 
-            '<div class="chat_header">' + username.toProperCase()  + '<div class="close_btn">&nbsp;</div></div>' + 
-                '<div class="toggle_chat">' + 
-                '<div class="message_box" id = "message_box_' + username + '"></div>' + 
-                '<div class="user_info">' +
-                    '<input name="chat_username" id="chat_username_' + username + '" type="text" placeholder="Your Name" />' + 
-                    '<input name="chat_message" id="chat_message_' + username + '" type="text" placeholder="Type Message Hit Enter"/> ' +
-                '</div>' +
+        '<div class="chat_box offset_' + ($(".chat_box").length + 1) + '">' + 
+            '<div class="chat_header" id="chat_header_' + username + '">' + 
+                username.toProperCase() + 
+                '<div class="close_btn" id="chat_button_' + username + '">&nbsp;</div>' +
+            '</div>' + 
+                    '<div class="toggle_chat" id="toggle_chat_' + username + '">' + 
+                    '<div class="message_box" id="message_box_' + username + '"></div>' + 
+                    '<div class="user_info">' +
+                        '<input name="chat_username" id="chat_username_' + username + '" type="text" placeholder="Your Name" />' + 
+                        '<input name="chat_message" id="chat_message_' + username + '" type="text" placeholder="Type Message Hit Enter"/> ' +
+                    '</div>' +
             '</div>' +
         '</div>';
 
@@ -93,10 +100,15 @@ function append_to_chat_box(data) {
 };
 //keep scrolled to bottom of chat
 function scroll_message_box(requested_bot) {
-    var scrolltoh = $('#message_box+' + requested_bot)[0].scrollHeight;
+    var scrolltoh = $('#message_box_' + requested_bot)[0].scrollHeight;
     $('#message_box_' + requested_bot).scrollTop(scrolltoh);
 };
 
+function toggleChat(requested_bot) {
+    $("#toggle_chat_" + requested_bot).slideToggle();
+    $("#chat_button_" + requested_bot).toggleClass('open_btn close_btn');
+} 
+   
 String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/, function(token) {
         return token.charAt(0).toUpperCase() + token.substr(1).toLowerCase();
