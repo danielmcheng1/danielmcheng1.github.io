@@ -696,6 +696,16 @@ function runGame(config, Display) {
         });
             
     };
+    var instructionTable = 
+        '<table>' + 
+            '<tr>' +
+                '<td><img src="img/instructions/coin.png" alt="coin image"/></td>' +
+                '<td>Your goal is to collect all the coins in each level</td>' +
+            '</tr>' +
+        '</table>'
+    ;
+    document.body.appendChild(instructionTable);
+    
  };
 /*
 Learning: closure / callbacks for createLevelListener function
