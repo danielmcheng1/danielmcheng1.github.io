@@ -327,20 +327,20 @@ var elevator = [
 
 
 var MASTER_DICT = {
-    "Unit Test World": [unitTest, {}],
-    "Easy": [easy, {}],
-    "Simple Abyss": [simpleAbyss, {}],
-    "Bungee Jump": [bungeeJump, {}],
-    "Lava World": [lavaWorld, {"=": 4}],
-    "Abyss Revisted": [abyssRevisited, {}],
-    "Gauntlet": [gauntlet, {"=": 3}],
-    "Bomb Away": [bombAway, {"|": 2, "v": 2}],
-    "Bunny World": [bunnyWorld, {}],
-    "To the Sky": [toTheSky, {"=": 3}],
+    //"Unit Test World": [unitTest, {}, "bach_gigue.mp3"],
+    "Easy": [easy, {}, "bach_gigue.mp3"],
+    "Simple Abyss": [simpleAbyss, {}, "bach_gigue.mp3"],
+    "Bungee Jump": [bungeeJump, {}, "bach_gigue.mp3"],
+    "Lava World": [lavaWorld, {"=": 4}, "bach_gigue.mp3"],
+    "Abyss Revisted": [abyssRevisited, {}, "bach_gigue.mp3"],
+    "Gauntlet": [gauntlet, {"=": 3}, "schubert_erlkonig.mp3"],
+    "Bomb Away": [bombAway, {"|": 2, "v": 2}, "schubert_erlkonig.mp3"],
+    "Bunny World": [bunnyWorld, {}, "schubert_erlkonig.mp3"],
+    "To the Sky": [toTheSky, {"=": 3}, "bach_gigue.mp3"],
     "Fool's Gold": [foolsGold, {}], 
     "Chase": [chase, {}],
-    "Ice World": [iceWorld, {"=": 4, "-": 3}],
-    "Elevator": [elevator, {"+": 3, "-":3}],
+    "Ice World": [iceWorld, {"=": 4, "-": 3}, "chestnuts.mp3"],
+    "Elevator": [elevator, {"+": 3, "-":3}, , "chestnuts.mp3"],
     "Weeping Angel": [weepingAngel, {}],
     "Into the Mines": [intoTheMines, {"=": 4}]
 };
@@ -353,9 +353,11 @@ var ALL_NAMES = [
         "Ice World", "Elevator", 
         "Bunny World", "Fool's Gold", "Into the Mines"];
         
-var ALL_LEVELS = []
-var ALL_SPEED_MULTIPLIERS = []
+var ALL_LEVELS = [];
+var ALL_SPEED_MULTIPLIERS = [];
+var ALL_BACKGROUND_MUSIC = [];
 for(var i = 0; i < ALL_NAMES.length; i++) {
     ALL_LEVELS.push(MASTER_DICT[ALL_NAMES[i]][0]);
     ALL_SPEED_MULTIPLIERS.push(MASTER_DICT[ALL_NAMES[i]][1]);
+    ALL_BACKGROUND_MUSIC.push(MASTER_DICT[ALL_NAMES[i]][2]);
 };
