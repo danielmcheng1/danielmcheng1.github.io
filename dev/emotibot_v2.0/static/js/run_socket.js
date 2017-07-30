@@ -14,6 +14,10 @@ socket.on ('connect', function(data) {
     //initiate Eliana chat 
     socket.emit('begin chat', 'ELIANA');
     
+    //background music 
+    var backgroundDOM = document.createElement("audio");
+    playBackgroundMusic(backgroundDOM);
+    
     socket.on('bot message', function(data) {
         //add some delay to make conversation more realistic (particularly for the non-ELIANA bots which don't require any API calls 
         var waitSeconds = Math.random() * (data["requested_bot"] == 'ELIANA' ? 0.5 : 1.5);
@@ -115,6 +119,17 @@ function toggleChat(requested_bot) {
     $("#chat_button_" + requested_bot).toggleClass('open_btn close_btn');
 } 
    
+/********************************/
+function playBackgroundMusic(audioDOM) {
+    audioDOM.src = "static/sound/background.mp3";
+    audioDOM.load();
+    audioDOM.play();
+    audioDOM.addEventListener('ended', function() {
+        audioDOM.play();
+    });
+};
+
+/****************************/
 String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/, function(token) {
         return token.charAt(0).toUpperCase() + token.substr(1).toLowerCase();
