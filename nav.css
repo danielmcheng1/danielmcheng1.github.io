@@ -42,11 +42,8 @@
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
+.dropdown:not(.no-hover):hover .dropdown-content {
     display: block;
-}
-.no-hover .dropdown-content {
-    display: none;
 }
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {

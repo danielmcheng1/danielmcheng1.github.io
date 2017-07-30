@@ -680,15 +680,23 @@ function runGame(config, Display) {
         };
     };	
     
-    
-var dropdownDOM = document.getElementsByClassName("dropdown");
-dropdownDOM[0].addEventListener('click', function() {
-    dropdownDOM[0].classList.add('no-hover');
-    console.log('stopped');
-});
 };
 
-	
+ window.onload = function() {
+    /*make hover menu disappear once user clicks so that their mouse actions aren't blocked*/    
+    var dropdownElements = document.getElementsByClassName("dropdown");
+    for(var i = 0 ; i < dropdownElements.length; i++) {
+        var element = dropdownElements[i];
+        element.addEventListener('click', function() {
+            element.classList.add('no-hover');
+            console.log('stopped');  
+                setTimeout(function(){
+                    element.classList.remove('no-hover');
+                }, 500); //0.5 seconds 
+        });
+            
+    };
+ };
 /*
 Learning: closure / callbacks for createLevelListener function
 Source: https://stackoverflow.com/questions/750486/javascript-closure-inside-loops-simple-practical-example
