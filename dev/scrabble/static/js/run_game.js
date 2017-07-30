@@ -365,11 +365,13 @@ function playSoundTileMoved(audioDOM) {
     audioDOM.play();
 };
 function playBackgroundMusic(audioDOM) {
-    audioDOM.src = "static/sound/background.mp3";
+    audioDOM.src = "static/sound/background_jazz.mp3";
+    
     audioDOM.volume = 0.7;
     audioDOM.load();
     audioDOM.play();
     audioDOM.addEventListener('ended', function() {
+        audioDOM.src = (audioDOM.src == "static/sound/background_jazz.mp3"? "static/sound/background_normal.mp3" : "static/sound/background_jazz.mp3");
         audioDOM.play();
     });
 };
