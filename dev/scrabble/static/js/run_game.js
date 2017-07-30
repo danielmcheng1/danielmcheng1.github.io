@@ -80,8 +80,10 @@ socket.on('moveDoneComputer', function(data) {
     refreshLastMove(data);
     refreshGameInfo(data);
     
-    //create audio element
-    var soundEffects = document.createElement("audio");
+    //create audio elements
+    var soundEffectsDOM = document.createElement("audio"); //for tile placement, bag shuffling, etc.
+    var backgroundMusicDOM = document.createElement("audio");
+    playBackgroundMusic(backgroundMusicDOM);
     
     //once data has refreshed, allow player to send move 
     $("#playMoveHuman").removeClass("buttonClicked");
@@ -170,7 +172,7 @@ socket.on('moveDoneComputer', function(data) {
             };
             if (targetCell) {
                 //sound effect 
-                playSoundTileMoved(soundEffects);
+                playSoundTileMoved(soundEffectsDOM);
                 
                 //push tile onto cell 
                 targetCell.append(sourceTile);
@@ -358,6 +360,16 @@ function refreshLastMove(data) {
 
 function playSoundTileMoved(audioDOM) {    
     audioDOM.src = "static/sound/click2.mp3";
+    audioDOM.volume = 1;
     audioDOM.load();
     audioDOM.play();
+};
+function playBackgroundMusic(audioDOM) {
+    audioDOM.src = "static/sound/background.mp3";
+    audioDOM.volume = 0.7;
+    audioDOM.load();
+    audioDOM.play();
+    audioDOM.addEventListener('ended', function() {
+        audioDOM.play();
+    });
 };
