@@ -366,10 +366,10 @@ function playSoundTileMoved(audioDOM) {
 };
 function playBackgroundMusic(audioDOM) {
     audioDOM.src = "static/sound/background_jazz.mp3";
-    
     audioDOM.volume = 0.7;
     audioDOM.load();
     audioDOM.play();
+    console.log("playing" + audioDOM.src);
     audioDOM.addEventListener('ended', function() {
         audioDOM.src = (audioDOM.src == "static/sound/background_jazz.mp3"? "static/sound/background_normal.mp3" : "static/sound/background_jazz.mp3");
         audioDOM.play();
