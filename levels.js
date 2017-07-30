@@ -415,7 +415,7 @@ var MASTER_DICT = {
     "Weeping Angel": [weepingAngel, {}, "bach_gigue_english.mp3"],
     "Ice World": [iceWorld, {"=": 4, "-": 3}, "vivaldi_pianoguysfrozen.mp3"],
     "Elevator": [elevator, {"+": 3, "-":3}, "vivaldi_pianoguysfrozen.mp3"],
-    "Bunny World": [bunnyWorld, {}, "sibelius_finlandia.mp3"],
+    "Bunny World": [bunnyWorld, {}, "grieg_hallofthemountainking.mp3"],
     "Fool's Gold": [foolsGold, {}, "grieg_hallofthemountainking.mp3"], 
     "Into the Mines": [intoTheMines, {"=": 4}, "grieg_hallofthemountainking.mp3"],
     "Hell": [hell, {"=": 4, "-": 5}, "stravinsky_riteofspring.mp3"]

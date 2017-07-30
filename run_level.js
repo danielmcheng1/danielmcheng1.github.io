@@ -91,7 +91,7 @@ Level.prototype.isFinished = function() {
 
 //update statistics
 Level.prototype.updateStatus = function() {
-	var levelStatus = document.getElementById("levelStatus");
+	var levelStatus = document.getElementById("levelSelector");
 	levelStatus.innerText = "Level " + this.levelId + ": " + this.levelName;
 	
 	var livesStatusNode = document.getElementById("liveStatus");
@@ -555,11 +555,13 @@ function runAnimation(frameFunc) {
 	};
 	requestAnimationFrame(frame);
 };
-
+var globalStopLevelAnimation = false;
 //Display object passed in -- e.g. DOMDisplay -- an encapsulated display/draw object
 function runLevel(level, Display, andThen) {
 	var display = new Display(document.body, level);
 	level.updateStatus();
+    
+    var animationHasStarted = false;
 	//document.body.onkeyup = function (e) {
 	//	if (e.keyCode == 13) { //enter key
 			runAnimation(function(step) {
@@ -572,6 +574,15 @@ function runLevel(level, Display, andThen) {
 						andThen(level.status);
 					return false;
 				}
+                //TBD hack to allow other functions to stop this animation--otherwise level will continue animating even after jumping to another level or page
+                if (globalStopLevelAnimation) {
+                    //don't stop if no existing game has been running--otherwise we'll never start the animation 
+                    if (animationHasStarted) 
+                        return false;
+                    else 
+                        globalStopLevelAnimation = false;
+                };
+                animationHasStarted =  true;
 			});
 	//	};
 	//};
@@ -635,6 +646,7 @@ function runGame(config, Display) {
 	/*Learning: As James said, the DOM does not support removing an object directly. You have to go to its parent and remove it from there. 
 	Javascript won't let an element commit suicide, but it does permit infanticide...*/
 	function clearExistingGames() {
+        globalStopLevelAnimation = true;
 		var existingGames = document.getElementById("game");
 		if (existingGames) existingGames.remove();
 	};
@@ -642,7 +654,11 @@ function runGame(config, Display) {
     function startBackgroundMusic(n) {
         var backgroundMusicToPlay = backgroundMusics[n];
         var backgroundMusicDOM = document.getElementById("backgroundMusic");
-        backgroundMusicDOM.volume = 0.6;
+        if (backgroundMusicToPlay == "grieg_hallofthemountainking.mp3") 
+            backgroundMusicDOM.volume = 1;
+        else 
+            backgroundMusicDOM.volum = 0.6;
+        console.log(backgroundMusicDOM.volume, backgroundMusicToPlay);
         if (backgroundMusicToPlay == "") {
             backgroundMusicDOM.pause();
             backgroundMusicDOM.src = "";
@@ -663,6 +679,13 @@ function runGame(config, Display) {
             };
         };
     };	
+    
+    
+var dropdownDOM = document.getElementsByClassName("dropdown");
+dropdownDOM[0].addEventListener('click', function() {
+    dropdownDOM[0].classList.add('no-hover');
+    console.log('stopped');
+});
 };
 
 	
