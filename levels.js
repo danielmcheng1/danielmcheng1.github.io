@@ -212,7 +212,7 @@ var intoTheMines = [
 	"xxxxxxxxxxxxxxxxxxxxxo  xxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxo  xxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"xxx!xxx!xx!xx!xx!xx!xo  xxxxxxxxxxxxxxxxxxxxxxxxxx",
-	"xxx!xxx!xx!xx!xx!xx!xo  x     =oooxxxxxxxxxxxxxxxx",
+	"xxx!xxx!xx!xx!xx!xx!xo  z     =oooxxxxxxxxxxxxxxxx",
 	"xxx!xxx!xx!xx!xx!xx!xo  xxxxxxx   vxx|xxxxxxxxxxxx",
 	"xxx!xxx!xx!xx!xx!xx!xo  xx!x!x!    xx |xxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxx   xx!x!x!xp  xx  |xxxxxxxxxx",
@@ -324,6 +324,81 @@ var elevator = [
 
 ];
 
+var hell = [
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    1     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!  o       !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!o         !!!!!!!!!!!!!!!!!!!!!!!", 
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!          !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!    o     !!!!!!!!!!!!!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!                  =   =   =!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!xxxxxxxxxxxxxxxxxxxxxxxxx  !!!!!!",
+    "!!!!!!!!!!!!!!!!!!!xxxxxx!!!!!!!!!!!!!!!!!!!  !!!!!!",
+    "xxxxxxxxxxxxxxxxxxxxxxxxx     v  v  o  v  o       !!",
+    "xxxxxxxxxxxxxxxxxxxxxxxxx                         !!",
+    "xxxxxxxxxxxxxxxxxxxxxxxxx     o  o  !  o  !       !!",
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxx!",
+    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!",
+    "!o      o      o                 o       o       o !",
+    "!=      =      =      =                            !",
+    "!                                                  !",
+    "!                                                  !",
+    "x                 -x         x-                    x",
+    "!                                                  !",
+    "!                                                  !",
+    "!              x        x           x              !",
+    "! =                                                !",
+    "!                         =                        !",
+    "!                                                = !",
+    "!        x                                x        !",
+    "!xx!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  x",
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=====     @x",
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxx",
+    "!oooooooooooooooooooooooooooooooooooooooooooooooooo!",
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+];
 
 
 var MASTER_DICT = {
@@ -341,8 +416,9 @@ var MASTER_DICT = {
     "Ice World": [iceWorld, {"=": 4, "-": 3}, "vivaldi_pianoguysfrozen.mp3"],
     "Elevator": [elevator, {"+": 3, "-":3}, "vivaldi_pianoguysfrozen.mp3"],
     "Bunny World": [bunnyWorld, {}, "sibelius_finlandia.mp3"],
-    "Fool's Gold": [foolsGold, {}, "bach_gigue_english.mp3"], 
-    "Into the Mines": [intoTheMines, {"=": 4}, "grieg_hallofthemountainking.mp3"]
+    "Fool's Gold": [foolsGold, {}, "grieg_hallofthemountainking.mp3"], 
+    "Into the Mines": [intoTheMines, {"=": 4}, "grieg_hallofthemountainking.mp3"],
+    "Hell": [hell, {"=": 4, "-": 5}, "stravinsky_riteofspring.mp3"]
 };
 /*final ordering of levels*/
 var ALL_NAMES = [ 
@@ -350,7 +426,8 @@ var ALL_NAMES = [
         "Lava World", "Abyss Revisted", "Chase", "Gauntlet", 
         "Bomb Away",  "To the Sky", "Weeping Angel",
         "Ice World", "Elevator", 
-        "Bunny World", "Fool's Gold", "Into the Mines"];
+        "Bunny World", "Fool's Gold", "Into the Mines",
+        "Hell"  ];
         
 var ALL_PLANS = [];
 var ALL_SPEED_MULTIPLIERS = [];
