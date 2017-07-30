@@ -5,3 +5,5 @@ dev/betty
 **/__pycache__/
 **/*.py[cod]
 **/*$py.class
+
+sound/background_music_old

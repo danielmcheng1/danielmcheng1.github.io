@@ -12,7 +12,7 @@
 	<br><span id = "levelStatus"></span>
 	<br><span id = "liveStatus"></span>
 	<br><span id = "coinStatus"></span>
-	<audio id = "music"></audio>
+	<audio id = "backgroundMusic"></audio>
 	<br><div class="dropdown">
 		<button class="dropbtn">Select Level</button>
 		<div class="dropdown-content" id="dropdown-menu">
@@ -22,6 +22,5 @@
 </body>
 
 <script>
-	//runGame(ALL_LEVELS, ALL_NAMES, ALL_OPTIONS, DOMDisplay);
-	runGame(ALL_LEVELS, ALL_NAMES, ALL_SPEED_MULTIPLIERS, CanvasDisplay);
+	runGame(ALL_LEVELS_CONFIG, CanvasDisplay);
 </script>

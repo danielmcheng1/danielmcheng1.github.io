@@ -32,7 +32,7 @@ function Level(levelId, levelName, plan, speedMultipliers, livesUsed, checkpoint
 	this.gridHiddenActors = [];
 	
 	this.speedMultipliers = speedMultipliers;
-	this.levelId = levelId; //0 based indexing
+	this.levelId = levelId;
 	this.levelName = levelName;
 	
 	this.coinsTotal = 0;
@@ -275,7 +275,10 @@ function Computer(pos, options) {
         this.pauseWithPlayer = true;
         this.paused = true;
     };
-	this.speed = new Vector(3, 3).times(this.speedMultiplier);
+    //var randomAdjustment = (Math.random() - 0.5) * 2;
+    var randomAdjustment = 0;
+    var randomVector = new Vector(randomAdjustment, randomAdjustment);
+	this.speed = new Vector(3, 3).times(this.speedMultiplier).plus(randomVector);
 	
 };
 Computer.prototype.type = "computer";
@@ -578,14 +581,32 @@ function runLevel(level, Display, andThen) {
 var globalLivesUsed = 1;
 var startingCheckpoint = null;
 var currentCheckpoint = null;
-function runGame(plans, names, speedMultipliers, Display) {
-	/*running a level*/
+function runGame(config, Display) {
+    var plans = config["plans"]
+    var names = config["names"]
+    var speedMultipliers = config["speed_multipliers"]
+    var backgroundMusics = config["background_musics"]
+    var levelIds = config["level_ids"]
+    
+    /*append each level to the drop down menu*/
+	for(var n = 0; n < plans.length; n++) {
+		var dropdownElt = document.getElementById("dropdown-menu");
+		var levelElt = elt("a", "Level");
+		dropdownElt.appendChild(levelElt);
+		levelElt.addEventListener("click", createLevelListener(n));
+		levelElt.innerText = "Level " + levelIds[n] + ": " + names[n];
+	};
+    
+	/*master function to start a level*/
 	function startLevel(n, livesUsed, checkpoint) {
 		clearExistingGames();
-		var currentLevel = new Level(n, names[n], plans[n], speedMultipliers[n], livesUsed, checkpoint);
+        startBackgroundMusic(n);
+        
 		//TBD for more accurate movement on ice blocks
 		if (names[n] == "Ice World" || names[n] == "Elevator") maxStep = 0.005; 
 		else maxStep = defaultMaxStep;
+		var currentLevel = new Level(levelIds[n], names[n], plans[n], speedMultipliers[n], livesUsed, checkpoint);
+        
 		runLevel(currentLevel, Display, function(status) {
 			if (status == "lost") {
                 globalLivesUsed++;
@@ -597,44 +618,17 @@ function runGame(plans, names, speedMultipliers, Display) {
 				startLevel(n + 1, 1, currentCheckpoint);
 			}
 			else {
-				playMusic("sound/applause.wav");
+				playMusic("sound/sound_effects/applause.wav");
 				window.alert("You have mastered all levels!");
 			};
 		});
 	};
 	
-	/*let user select which level to jump to*/
-	function createLevelListener(v, levelElt) {
+	/*create click event listener for user select which level to jump to*/
+	function createLevelListener(levelNum) {
 		return function() {
-			startLevel(v, 1, startingCheckpoint);
-			
-			var musicNode = document.getElementById("music");
-			musicNode.volume = 0.6;
-			musicNode.src = "sound/bachgigue.mp3";
-			musicNode.play();
-			musicNode.addEventListener('ended', function() {
-				/*
-                var rand = Math.random();
-				if (rand < 0.3) {
-					musicNode.src = "sound/trump.mp3";
-				} else if (rand < 0.6) {
-					musicNode.src = "sound/mulan.mp3";
-				} else if (rand < 0.9) {
-					musicNode.src = "sound/chestnuts.mp3";
-				} else {
-					musicNode.src = "sound/aladdin.mp3";
-				};
-                */
-				musicNode.play();
-			});
+            startLevel(levelNum, 1, startingCheckpoint);
 		};
-	};
-	for(var i = 0; i < plans.length; i++) {
-		var dropdownElt = document.getElementById("dropdown-menu");
-		var levelElt = elt("a", "Level");
-		dropdownElt.appendChild(levelElt);
-		levelElt.addEventListener("click", createLevelListener(i, levelElt));
-		levelElt.innerText = "Level " + i + ": " + names[i];
 	};
 	
 	/*clear out existing games whenever a level is selected*/
@@ -644,7 +638,31 @@ function runGame(plans, names, speedMultipliers, Display) {
 		var existingGames = document.getElementById("game");
 		if (existingGames) existingGames.remove();
 	};
-	
+    
+    function startBackgroundMusic(n) {
+        var backgroundMusicToPlay = backgroundMusics[n];
+        var backgroundMusicDOM = document.getElementById("backgroundMusic");
+        backgroundMusicDOM.volume = 0.6;
+        if (backgroundMusicToPlay == "") {
+            backgroundMusicDOM.pause();
+            backgroundMusicDOM.src = "";
+        } else {
+            //only update if the song doesn't match the desired one -- otherwise let the song continue to play
+            var currentBackgroundMusicRegex = backgroundMusicDOM.src.match(/.*\/(.*)/);
+            if (currentBackgroundMusicRegex != null)
+                currentBackgroundMusic = currentBackgroundMusicRegex[1];
+            else 
+                currentBackgroundMusic = "";
+            if (currentBackgroundMusic != backgroundMusicToPlay) {
+                backgroundMusicDOM.src = "sound/background_music/" + backgroundMusicToPlay;
+                backgroundMusicDOM.play();
+                //repeat if the music stops before level completes 
+                backgroundMusicDOM.addEventListener('ended', function() {
+                    backgroundMusicDOM.play();
+                });
+            };
+        };
+    };	
 };
 
 	
@@ -813,7 +831,7 @@ Bomb.prototype.act = function(step, level) {
 			});
 			//explode preferentially if little bomb spray is on the board right now
 			if (currentBombSprayActors.length < bombSprayThreshold) {
-				playMusic("sound/bomb.mp3", 0.05);
+				playMusic("sound/sound_effects/bomb.mp3", 0.05);
 				
 				//generate bomb spray expanding out in a circle 
 				var Actor = actorChars["b"];
@@ -861,7 +879,7 @@ BombSpray.prototype.act = function(step, level) {
 
 CartesianBomb.prototype.act = function(step, level) {
 	if (this.timeElapsed > 100) {	
-		playMusic("sound/bomb.mp3", 0.05);
+		playMusic("sound/sound_effects/bomb.mp3", 0.05);
 		
 		//generate bomb spray expanding out in a circle 
 		var Actor = actorChars["c"];
@@ -1084,7 +1102,7 @@ Player.prototype.placeCartesianBomb = function(step, level, keys) {
 };
 Player.prototype.shootWater = function(step, level, keys) {
 	if (keys.space && this.waterShootingLatency == 0) {
-		playMusic("sound/waterballoon.wav", 0.4);
+		playMusic("sound/sound_effects/waterballoon.wav", 0.4);
 		var waterSpeed, waterPos;
 		var defaultWaterSpeedX = 5;
 		if (this.speed.x < 0) {
@@ -1127,12 +1145,12 @@ Level.prototype.actorsFight = function(attacker, defender) {
 		if (killingActors.indexOf(defenderType) >= 0 && this.status == null) {
 			this.status = "lost";
 			this.finishDelay = 2;
-			playMusic("sound/burning.mp3", 0.2);
+			playMusic("sound/sound_effects/burning.mp3", 0.2);
 		}
 		else if (this.status == null) { //ensure that no actions happen after player has lost
 			if (defenderType == "coin") {
 				//remove this coin from the list of actors 
-				playMusic("sound/smb_coin.wav", 0.2);
+				playMusic("sound/sound_effects/smb_coin.wav", 0.2);
 				this.removeActor(defenderObj);
 				this.coinsRemaining--;
 				
@@ -1143,13 +1161,13 @@ Level.prototype.actorsFight = function(attacker, defender) {
 				};
 			}
 			else if (playerPowerups.indexOf(defenderType) >= 0) {
-				playMusic("sound/smb_1up.wav", 0.45);
+				playMusic("sound/sound_effects/smb_1up.wav", 0.45);
 				this.removeActor(defenderObj);
 				attacker.weapons.push(defenderType);
 				attacker.currentWeaponIndex = attacker.weapons.length - 1;
 			}
 			else if (defenderType == "checkpoint") {
-				playMusic("sound/smb_1up.wav", 0.45);
+				playMusic("sound/sound_effects/smb_1up.wav", 0.45);
 				var defenderPos = defender.pos;
 				this.removeActor(defender);
 				this.saveState(defenderPos);

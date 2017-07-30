@@ -206,8 +206,8 @@ var intoTheMines = [
 	"     x      !xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"            !xx     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"            xxx     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	"=          1xo   xo   xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	"!!!!!!!!!!!xxo   xo=  xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+	"=          1xo   zo  =xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+	"!!!!!!!!!!!xxo   zo=  xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxx | xxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxo  xxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxo  xxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -217,9 +217,9 @@ var intoTheMines = [
 	"xxx!xxx!xx!xx!xx!xx!xo  xx!x!x!    xx |xxxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxx   xx!x!x!xp  xx  |xxxxxxxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx      |xxx xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   xxx xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo  xxx xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   x|    x",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   x x xxxxx",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo  x x xxxxx",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   z|    x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    =x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   = x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx     x",
@@ -263,15 +263,15 @@ var foolsGold = [
 	];
 
 var chase = [
-	  "2                  o 2",
-	  "o                     ",
-	  "x        o            ",
-	  "         x         o  ",
-	  "                   x  ",
+	  "2        o2        o 2",
+	  "o        o         o  ",
+	  "x        o         o  ",
+	  "2    o   x    o    o  ",
+	  "     o        o    x  ",
 	  "     o        o       ",
 	  "     x        x       ",
 	  "                      ",
-	  " 1         o       o2 ",
+	  " 1        2o       o2 ",
 	  "!xxxxxxxxxxxxxxxxxxxx!",
 	  "!!!!!!!!!!!!!!!!!!!!!!",
 ];
@@ -327,37 +327,46 @@ var elevator = [
 
 
 var MASTER_DICT = {
-    //"Unit Test World": [unitTest, {}, "bach_gigue.mp3"],
-    "Easy": [easy, {}, "bach_gigue.mp3"],
-    "Simple Abyss": [simpleAbyss, {}, "bach_gigue.mp3"],
-    "Bungee Jump": [bungeeJump, {}, "bach_gigue.mp3"],
-    "Lava World": [lavaWorld, {"=": 4}, "bach_gigue.mp3"],
-    "Abyss Revisted": [abyssRevisited, {}, "bach_gigue.mp3"],
+    "Unit Test World": [unitTest, {}, ""],
+    "Easy": [easy, {}, ""],
+    "Simple Abyss": [simpleAbyss, {}, "bach_gigue_english.mp3"],
+    "Bungee Jump": [bungeeJump, {}, "bach_gigue_english.mp3"],
+    "Lava World": [lavaWorld, {"=": 4}, "bach_gigue_french.mp3"],
+    "Abyss Revisted": [abyssRevisited, {}, "bach_gigue_french.mp3"],
+    "Chase": [chase, {}, "vivaldi_pianoguysfrozen.mp3"],
     "Gauntlet": [gauntlet, {"=": 3}, "schubert_erlkonig.mp3"],
-    "Bomb Away": [bombAway, {"|": 2, "v": 2}, "schubert_erlkonig.mp3"],
-    "Bunny World": [bunnyWorld, {}, "schubert_erlkonig.mp3"],
-    "To the Sky": [toTheSky, {"=": 3}, "bach_gigue.mp3"],
-    "Fool's Gold": [foolsGold, {}], 
-    "Chase": [chase, {}],
-    "Ice World": [iceWorld, {"=": 4, "-": 3}, "chestnuts.mp3"],
-    "Elevator": [elevator, {"+": 3, "-":3}, , "chestnuts.mp3"],
-    "Weeping Angel": [weepingAngel, {}],
-    "Into the Mines": [intoTheMines, {"=": 4}]
+    "Bomb Away": [bombAway, {"|": 2, "v": 2}, "bach_gigue_french.mp3"],
+    "To the Sky": [toTheSky, {"=": 3}, "bach_gigue_english.mp3"],
+    "Weeping Angel": [weepingAngel, {}, "bach_gigue_english.mp3"],
+    "Ice World": [iceWorld, {"=": 4, "-": 3}, "vivaldi_pianoguysfrozen.mp3"],
+    "Elevator": [elevator, {"+": 3, "-":3}, "vivaldi_pianoguysfrozen.mp3"],
+    "Bunny World": [bunnyWorld, {}, "sibelius_finlandia.mp3"],
+    "Fool's Gold": [foolsGold, {}, "bach_gigue_english.mp3"], 
+    "Into the Mines": [intoTheMines, {"=": 4}, "grieg_hallofthemountainking.mp3"]
 };
-
-var ALL_NAMES = [
-        "Unit Test World", 
+/*final ordering of levels*/
+var ALL_NAMES = [ 
         "Easy", "Simple Abyss", "Bungee Jump", 
         "Lava World", "Abyss Revisted", "Chase", "Gauntlet", 
         "Bomb Away",  "To the Sky", "Weeping Angel",
         "Ice World", "Elevator", 
         "Bunny World", "Fool's Gold", "Into the Mines"];
         
-var ALL_LEVELS = [];
+var ALL_PLANS = [];
 var ALL_SPEED_MULTIPLIERS = [];
-var ALL_BACKGROUND_MUSIC = [];
+var ALL_BACKGROUND_MUSICS = [];
+var ALL_LEVEL_IDS = [];
 for(var i = 0; i < ALL_NAMES.length; i++) {
-    ALL_LEVELS.push(MASTER_DICT[ALL_NAMES[i]][0]);
+    ALL_PLANS.push(MASTER_DICT[ALL_NAMES[i]][0]);
     ALL_SPEED_MULTIPLIERS.push(MASTER_DICT[ALL_NAMES[i]][1]);
-    ALL_BACKGROUND_MUSIC.push(MASTER_DICT[ALL_NAMES[i]][2]);
+    ALL_BACKGROUND_MUSICS.push(MASTER_DICT[ALL_NAMES[i]][2]);
+    ALL_LEVEL_IDS.push(i + 1); //increment by one because of zero-based indexing
 };
+
+var ALL_LEVELS_CONFIG = {
+    "plans": ALL_PLANS, 
+    "names": ALL_NAMES, 
+    "speed_multipliers": ALL_SPEED_MULTIPLIERS, 
+    "background_musics": ALL_BACKGROUND_MUSICS, 
+    "level_ids": ALL_LEVEL_IDS
+}
