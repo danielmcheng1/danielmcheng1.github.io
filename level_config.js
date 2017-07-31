@@ -392,7 +392,7 @@ var hell = [
     "!                 -x         x-                    !",
     "!                                                  !",
     "!                                                  !",
-    "!              x        x           x              !",
+    "!              x        x           x             x!",
     "! =                                                !",
     "!                         =                        !",
     "!                       p                        = !",
@@ -400,7 +400,7 @@ var hell = [
     "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  x",
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=====     @x",
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxx",
-    "!oooooooooooooooooooooooooooooooooooooooo!!!!!!!!!!!",
+    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!o!!!!!!!!!!!",
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ];
 
