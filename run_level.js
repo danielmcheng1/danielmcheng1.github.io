@@ -630,11 +630,11 @@ function runGame(config, Display) {
 			if (status == "lost") {
                 globalLivesUsed++;
                 livesUsed++;
-                updateStatsForLevel(levelIds[n], names[n], {livesUsed: 1});
+                updateStatsData(levelIds[n], names[n], {livesUsed: 1});
 				startLevel(n, livesUsed, currentCheckpoint);
 			}
 			else if (n < plans.length - 1) {
-                updateStatsForLevel(levelIds[n], names[n], {livesUsed: 1});
+                updateStatsData(levelIds[n], names[n], {livesUsed: 1});
 				currentCheckpoint = startingCheckpoint;
 				startLevel(n + 1, 1, currentCheckpoint);
 			}
@@ -1604,43 +1604,24 @@ function updateLevelSelectorButton(levelId, levelName) {
 
 /******************************************/
 //update stats backend 
-var statsLivesUsed = {};
-var statsNames = {};
-function updateStatsForLevel(levelId, levelName, data) {
+var statsData = {};
+function updateStatsData(levelId, levelName, data) {
     var livesUsed = data["livesUsed"] || 0;
-    statsLivesUsed[levelId] = (statsLivesUsed[levelId] || 0) + livesUsed;
-    statsNames[levelId] = levelName;
-    console.log(statsLivesUsed);
-    console.log(statsNames);
+    var fullId = "Level " + levelId + ": " + levelName;
+    statsData[fullId] = (statsData[fullId] || 0) + livesUsed;
 };
 
-function statsExist() {
-    return getStatsDiv() !== null;
-}
-function getStatsDiv() {
-    return document.getElementById("statsDiv");
-};
-
+//thin wrappers from the chart stats module that plots the actual statistical data
 function toggleStats() {
-    if (statsExist()) {
+    if (statsExists()) {
         removeStats();
     } else {
         clearExistingGames();
         removeInstructions();
-        appendStats();
+        appendStats(statsData);
     };
 };
 
-function appendStats() {
-    var statsDiv = document.createElement('div');
-    statsDiv.setAttribute('id', 'statsDiv');
-    statsDiv.innerText = statsLivesUsed;
-    document.body.appendChild(statsDiv);
-};
-function removeStats() {
-    if (statsExist()) 
-        getStatsDiv().remove();
-};
 
 /**********************************************/
 //removing and adding instructions--TBD could make this hide instead of recreating each time
