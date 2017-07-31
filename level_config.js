@@ -427,7 +427,7 @@ var MASTER_DICT = {
 /*final ordering of levels*/
 var ALL_NAMES = [ 
         "Easy", "Simple Abyss", "Bungee Jump", 
-        "Lava World", "Abyss Revisited", "Chase", "Gauntlet", 
+        "Lava World", "Abyss Revisited", "Chase", "Gauntlet",
         "Bomb Away",  "To the Sky", "Weeping Angel",
         "Ice World", "Elevator", 
         "Bunny World", "Fool's Gold", "Into the Mines",

@@ -648,7 +648,7 @@ function runGame(config, Display) {
 				startLevel(n, livesUsed, currentCheckpoint);
 			}
 			else if (n < plans.length - 1) {
-                updateStatsData(levelIds[n], names[n], {livesUsed: 1});
+                updateStatsData(levelIds[n], names[n], {livesUsed: 0}); //only increment once life is lost
 				currentCheckpoint = startingCheckpoint;
 				startLevel(n + 1, 1, currentCheckpoint);
 			}
@@ -1752,7 +1752,7 @@ function appendInstructions() {
     };
     var endingDiv = document.createElement('div');
     endingDiv.innerHTML = '<br>' +
-                          '<i>About the name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i>, which is Latin for obstructing or blocking someone' +
+                          '<i>About the name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i>--Latin for obstructing or blocking someone' +
                           '<br>' + 
                           '<i>About the music:</i> Background music was inspired by Classical era songs ranging from pleasant Baroque dances to strident Stravinsky symphonies';
         
