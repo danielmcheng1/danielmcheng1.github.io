@@ -1754,9 +1754,9 @@ function appendInstructions() {
     endingDiv.innerHTML = '<br>' + 
                           '<i>Start the Game:</i> Scroll back up to the top and hover over the "Select Level" button to start at Level 1' +
                           '<br>' + 
-                          '<i>About the name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i>--Latin for obstructing or blocking someone' +
+                          '<i>About the Name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i> (Latin for obstructing or blocking someone)' +
                           '<br>' + 
-                          '<i>About the music:</i> Background music was inspired by Classical era songs ranging from pleasant Baroque dances to strident Stravinsky symphonies';
+                          '<i>About the Music:</i> Background music was inspired by Classical era songs ranging from pleasant Baroque dances to strident Stravinsky symphonies';
         
     instructionDiv.appendChild(introDiv);
     instructionDiv.appendChild(tableElement);
