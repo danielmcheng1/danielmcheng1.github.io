@@ -61,6 +61,7 @@ var sourceTile;
 var sourceCell;
 var placedTilesHuman;
     
+//kick off the music 
 //prevent these from being clicked until game has started 
 $("#playMoveHuman").addClass("buttonClicked");
 $("#exchangeTilesHuman").addClass("buttonClicked");
@@ -68,11 +69,9 @@ $("#passHuman").addClass("buttonClicked");
 
 $("#startGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
+        playBackgroundMusic();
         socket.emit('moveDoneHuman', {});  
         $(this).addClass("buttonClicked");
-        //kick off the music 
-        var backgroundMusicDOM = document.createElement("audio");
-        playBackgroundMusic(backgroundMusicDOM);
     };
 });
 
@@ -365,14 +364,20 @@ function playSoundTileMoved(audioDOM) {
     audioDOM.load();
     audioDOM.play();
 };
-function playBackgroundMusic(audioDOM) {
-    audioDOM.src = "static/sound/background_jazz.mp3";
-    audioDOM.volume = 0.7;
-    audioDOM.load();
-    audioDOM.play();
-    audioDOM.addEventListener('ended', function() {
-        var parsedSrc = audioDOM.src.match(/.*\/(.*)\.mp3/)[1] || "";
-        audioDOM.src = (parsedSrc == "background_jazz"? "static/sound/background_normal.mp3" : "static/sound/background_jazz.mp3");
+function playBackgroundMusic() {
+    
+    var audioDOM = document.getElementById("backgroundMusic");
+    if (audioDOM == null) {
+        var audioDOM = document.createElement("audio");
+        audioDOM.setAttribute("id", "backgroundMuisc");
+        audioDOM.src = "static/sound/background_jazz.mp3";
+        audioDOM.volume = 0.7;
+        audioDOM.load();
         audioDOM.play();
-    });
+        audioDOM.addEventListener('ended', function() {
+            var parsedSrc = audioDOM.src.match(/.*\/(.*)\.mp3/)[1] || "";
+            audioDOM.src = (parsedSrc == "background_jazz"? "static/sound/background_normal.mp3" : "static/sound/background_jazz.mp3");
+            audioDOM.play();
+        });
+    };
 };
