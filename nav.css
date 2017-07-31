@@ -1,3 +1,50 @@
+html *{
+    font-family: Arial,Serif;
+} 
+h2 {
+    display: inline
+}
+
+.instruction {
+    font-size: 15px;
+}
+#instructionTable {
+    table-layout: fixed;
+    border-collapse:collapse;
+}
+.instructionRow {
+}
+.instructionRowEven {
+    background-color: #ffffff;
+}
+.instructionRowOdd {
+    background-color: #f5f5f5;
+}
+.instructionRowBlank {
+    height:75px;
+}
+.instructionCell {
+    /*
+    border:solid 1px;
+    border-color: #dbdbdb;
+    */
+    padding-bottom:6px;
+    padding-top:6px;
+    padding-left: 6px;
+    padding-right:6px;
+    vertical-align:center;
+    font-size: 14px;
+    
+}
+.instructionImage {
+    display: block;
+    margin: 0 auto;
+    height: auto;
+    max-width: 100%;
+}
+
+ 
+    
 /* Style The Dropdown Button */
 .dropbtn {
     background-color: light gray;
@@ -9,7 +56,8 @@
 	border-style: none;
     cursor: pointer;
 }
-#levelSelector {  
+/*bold the current level*/
+#levelSelectorButton {  
     font-weight: bold;
 }
 

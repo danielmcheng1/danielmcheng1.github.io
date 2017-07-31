@@ -91,7 +91,7 @@ Level.prototype.isFinished = function() {
 
 //update statistics
 Level.prototype.updateStatus = function() {
-	var levelStatus = document.getElementById("levelSelector");
+	var levelStatus = document.getElementById("levelSelectorButton");
 	levelStatus.innerText = "Level " + this.levelId + ": " + this.levelName;
 	
 	var livesStatusNode = document.getElementById("liveStatus");
@@ -588,7 +588,17 @@ function runLevel(level, Display, andThen) {
 	//};
 };
 
-//TBD how is status reset each time?--don't quite get these final steps
+/*clear out existing games whenever a level is selected*/
+/*Learning: As James said, the DOM does not support removing an object directly. You have to go to its parent and remove it from there. 
+Javascript won't let an element commit suicide, but it does permit infanticide...*/
+function clearExistingGames() {
+    globalStopLevelAnimation = true;
+    var existingGames = document.getElementById("game");
+    if (existingGames) existingGames.remove();
+};
+
+
+//TBD how is status reset each time?
 var globalLivesUsed = 1;
 var startingCheckpoint = null;
 var currentCheckpoint = null;
@@ -638,18 +648,11 @@ function runGame(config, Display) {
 	/*create click event listener for user select which level to jump to*/
 	function createLevelListener(levelNum) {
 		return function() {
+            removeInstructions();
             startLevel(levelNum, 1, startingCheckpoint);
 		};
 	};
 	
-	/*clear out existing games whenever a level is selected*/
-	/*Learning: As James said, the DOM does not support removing an object directly. You have to go to its parent and remove it from there. 
-	Javascript won't let an element commit suicide, but it does permit infanticide...*/
-	function clearExistingGames() {
-        globalStopLevelAnimation = true;
-		var existingGames = document.getElementById("game");
-		if (existingGames) existingGames.remove();
-	};
     
     function startBackgroundMusic(n) {
         var backgroundMusicToPlay = backgroundMusics[n];
@@ -658,7 +661,6 @@ function runGame(config, Display) {
             backgroundMusicDOM.volume = 1;
         else 
             backgroundMusicDOM.volum = 0.6;
-        console.log(backgroundMusicDOM.volume, backgroundMusicToPlay);
         if (backgroundMusicToPlay == "") {
             backgroundMusicDOM.pause();
             backgroundMusicDOM.src = "";
@@ -696,16 +698,16 @@ function runGame(config, Display) {
         });
             
     };
-    var instructionTable = 
-        '<table>' + 
-            '<tr>' +
-                '<td><img src="img/instructions/coin.png" alt="coin image"/></td>' +
-                '<td>Your goal is to collect all the coins in each level</td>' +
-            '</tr>' +
-        '</table>'
-    ;
-    document.body.appendChild(instructionTable);
     
+    appendInstructions();
+    var instructionsButton = document.getElementById("instructionsButton");
+    instructionsButton.addEventListener('click', function(e) {
+        if (instructionsExist()) {
+            removeInstructions();
+        } else {
+            appendInstructions();
+        };
+    });
  };
 /*
 Learning: closure / callbacks for createLevelListener function
@@ -1587,4 +1589,103 @@ function playMusic(path, volume, seconds) {
 		}, false); 
 	};
 	return audio;
+};
+
+/**********************************************/
+//removing and adding instructions--TBD could make this hide instead of recreating each time
+function removeInstructions() {
+    if (instructionsExist()) 
+        getInstructionsDiv().remove();
+};
+function instructionsExist() {
+    return getInstructionsDiv();
+};   
+function getInstructionsDiv() {
+    return document.getElementById("instructionDiv");
+};
+
+function appendInstructions() {
+    removeInstructions();
+    var instructionInput = 
+    [
+        ["leftRightKeys.png","Press the left and right arrow keys to move around each level"],
+        ["upKeyJump.png","Press the up key to jump. Your jump height and speed depend on how hard you press"],
+        ["duck.png","Press the ‘D’ key to duck and shrink in size. Press the 'E' key to grow back to your normal size"],
+        //["grow.png","Press the ‘E’ key to grow back to your normal size"],
+        ["",""],
+        ["coin.png","Pass over a coin to collect the gold"],
+        ["",""],
+        ["ice.png","You can ride safely on these ice blocks"],
+        ["lava.png","These lava blocks will kill you! Avoid them at all cost"],
+        ["bot.png","You should also avoid these killer bots. They aren't that smart, so you should be able to outwit most of them..."],
+        ["",""],
+        ["powerups.png","In more advanced levels, you can acquire power-up. Press 'Space' to use the power-up, and 'S' to switch between power-ups"],
+        ["shootWater.png","With the water power-up, you can shoot and destroy moving lava. Shooting speed is proportional to your player's speed"],
+        ["plantBomb.png","With the bomb power-up, you can plant bombs to blow up walls"],
+        ["",""],
+        ["checkpoint.png","Collect checkpoints so that the level doesn't restart whenever you die"]
+    ]
+    
+    var instructionDiv = document.createElement('div');
+    instructionDiv.setAttribute('id', 'instructionDiv');
+    instructionDiv.classList.add('instruction');
+    
+    var introDiv = document.createElement('div');
+    introDiv.innerHTML = '<br><h2><u>OBSTRUCTIO:</u> The Block Game to Break Your Will</h2>' +
+                         '<br>' +
+                         'You are a brave block scouring for gold in a wicked world--a world infested by flying lava and killer bots.' +
+                         '<br><br>' + 
+                         'Your mission is to collect all the gold coins in each level--without getting killed by your block enemies.' +
+                         '<br><br>' + 
+                         'Good luck.' + 
+                         '<br><br>'
+                         ;
+
+    var tableElement = document.createElement('table');    
+    tableElement.classList.add('instructionTable');
+    var previousRow = 'Even';
+    for (var i = 0; i < instructionInput.length; i++) {
+        var instructionImage = instructionInput[i][0];
+        var instructionText = instructionInput[i][1];
+        
+        /*color each row*/
+        var tableRow = tableElement.insertRow();
+        tableRow.classList.add('instructionRow');
+        tableRow.classList.add('instructionRow' + (i % 2 ? 'Even' : 'Odd'));
+        
+        if (instructionImage == "" && instructionText == "") {
+            tableRow.classList.add('instructionRowBlank');
+        } if (1 == 1) {
+
+            /*add the demo image*/
+            var tableCell = tableRow.insertCell();
+            tableCell.classList.add('instructionCell');
+            
+            var imageNode = document.createElement('img');
+            imageNode.classList.add('instructionImage');
+            if (instructionInput[i][0] != "") {
+                imageNode.src = "img/instructions/" + instructionImage;
+                imageNode.alt = instructionImage;
+                tableCell.appendChild(imageNode);
+            };
+            
+            /*add the text explanation*/  
+            tableCell = tableRow.insertCell(); 
+            tableCell.classList.add('instructionCell'); 
+            var textNode = document.createElement('text');
+            textNode.innerHTML = instructionText;    
+            tableCell.appendChild(textNode);
+        };
+    };
+    var endingDiv = document.createElement('div');
+    endingDiv.innerHTML = '<br>' +
+                          '<i>About the name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i>, which is Latin for obstructing or blocking someone' +
+                          '<br>' + 
+                          '<i>About the music:</i> Background music was inspired by Classical era songs ranging from pleasant Baroque dances to strident Stravinsky symphonies';
+        
+    instructionDiv.appendChild(introDiv);
+    instructionDiv.appendChild(tableElement);
+    instructionDiv.appendChild(endingDiv);
+    document.body.appendChild(instructionDiv);
+    clearExistingGames();
 };

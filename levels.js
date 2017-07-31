@@ -395,8 +395,8 @@ var hell = [
     "!              x        x           x              !",
     "! =                                                !",
     "!                         =                        !",
-    "!                                                = !",
-    "! x      x                                x        !",
+    "!                       p                        = !",
+    "! x      x              x                 x        !",
     "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  x",
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=====     @x",
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxx",
@@ -411,7 +411,7 @@ var MASTER_DICT = {
     "Simple Abyss": [simpleAbyss, {}, "bach_gigue_english.mp3"],
     "Bungee Jump": [bungeeJump, {}, "bach_gigue_english.mp3"],
     "Lava World": [lavaWorld, {"=": 4}, "bach_gigue_french.mp3"],
-    "Abyss Revisted": [abyssRevisited, {}, "bach_gigue_french.mp3"],
+    "Abyss Revisited": [abyssRevisited, {}, "bach_gigue_french.mp3"],
     "Chase": [chase, {}, "vivaldi_pianoguysfrozen.mp3"],
     "Gauntlet": [gauntlet, {"=": 3}, "schubert_erlkonig.mp3"],
     "Bomb Away": [bombAway, {"|": 2, "v": 2}, "bach_gigue_french.mp3"],
@@ -427,7 +427,7 @@ var MASTER_DICT = {
 /*final ordering of levels*/
 var ALL_NAMES = [ 
         "Easy", "Simple Abyss", "Bungee Jump", 
-        "Lava World", "Abyss Revisted", "Chase", "Gauntlet", 
+        "Lava World", "Abyss Revisited", "Chase", "Gauntlet", 
         "Bomb Away",  "To the Sky", "Weeping Angel",
         "Ice World", "Elevator", 
         "Bunny World", "Fool's Gold", "Into the Mines",
