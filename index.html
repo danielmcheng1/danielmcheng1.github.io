@@ -5,17 +5,21 @@
     <title>Obstructio: The Block Game to Break Your Will</title>
     <link rel=stylesheet href="game.css">
     <link rel=stylesheet href="nav.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+    <script>window.Chart || document.write('<script src="lib/Chart.bundle.js"><\/script>');</script>
+    
     <script src="run_level.js"></script>
     <script src="level_config.js"></script>
     <script src="chart_stats.js"></script>
 </head>
 <body>
-    <span id = "levelStatus"></span>
-    <br><span id = "liveStatus"></span>
-	<br><span id = "coinStatus"></span>
-    <br><br>
 	<audio id = "backgroundMusic"></audio>
+    <span id = "gameInfo">
+        <br><span id = "livesStatus"></span>
+        <br><span id = "coinsStatus"></span>    
+    </span>
+    <br>
     <div class="dropdown">
 		<button class="dropbtn" id="levelSelectorButton">Select Level</button>
 		<div class="dropdown-content" id="dropdown-menu">
@@ -28,5 +32,4 @@
 
 <script>
 	runGame(ALL_LEVELS_CONFIG, CanvasDisplay);
-    
 </script>

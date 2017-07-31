@@ -91,11 +91,25 @@ Level.prototype.isFinished = function() {
 
 //update statistics
 Level.prototype.updateStatus = function() {	
-	var livesStatusNode = document.getElementById("liveStatus");
-	livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives") + " (" + globalLivesUsed + " " + (globalLivesUsed == 1 ? "life" : "lives") + " across all levels)";
+
+	var livesStatusNode = document.getElementById("livesStatus");
+    /*if (!livesStatusNode) {
+        var brHolder = document.createElement("br");
+        brHolder.setAttribute("id", "livesStatusBr");
+        document.getElementById("gameInfo").appendChild(brHolder);
+        livesStatusNode = document.createElement("div");
+        livesStatusNode.setAttribute("id", "livesStatus");
+        document.getElementById("livesStatusBr").appendChild(livesStatusNode);
+    };*/
+    livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives") + " (" + globalLivesUsed + " " + (globalLivesUsed == 1 ? "life" : "lives") + " across all levels)";
 	
-	var coinStatus = document.getElementById("coinStatus");
-	coinStatus.innerText = "Coins Remaining: " + this.coinsRemaining + " out of " + this.coinsTotal + " " + (this.coinsTotal == 1? "coin" : "coins");
+    var coinsStatusNode = document.getElementById("coinsStatus");
+    /*if (!coinsStatusNode) {
+        coinsStatusNode = document.createElement("div");
+        coinsStatusNode.setAttribute("id", "coinsStatus");
+        document.getElementById("livesStatus").appendChild(coinsStatusNode);
+    };*/      
+	coinsStatusNode.innerText = "Coins Remaining: " + this.coinsRemaining + " out of " + this.coinsTotal + " " + (this.coinsTotal == 1? "coin" : "coins");
 };
 
 //other level utility functions
@@ -640,7 +654,7 @@ function runGame(config, Display) {
 			}
 			else {
 				playMusic("sound/sound_effects/applause.wav");
-				window.alert("You have mastered all levels!");
+				window.alert("You have mastered all levels! Click on the Stats tab to review your success");
 			};
 		});
 	};
@@ -657,14 +671,13 @@ function runGame(config, Display) {
     
     function startBackgroundMusic(n) {
         var backgroundMusicToPlay = backgroundMusics[n];
-        var backgroundMusicDOM = document.getElementById("backgroundMusic");
+        var backgroundMusicDOM = getBackgroundMusic();
         if (backgroundMusicToPlay == "grieg_hallofthemountainking.mp3") 
             backgroundMusicDOM.volume = 1;
         else 
-            backgroundMusicDOM.volum = 0.6;
+            backgroundMusicDOM.volume = 0.6;
         if (backgroundMusicToPlay == "") {
-            backgroundMusicDOM.pause();
-            backgroundMusicDOM.src = "";
+            pauseBackgroundMusic();
         } else {
             //only update if the song doesn't match the desired one -- otherwise let the song continue to play
             var currentBackgroundMusicRegex = backgroundMusicDOM.src.match(/.*\/(.*)/);
@@ -683,6 +696,14 @@ function runGame(config, Display) {
         };
     };	
     
+};
+function getBackgroundMusic() {
+    return document.getElementById("backgroundMusic");
+};
+function pauseBackgroundMusic() {
+    var backgroundMusicDOM = getBackgroundMusic();
+    backgroundMusicDOM.pause();
+    backgroundMusicDOM.src = "";
 };
 
  window.onload = function() {
@@ -1573,7 +1594,6 @@ function flipHorizontally(context, around) {
 
 /************************************************/
 //AUDIO 
-
 //TBD organize sounds
 function playMusic(path, volume, seconds) {
 	var audio = document.createElement("audio");
@@ -1593,6 +1613,13 @@ function playMusic(path, volume, seconds) {
 };
 
 /**********************************************/
+function resetAllGameFunctions() {
+    clearExistingGames();
+    updateLevelSelectorButton();
+    pauseBackgroundMusic();
+};
+
+/**********************************************/
 //update header buttons
 function updateLevelSelectorButton(levelId, levelName) {
     var levelStatus = document.getElementById("levelSelectorButton");
@@ -1606,9 +1633,10 @@ function updateLevelSelectorButton(levelId, levelName) {
 //update stats backend 
 var statsData = {};
 function updateStatsData(levelId, levelName, data) {
-    var livesUsed = data["livesUsed"] || 0;
-    var fullId = "Level " + levelId + ": " + levelName;
-    statsData[fullId] = (statsData[fullId] || 0) + livesUsed;
+    var existingLives = 0;
+    if (statsData[levelId])
+        existingLives = statsData[levelId]["livesUsed"];
+    statsData[levelId] = {"livesUsed": existingLives + data["livesUsed"], "levelName": levelName};
 };
 
 //thin wrappers from the chart stats module that plots the actual statistical data
@@ -1616,7 +1644,7 @@ function toggleStats() {
     if (statsExists()) {
         removeStats();
     } else {
-        clearExistingGames();
+        resetAllGameFunctions();
         removeInstructions();
         appendStats(statsData);
     };
@@ -1637,7 +1665,7 @@ function toggleInstructions() {
     if (instructionsExist()) {
         removeInstructions();
     } else {
-        clearExistingGames();
+        resetAllGameFunctions();
         removeStats();
         appendInstructions();
         
@@ -1653,20 +1681,20 @@ function appendInstructions() {
     
     var instructionInput = 
     [
+        ["you.png", "This is you, the brave block explorer"],
         ["leftRightKeys.png","Press the left and right arrow keys to move around each level"],
         ["upKeyJump.png","Press the up key to jump. Your jump height and speed depend on how hard you press"],
         ["duck.png","Press the ‘D’ key to duck and shrink in size. Press the 'E' key to grow back to your normal size"],
+        ["coin.png","Collect all of these gold coins in each level"],
         //["grow.png","Press the ‘E’ key to grow back to your normal size"],
         ["",""],
-        ["coin.png","Pass over a coin to collect the gold"],
-        ["",""],
-        ["ice.png","You can ride safely on these ice blocks"],
         ["lava.png","These lava blocks will kill you! Avoid them at all cost"],
         ["bot.png","You should also avoid these killer bots. They aren't that smart, so you should be able to outwit most of them..."],
+        ["ice.png","Fortunately, you can ride safely on these ice blocks"],
         ["",""],
-        ["powerups.png","In more advanced levels, you can acquire power-up. Press 'Space' to use the power-up, and 'S' to switch between power-ups"],
-        ["shootWater.png","With the water power-up, you can shoot and destroy moving lava. Shooting speed is proportional to your player's speed"],
-        ["plantBomb.png","With the bomb power-up, you can plant bombs to blow up walls"],
+        ["powerups.png","In more advanced levels, you can acquire power-ups. Press 'Space' to use the power-up, and 'S' to switch between power-ups"],
+        ["shootWater.png","With the water power-up, you can shoot and destroy moving lava. Shooting speed is based on your player's speed"],
+        ["plantBomb.png","With the bomb power-up, you can plant bombs to blow up walls. You can also drop them in mid-air if you want..."],
         ["",""],
         ["checkpoint.png","Collect checkpoints so that the level doesn't restart whenever you die"]
     ]
@@ -1678,7 +1706,7 @@ function appendInstructions() {
     var introDiv = document.createElement('div');
     introDiv.innerHTML = '<br><h2><u>OBSTRUCTIO:</u> The Block Game to Break Your Will</h2>' +
                          '<br>' +
-                         'You are a brave block scouring for gold in a wicked world--a world infested by flying lava and killer bots.' +
+                         'You are a brave block scouring for gold in a wicked world: a world infested by flying lava and killer bots.' +
                          '<br><br>' + 
                          'Your mission is to collect all the gold coins in each level--without getting killed by your block enemies.' +
                          '<br><br>' + 

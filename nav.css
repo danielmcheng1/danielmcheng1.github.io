@@ -97,3 +97,8 @@ h2 {
 .dropdown:hover .dropbtn {
     background-color: light gray;
 }
+
+#statsChartDiv {
+    width: 60%;
+    height: 60%;
+};
