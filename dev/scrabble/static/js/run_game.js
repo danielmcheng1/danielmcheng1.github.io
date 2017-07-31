@@ -70,8 +70,12 @@ $("#startGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         socket.emit('moveDoneHuman', {});  
         $(this).addClass("buttonClicked");
+        //kick off the music 
+        var backgroundMusicDOM = document.createElement("audio");
+        playBackgroundMusic(backgroundMusicDOM);
     };
 });
+
 socket.on('moveDoneComputer', function(data) {    
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
@@ -80,10 +84,7 @@ socket.on('moveDoneComputer', function(data) {
     refreshLastMove(data);
     refreshGameInfo(data);
     
-    //create audio elements
     var soundEffectsDOM = document.createElement("audio"); //for tile placement, bag shuffling, etc.
-    var backgroundMusicDOM = document.createElement("audio");
-    playBackgroundMusic(backgroundMusicDOM);
     
     //once data has refreshed, allow player to send move 
     $("#playMoveHuman").removeClass("buttonClicked");

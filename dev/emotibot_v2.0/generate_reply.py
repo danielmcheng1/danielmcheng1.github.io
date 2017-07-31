@@ -17,7 +17,7 @@ BOT_OPENINGS = {'ELIANA': ["It's good to see you here today, my friend. Has anyt
 BOT_MADE_RANDOM_RESPONSE = {'ELIANA': False, 'ANA': False, 'OLGA': False}
 
 #TBD -- need key for each bot -- move into backend database 
-BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?", "Do you have a cute puppy?", "Say, are you any good at flirting?"]
+BOT_RANDOM_RESPONSES_BEFORE = ["Say, do you like eel?"] #"Say, do you have a cute puppy?"] #"Say, are you any good at flirting?"]
 BOT_RANDOM_RESPONSES_AFTER = ["I'm sorry, I got distracted", "Sorry, slip of the tongue"]
 
 BOT_CHAT_HISTORY = {'ELIANA': [], 'ANA': [], 'OLGA': []}
@@ -127,7 +127,7 @@ def reflect_emotion(message):
     emotions = get_emotions(message)
     (top, probability) =  get_n_ranked_key(emotions, 1)
     
-    if probability > 0.55:
+    if probability > 0.6:
         responses = map_emotions_to_response(emotions)
         return (responses[top], emotions)
     return (None, emotions) 
@@ -153,7 +153,7 @@ def map_emotions_to_response(emotions):
     return {k: random.choice(response_mapping[k]).replace("[x]", random.choice(adjective_mapping[k])) for k, v in emotions.items()}
 
 def make_random_response(message_history):
-    return len(message_history) > 4 and random.randint(1, 9) == 1
+    return len(message_history) > 3 and random.randint(1, 2) == 1
         
     
 def get_n_ranked_key(dict, n):
