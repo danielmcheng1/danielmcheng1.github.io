@@ -90,10 +90,7 @@ Level.prototype.isFinished = function() {
 };
 
 //update statistics
-Level.prototype.updateStatus = function() {
-	var levelStatus = document.getElementById("levelSelectorButton");
-	levelStatus.innerText = "Level " + this.levelId + ": " + this.levelName;
-	
+Level.prototype.updateStatus = function() {	
 	var livesStatusNode = document.getElementById("liveStatus");
 	livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives") + " (" + globalLivesUsed + " " + (globalLivesUsed == 1 ? "life" : "lives") + " across all levels)";
 	
@@ -622,6 +619,7 @@ function runGame(config, Display) {
 	function startLevel(n, livesUsed, checkpoint) {
 		clearExistingGames();
         startBackgroundMusic(n);
+        updateLevelSelectorButton(levelIds[n], names[n]);
         
 		//TBD for more accurate movement on ice blocks
 		if (names[n] == "Ice World" || names[n] == "Elevator") maxStep = 0.005; 
@@ -1592,6 +1590,16 @@ function playMusic(path, volume, seconds) {
 };
 
 /**********************************************/
+//update header buttons
+function updateLevelSelectorButton(levelId, levelName) {
+    var levelStatus = document.getElementById("levelSelectorButton");
+    if (levelId && levelName) 
+        levelStatus.innerText = "Level " + levelId + ": " + levelName;
+    else 
+        levelStatus.innerText = "Select Level";
+};
+    
+/**********************************************/
 //removing and adding instructions--TBD could make this hide instead of recreating each time
 function removeInstructions() {
     if (instructionsExist()) 
@@ -1606,6 +1614,8 @@ function getInstructionsDiv() {
 
 function appendInstructions() {
     removeInstructions();
+    clearExistingGames();
+    
     var instructionInput = 
     [
         ["leftRightKeys.png","Press the left and right arrow keys to move around each level"],
@@ -1687,5 +1697,5 @@ function appendInstructions() {
     instructionDiv.appendChild(tableElement);
     instructionDiv.appendChild(endingDiv);
     document.body.appendChild(instructionDiv);
-    clearExistingGames();
 };
+
