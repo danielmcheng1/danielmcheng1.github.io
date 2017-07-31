@@ -219,7 +219,7 @@ var intoTheMines = [
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx      |xxx xxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   x x xxxxx",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo  x x xxxxx",
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   z|    x",
+	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxo   x|    x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    =x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   = x",
 	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx     x",
