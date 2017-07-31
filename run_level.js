@@ -630,9 +630,11 @@ function runGame(config, Display) {
 			if (status == "lost") {
                 globalLivesUsed++;
                 livesUsed++;
+                updateStatsForLevel(levelIds[n], names[n], {livesUsed: 1});
 				startLevel(n, livesUsed, currentCheckpoint);
 			}
 			else if (n < plans.length - 1) {
+                updateStatsForLevel(levelIds[n], names[n], {livesUsed: 1});
 				currentCheckpoint = startingCheckpoint;
 				startLevel(n + 1, 1, currentCheckpoint);
 			}
@@ -647,6 +649,7 @@ function runGame(config, Display) {
 	function createLevelListener(levelNum) {
 		return function() {
             removeInstructions();
+            removeStats();
             startLevel(levelNum, 1, startingCheckpoint);
 		};
 	};
@@ -689,7 +692,6 @@ function runGame(config, Display) {
         var element = dropdownElements[i];
         element.addEventListener('click', function() {
             element.classList.add('no-hover');
-            console.log('stopped');  
                 setTimeout(function(){
                     element.classList.remove('no-hover');
                 }, 500); //0.5 seconds 
@@ -700,11 +702,12 @@ function runGame(config, Display) {
     appendInstructions();
     var instructionsButton = document.getElementById("instructionsButton");
     instructionsButton.addEventListener('click', function(e) {
-        if (instructionsExist()) {
-            removeInstructions();
-        } else {
-            appendInstructions();
-        };
+        toggleInstructions();
+    });
+    
+    var statsButton = document.getElementById("statsButton");
+    statsButton.addEventListener('click', function(e) {
+        toggleStats();
     });
  };
 /*
@@ -1598,23 +1601,74 @@ function updateLevelSelectorButton(levelId, levelName) {
     else 
         levelStatus.innerText = "Select Level";
 };
-    
+
+/******************************************/
+//update stats backend 
+var statsLivesUsed = {};
+var statsNames = {};
+function updateStatsForLevel(levelId, levelName, data) {
+    var livesUsed = data["livesUsed"] || 0;
+    statsLivesUsed[levelId] = (statsLivesUsed[levelId] || 0) + livesUsed;
+    statsNames[levelId] = levelName;
+    console.log(statsLivesUsed);
+    console.log(statsNames);
+};
+
+function statsExist() {
+    return getStatsDiv() !== null;
+}
+function getStatsDiv() {
+    return document.getElementById("statsDiv");
+};
+
+function toggleStats() {
+    if (statsExist()) {
+        removeStats();
+    } else {
+        clearExistingGames();
+        removeInstructions();
+        appendStats();
+    };
+};
+
+function appendStats() {
+    var statsDiv = document.createElement('div');
+    statsDiv.setAttribute('id', 'statsDiv');
+    statsDiv.innerText = statsLivesUsed;
+    document.body.appendChild(statsDiv);
+};
+function removeStats() {
+    if (statsExist()) 
+        getStatsDiv().remove();
+};
+
 /**********************************************/
 //removing and adding instructions--TBD could make this hide instead of recreating each time
-function removeInstructions() {
-    if (instructionsExist()) 
-        getInstructionsDiv().remove();
-};
+
 function instructionsExist() {
-    return getInstructionsDiv();
+    return getInstructionsDiv() !== null;
 };   
 function getInstructionsDiv() {
     return document.getElementById("instructionDiv");
 };
 
+function toggleInstructions() {
+    if (instructionsExist()) {
+        removeInstructions();
+    } else {
+        clearExistingGames();
+        removeStats();
+        appendInstructions();
+        
+    };
+};
+      
+function removeInstructions() {
+    if (instructionsExist()) 
+        getInstructionsDiv().remove();
+};  
 function appendInstructions() {
     removeInstructions();
-    clearExistingGames();
     
     var instructionInput = 
     [
