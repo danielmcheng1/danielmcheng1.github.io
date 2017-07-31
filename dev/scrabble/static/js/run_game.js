@@ -365,7 +365,7 @@ function playSoundTileMoved(audioDOM) {
     audioDOM.play();
 };
 function playBackgroundMusic() {
-    
+    //check if exists because Flask will re-render each time
     var audioDOM = document.getElementById("backgroundMusic");
     if (audioDOM == null) {
         var audioDOM = document.createElement("audio");
