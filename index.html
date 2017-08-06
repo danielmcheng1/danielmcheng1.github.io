@@ -3,15 +3,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Obstructio: The Block Game to Break Your Will</title>
-    <link rel=stylesheet href="game.css">
-    <link rel=stylesheet href="nav.css">
+    <link rel=stylesheet href="obstructio/css/game.css">
+    <link rel=stylesheet href="obstructio/css/nav.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
     <script>window.Chart || document.write('<script src="lib/Chart.bundle.js"><\/script>');</script>
     
-    <script src="run_level.js"></script>
-    <script src="level_config.js"></script>
-    <script src="chart_stats.js"></script>
+    <script src="obstructio/js/level_config.js"></script>
+    <script src="obstructio/js/chart_stats.js"></script>
+    <script src="obstructio/js/run_level.js"></script>
 </head>
 <body>
 	<audio id = "backgroundMusic"></audio>
@@ -29,7 +29,3 @@
     <button class="dropbtn" id="statsButton">Stats</button>
 	<br>
 </body>
-
-<script>
-	runGame(ALL_LEVELS_CONFIG, CanvasDisplay);
-</script>

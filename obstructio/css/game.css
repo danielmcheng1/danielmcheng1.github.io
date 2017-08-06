@@ -1,0 +1,72 @@
+
+/*
+DOM has max size, but fixed--anything outside that is hidden
+relative position so that player can always be at the center
+*/
+.game {
+	overflow: hidden;
+	max-width: 600px;
+	max-height: 450px;
+	position: relative;
+}
+
+.background  {
+	/*background: rgb(52, 166, 251);*/
+	/*background: rgb(116,204,244);*/
+	background: light blue;
+	table-layout: fixed;
+	border-spacing: 0;
+}
+.background td {
+	padding: 0;
+}
+
+
+
+.actor {
+	position: absolute; 
+}
+.player {
+	background: rgb(64, 64, 64);
+}
+.lost .player {
+	background: rgb(160, 64, 64);
+}
+.won .player {
+	box-shadow: -4px -7px 8px yellow, 4px -7px 8px yellow;
+}
+
+
+.wall {
+	background: white;
+}
+.lava {
+	background: rgb(255, 100, 100);
+}
+.coin {
+	background: rgb(241, 229, 89); 
+}
+
+
+.bomb {
+	background: rgb(0, 0, 0);
+	border-radius: 50%;
+}
+.bombSpray {
+	/*
+	background: rgb(226, 88, 34);
+	*/
+	background: red;
+	border-radius: 50%;
+
+}
+
+.water {
+	background: rgb(64, 164, 223);
+	background: dark blue;
+	border-radius: 50%;
+	border-color: black;
+	border: solid;
+	border-width: 1px;
+}
+
