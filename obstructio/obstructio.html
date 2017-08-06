@@ -1,0 +1,31 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Obstructio: The Block Game to Break Your Will</title>
+    <link rel=stylesheet href="css/game.css">
+    <link rel=stylesheet href="css/nav.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+    <script>window.Chart || document.write('<script src="lib/Chart.bundle.js"><\/script>');</script>
+    
+    <script src="js/level_config.js"></script>
+    <script src="js/chart_stats.js"></script>
+    <script src="js/run_level.js"></script>
+</head>
+<body>
+	<audio id = "backgroundMusic"></audio>
+    <span id = "gameInfo">
+        <br><span id = "livesStatus"></span>
+        <br><span id = "coinsStatus"></span>    
+    </span>
+    <br>
+    <div class="dropdown">
+		<button class="dropbtn" id="levelSelectorButton">Select Level</button>
+		<div class="dropdown-content" id="dropdown-menu">
+		</div>
+	</div>
+    <button class="dropbtn" id="instructionsButton">Instructions</button>
+    <button class="dropbtn" id="statsButton">Stats</button>
+	<br>
+</body>

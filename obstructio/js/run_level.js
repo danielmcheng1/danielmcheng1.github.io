@@ -686,7 +686,7 @@ function runGame(config, Display) {
             else 
                 currentBackgroundMusic = "";
             if (currentBackgroundMusic != backgroundMusicToPlay) {
-                backgroundMusicDOM.src = "obstructio/sound/background_music/" + backgroundMusicToPlay;
+                backgroundMusicDOM.src = "sound/background_music/" + backgroundMusicToPlay;
                 backgroundMusicDOM.play();
                 //repeat if the music stops before level completes 
                 backgroundMusicDOM.addEventListener('ended', function() {
@@ -1310,7 +1310,7 @@ var waterSprite = document.createElement("img");
 var playerXOverlap = 0; //adjustment because our images are > 20 pixels
 
 /********************/
-var img_path = "obstructio/img/";
+var img_path = "img/";
 bombAboutToExplodeSprite.src = img_path + "bombAboutToExplode.png";
 bombSpraySprite.src = img_path + "bombSpray.png";
 bombSprite.src = img_path + "bomb.png";
@@ -1572,7 +1572,7 @@ function flipHorizontally(context, around) {
 //TBD organize sounds
 function playSoundEffect(file, volume, seconds) {
 	var audio = document.createElement("audio");
-	audio.src = "obstructio/sound/sound_effects/" + file;
+	audio.src = "sound/sound_effects/" + file;
 	if (volume) audio.volume = Math.min(volume, 1);
 	audio.play();
 	if (seconds) {
@@ -1686,7 +1686,10 @@ function appendInstructions() {
                          'Your mission is to collect all the gold coins in each level--without getting killed by your block enemies.' +
                          '<br><br>' + 
                          'Good luck.' + 
-                         '<br><br>'
+                         '<br><br>' +
+                         '<i>About the Name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i> (Latin for obstructing or blocking someone)' +
+                         '<br>' + 
+                         '<i>About the Music:</i> Background music was inspired by Classical era songs ranging from pleasant Baroque dances to strident Stravinsky symphonies'
                          ;
 
     var tableElement = document.createElement('table');    
@@ -1712,7 +1715,7 @@ function appendInstructions() {
             var imageNode = document.createElement('img');
             imageNode.classList.add('instructionImage');
             if (instructionInput[i][0] != "") {
-                imageNode.src = "obstructio/img/instructions/" + instructionImage;
+                imageNode.src = "img/instructions/" + instructionImage;
                 imageNode.alt = instructionImage;
                 tableCell.appendChild(imageNode);
             };
@@ -1727,12 +1730,8 @@ function appendInstructions() {
     };
     var endingDiv = document.createElement('div');
     endingDiv.innerHTML = '<br>' + 
-                          '<i>Start the Game:</i> Scroll back up to the top and hover over the "Select Level" button to start at Level 1' +
-                          '<br>' + 
-                          '<i>About the Name:</i> This game is about a block being blocked from finding gold blocks. Hence the name <i>Obstructio</i> (Latin for obstructing or blocking someone)' +
-                          '<br>' + 
-                          '<i>About the Music:</i> Background music was inspired by Classical era songs ranging from pleasant Baroque dances to strident Stravinsky symphonies';
-        
+                          '<i>Start the Game:</i> Scroll back up to the top and hover over the "Select Level" button to start at Level 1'
+                          ;
     instructionDiv.appendChild(introDiv);
     instructionDiv.appendChild(tableElement);
     instructionDiv.appendChild(endingDiv);
