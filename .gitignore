@@ -1,10 +1,15 @@
 **/*hidden.conf
 **/*hidden.py
-dev/betty
 
 **/__pycache__/
 **/*.py[cod]
 **/*$py.class
 
-sound/background_music_old
-dev/emotibot_v2.0/sample_conversations
+obstructio/sound/background_music_old
+
+dev/betty
+dev/chatbot_apiai
+dev/chatbot_ellieslack
+dev/emotibot_v1.0
+dev/flask
+
