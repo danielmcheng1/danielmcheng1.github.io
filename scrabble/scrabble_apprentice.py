@@ -1,13 +1,8 @@
 #Author: Daniel M. Cheng
 #Creation: February 2016
 #Description: Scrabble AI based on Steven A. Gordon's GADDAG data structure (http://ericsink.com/downloads/faster-scrabble-gordon.pdf)
+#Modified: July 2017 -- set up front-end server for playing against Scrabble AI 
 
-#Permits play with multiple AI's or human players
-
-#Currently working to clean code and transition into a web application
-'''
-Update in July 2017 -- setting up backend Python server and frontend Javascript application 
-'''
 import os, csv, sys, random
 import termcolor
 from pympler import asizeof
