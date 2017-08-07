@@ -1,6 +1,5 @@
 
 from flask import Flask, render_template, request
-import requests
 import sys 
 
 from flask_socketio import SocketIO, emit, send

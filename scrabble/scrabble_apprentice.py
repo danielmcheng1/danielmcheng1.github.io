@@ -4,9 +4,9 @@
 #Modified: July 2017 -- set up front-end server for playing against Scrabble AI 
 
 import os, csv, sys, random
-import termcolor
-from pympler import asizeof
-#pip install termcolor, pympler
+#coloring/config for original scrabble that printed out to console 
+#import termcolor
+#from pympler import asizeof
 
 #function to grab the sizes of objects--useful for testing memory usage by GADDAG data structure
 def get_size(obj):
