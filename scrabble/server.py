@@ -21,6 +21,7 @@ def process_human_move(data):
     print("Data: {0}".format(str(data)), file = sys.stderr) 
     
     global SCRABBLE_APPRENTICE_DATA 
+    emit('dataReceived', {})
     #guarantee reset if user refreshes page -- could also check if last_move filled in in the scrabble module?
     if data == {}:
         SCRABBLE_APPRENTICE_DATA = {}

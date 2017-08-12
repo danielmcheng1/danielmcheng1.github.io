@@ -278,7 +278,7 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        scrabble_corpus = scrabble_corpus
+        #scrabble_corpus = scrabble_corpus[0:100]
         
         scrabble_gaddag = gaddag(scrabble_corpus)
         scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
