@@ -75,13 +75,14 @@ $("#startGame").click (function(event) {
     };
 });
 
-socket.on('moveDoneComputer', function(data) {    
+socket.on('moveDoneComputer', function(data) {
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
     refreshRack(data, 'Computer');
     refreshLastMove(data);
     refreshGameInfo(data);
+    var board = data["board"];
     
     var soundEffectsDOM = document.createElement("audio"); //for tile placement, bag shuffling, etc.
     
@@ -183,7 +184,7 @@ socket.on('moveDoneComputer', function(data) {
                 if ($("#" + sourceId).hasClass("boardCell")) {
                     var sourceIdParsed = parseIntoRowCol(sourceId);
                     var targetIdParsed = parseIntoRowCol(targetId);
-                    var bonus = data["board"][sourceIdParsed["row"]][sourceIdParsed["col"]];
+                    var bonus = board[sourceIdParsed["row"]][sourceIdParsed["col"]];
                     if (bonus != '') {
                         bonusSpan = '<span class="bonusOverlay">' + bonus + ' Score</span>';
                         $("#" + sourceId).append($(bonusSpan));
