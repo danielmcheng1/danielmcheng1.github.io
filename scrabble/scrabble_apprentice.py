@@ -3,10 +3,9 @@
 #Description: Scrabble AI based on Steven A. Gordon's GADDAG data structure (http://ericsink.com/downloads/faster-scrabble-gordon.pdf)
 #Modified: July 2017 -- set up front-end server for playing against Scrabble AI 
 
-import os, csv, sys, random, string
-import pickle
+import os, csv, sys, random
 
-import scrabble_gaddag 
+import scrabble_apprentice_gaddag 
 #coloring/config for original scrabble that printed out to console 
 #import termcolor
 #from pympler import asizeof
@@ -409,7 +408,7 @@ class board:
             return False
         
     def is_valid_word(self, word):
-        return word in self.scrabble_corpus 
+        return "".join(word) in self.scrabble_corpus 
         '''
         curr_node = self.gaddag.start_node
         #reverse because the full word is stored as a reveresed prefix in the Gaddag
@@ -810,9 +809,9 @@ class board:
                                     valid_crossword_score_dict, indent + GEN_MOVES_PRINT_INDENT)
                 #if the next node leads to a hook, then we have to reverse 
                 #(unless we're bumping up against another tile on the board)
-                if GADDAG_HOOK in curr_node.edges.keys() and \
+                if scrabble_apprentice_gaddag.GADDAG_HOOK in curr_node.edges.keys() and \
                 not self.ends_are_filled(curr_offset, hook_row, hook_col, direction, new_word, FRONT_END):
-                    curr_node = curr_node.edges[GADDAG_HOOK]
+                    curr_node = curr_node.edges[scrabble_apprentice_gaddag.GADDAG_HOOK]
                     if DEBUG_GENERATE_MOVES:
                         print(indent + "found a hook-->reversing now with: " + str(new_word) + " with rack " + str(curr_rack))
                     self.generate_moves_for_hook_spot(curr_node, curr_rack, new_word,
@@ -860,7 +859,7 @@ class board:
                 print(indent + GEN_MOVES_PRINT_INDENT + "found an existing tile " + letter + " at " + str((curr_row, curr_col)))
             #read in the gaddag file for this letter 
             if curr_node is None:
-                curr_node = scrabble_gaddag.read_gaddag_by_letter(letter).start_node
+                curr_node = scrabble_apprentice_gaddag.read_gaddag_by_letter(letter).start_node
                 
             self.concatenate_next(letter, curr_node, curr_rack, curr_word,
                        curr_offset, hook_row, hook_col, direction, boundary,
@@ -881,7 +880,7 @@ class board:
                             print(indent + GEN_MOVES_PRINT_INDENT + "found letter " + letter + "--new rack is " + str(new_rack))
                         #read in the gaddag file for this letter 
                         if curr_node is None:
-                            curr_node = scrabble_gaddag.read_gaddag_by_letter(letter).start_node
+                            curr_node = scrabble_apprentice_gaddag.read_gaddag_by_letter(letter).start_node
                         self.concatenate_next(letter, curr_node, new_rack, curr_word,
                                    curr_offset, hook_row, hook_col, direction, boundary,
                                    valid_crossword_score_dict, indent + GEN_MOVES_PRINT_INDENT + GEN_MOVES_PRINT_INDENT)
@@ -1277,20 +1276,8 @@ class game_play:
             player.print_player_state()
           
 if __name__ == "__main__":
-    '''
     (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-    scrabble_gaddag = gaddag(scrabble_corpus)
-    scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
- 
-        
-    scrabble_player_1 = scrabble_player("Computer 1", IS_HUMAN, board)  
-    scrabble_player_2 = scrabble_player("Computer 2", IS_COMPUTER, board)   
-    print(scrabble_board.board)
-    scrabble_game_play = scrabble_game_play(scrabble_board, scrabble_player_1, scrabble_player_2)    
-
-    scrabble_game_play.play_game()
-    '''
-
+    scrabble_apprentice_gaddag.write_gaddags_by_letter(scrabble_corpus)
 
     
     
