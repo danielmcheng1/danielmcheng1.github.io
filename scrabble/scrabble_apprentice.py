@@ -3,7 +3,10 @@
 #Description: Scrabble AI based on Steven A. Gordon's GADDAG data structure (http://ericsink.com/downloads/faster-scrabble-gordon.pdf)
 #Modified: July 2017 -- set up front-end server for playing against Scrabble AI 
 
-import os, csv, sys, random
+import os, csv, sys, random, string
+import pickle
+
+import scrabble_gaddag 
 #coloring/config for original scrabble that printed out to console 
 #import termcolor
 #from pympler import asizeof
@@ -117,125 +120,7 @@ def load_all():
     return (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus)
 
 
-#2 Class definitions for Gaddag
-#the hook represents where the prefix ends (up to and including the intersection tile)
-GADDAG_HOOK = "@" 
-
-#Gaddag naive implementation: 1820 megabytes for scrabble_gaddag
-#partially compressed suffixes for a given word and eow letter sets: 854 mb!
-#Execution time: 20-30 seconds for initial load
-    
-#global vars solely for printing (not for identifying)
-GADDAG_PRINT_EOW = "."
-GADDAG_PRINT_INDENT = "    "  
-GADDAG_PRINT_ARROW = "-->"
-class gaddag_node:
-    def __init__(self):
-        self.edges = dict()
-        self.eow_set = set() 
-        #a set tells us that we've reached the end of a word
-        #we can use a set because any path leading to it is a word for any letter in that set
-        #and any subsequent forced states share that same prefix (i.e. they are iterations of the same word)
-      
-    def add_eow(self, next_letter, eow_letter):
-        if next_letter not in self.edges.keys():
-            self.edges[next_letter] = gaddag_node()
-        next_node = self.edges[next_letter]
-        next_node.eow_set.add(eow_letter)
-        return next_node
-    
-    def add_edge(self, next_letter):
-        if next_letter not in self.edges.keys():
-            self.edges[next_letter] = gaddag_node()
-        return self.edges[next_letter]
-    #If key is in the dictionary, return its value. 
-    #If not, insert key with a value of default and return default. default defaults to None.
-            #setdefault(key[, default])
-
-    def force_edge(self, next_letter, forced_node):
-        if next_letter in self.edges.keys() and not self.edges[next_letter] == forced_node:
-            raise ValueError("Attempting to force an edge but an edge already exists to a different node for " + \
-                             str(next_letter) + " to " + str(self.edges[next_letter].eow_set))
-        self.edges[next_letter] = forced_node
-        return self.edges[next_letter]
-    
-    def print_node(self, indent, path):
-        node_edge_num = 0
-        #either we've reached the end of a chain of nodes, 
-        #or we can still continue on but we've reached an intermeidate eow set 
-        if not self.edges or self.eow_set: 
-            print (path + str(self.eow_set))
-        for k in self.edges.keys():
-            node_edge_num += 1
-            if node_edge_num == 1:
-                path = path + k + GADDAG_PRINT_ARROW
-            else:
-                path = indent + k + GADDAG_PRINT_ARROW
-            self.edges[k].print_node(indent + GADDAG_PRINT_INDENT, path)
         
-
-class gaddag:
-    def __init__(self, corpus):
-        self.start_node = gaddag_node()
-        self.make_gaddag(corpus)
-        
-    def make_gaddag(self, corpus):
-        for word in corpus:
-            self.add_word(word)
-           
-    def add_word(self, word):
-        n = len(word)
-        next_node = self.start_node
-        for i in range(n - 1, 1, -1):
-            next_node = next_node.add_edge(word[i])
-        next_node = next_node.add_eow(word[1], word[0])
-        #no need to add hook since no suffix exists
-        next_node = self.start_node  
-        
-        for i in range(n - 2, -1, -1):
-            next_node = next_node.add_edge(word[i])
-        next_node = next_node.add_eow(GADDAG_HOOK, word[n-1])  
-        
-        for i in range(n - 3, -1, -1):
-            forced_node = next_node
-            next_node = self.start_node
-            rev_prefix = word[i::-1]
-            for letter in rev_prefix:
-                next_node = next_node.add_edge(letter)
-            next_node = next_node.add_edge(GADDAG_HOOK)
-            next_node.force_edge(word[i+1], forced_node)   
-            
-    #for printing entire gaddag
-    def print_gaddag(self):
-        print("\n")
-        self.start_node.print_node("", "")
-    
-    #for printing the paths for a list of consecutive letters (typically used to trace a prefix IN REVERSE)
-    def print_select_gaddag_paths(self, start_letters):
-        print("\n")
-        start_path = ""
-        start_indent = ""
-        curr_node = self.start_node
-        #we will try to find this full word in the Gaddag, which will appear as the reversed full prefix
-        while len(start_letters):
-            letter = start_letters.pop() #this traces the letters in reverse
-            if letter in curr_node.edges.keys():
-                if curr_node.eow_set:
-                    print (start_path + str(curr_node.eow_set))
-                start_path = start_path + letter + "-->"
-                start_indent = start_indent + GADDAG_PRINT_INDENT
-                curr_node = curr_node.edges[letter]
-            elif not curr_node.edges or curr_node.eow_set: 
-                if letter not in curr_node.eow_set:
-                    print("Not in Gaddag")
-                print (start_path + str(curr_node.eow_set))
-                return
-            else:
-                print("Not in Gaddag")
-                print(start_path + str(curr_node.eow_set))
-                return
-        curr_node.print_node(start_indent, start_path)
-
 #3: Scrabble board play class
 #global vars
 WILDCARD = ' ' #this are the two blank Scrabble tiles
@@ -270,7 +155,6 @@ class apprentice:
 class board_config:
     def __init__():
 '''    
-
 #wrapper to replace scrabble_game.game_play method so that we can interface with flask/web app
 def wrapper_play_next_move(data):
     print("Received data in scrabble_apprentice: {0}".format(str(data)))
@@ -278,10 +162,7 @@ def wrapper_play_next_move(data):
     if data.get("scrabble_game_play", {}) == {}:
         print("initializing")
         (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-        #scrabble_corpus = scrabble_corpus[0:25000]
-        
-        scrabble_gaddag = gaddag(scrabble_corpus)
-        scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
+        scrabble_board = board(scrabble_bag, scrabble_score_dict, scrabble_corpus)
             
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
@@ -436,13 +317,13 @@ class tile:
         
 class board:
     #highest for loop appears first!! http://rhodesmill.org/brandon/2009/nested-comprehensions/
-    def __init__(self, gaddag, bag, score_dict):
+    def __init__(self, bag, score_dict, corpus):
         self.board = [[self.add_premium(row, col) for col in range(MIN_COL, MAX_COL)] for row in range(MIN_ROW, MAX_ROW)]
         self.board_to_player = [["" for col in range(MIN_COL, MAX_COL)] for row in range(MIN_ROW, MAX_ROW)]
         self.num_words_placed = 0
-        self.gaddag = gaddag
         self.bag = bag
         self.scrabble_score_dict = score_dict
+        self.scrabble_corpus = corpus
         
     def clear_comp(self):
         self.comp_max_score = 0
@@ -528,6 +409,8 @@ class board:
             return False
         
     def is_valid_word(self, word):
+        return word in self.scrabble_corpus 
+        '''
         curr_node = self.gaddag.start_node
         #reverse because the full word is stored as a reveresed prefix in the Gaddag
         word_reversed = word[::-1] #this is a shallow copy, but the letters in this list are not mutable
@@ -549,6 +432,7 @@ class board:
                 return False
         #this could happen if we pass a null word into this function
         return False
+        '''
                 
     #exception for the first move
     def intersect_center_tile(self, start_row, start_col, direction, word):
@@ -974,6 +858,10 @@ class board:
             letter = self.board[curr_row][curr_col]
             if DEBUG_GENERATE_MOVES:
                 print(indent + GEN_MOVES_PRINT_INDENT + "found an existing tile " + letter + " at " + str((curr_row, curr_col)))
+            #read in the gaddag file for this letter 
+            if curr_node is None:
+                curr_node = scrabble_gaddag.read_gaddag_by_letter(letter).start_node
+                
             self.concatenate_next(letter, curr_node, curr_rack, curr_word,
                        curr_offset, hook_row, hook_col, direction, boundary,
                        valid_crossword_score_dict, indent + GEN_MOVES_PRINT_INDENT + GEN_MOVES_PRINT_INDENT)
@@ -991,6 +879,9 @@ class board:
                         new_rack.remove(letter)
                         if DEBUG_GENERATE_MOVES:
                             print(indent + GEN_MOVES_PRINT_INDENT + "found letter " + letter + "--new rack is " + str(new_rack))
+                        #read in the gaddag file for this letter 
+                        if curr_node is None:
+                            curr_node = scrabble_gaddag.read_gaddag_by_letter(letter).start_node
                         self.concatenate_next(letter, curr_node, new_rack, curr_word,
                                    curr_offset, hook_row, hook_col, direction, boundary,
                                    valid_crossword_score_dict, indent + GEN_MOVES_PRINT_INDENT + GEN_MOVES_PRINT_INDENT)
@@ -1005,7 +896,7 @@ class board:
             for (hook_row, hook_col) in valid_hook_spots:
                 if DEBUG_ALL_MOVES:
                     print("Generating moves for this hook spot: " + str((hook_row, hook_col)))
-                self.generate_moves_for_hook_spot(self.gaddag.start_node, rack, [], 0, hook_row, hook_col, \
+                self.generate_moves_for_hook_spot(None, rack, [], 0, hook_row, hook_col, \
                                                   HORIZONTAL, prev_hook_spot, valid_crossword_score_dict, "")
                 prev_hook_spot = hook_col + 1
             if DEBUG_ALL_MOVES:
@@ -1021,7 +912,7 @@ class board:
             for (hook_row, hook_col) in valid_hook_spots:
                 if DEBUG_ALL_MOVES:
                     print("Generating moves for this hook spot: " + str((hook_row, hook_col)))
-                self.generate_moves_for_hook_spot(self.gaddag.start_node, rack, [], 0, hook_row, hook_col, \
+                self.generate_moves_for_hook_spot(None, rack, [], 0, hook_row, hook_col, \
                                                   VERTICAL, prev_hook_spot, valid_crossword_score_dict, "")
                 prev_hook_spot = hook_row + 1
             if DEBUG_ALL_MOVES:
@@ -1386,7 +1277,7 @@ class game_play:
             player.print_player_state()
           
 if __name__ == "__main__":
-    
+    '''
     (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
     scrabble_gaddag = gaddag(scrabble_corpus)
     scrabble_board = board(scrabble_gaddag, scrabble_bag, scrabble_score_dict)
@@ -1395,9 +1286,10 @@ if __name__ == "__main__":
     scrabble_player_1 = scrabble_player("Computer 1", IS_HUMAN, board)  
     scrabble_player_2 = scrabble_player("Computer 2", IS_COMPUTER, board)   
     print(scrabble_board.board)
-    #scrabble_game_play = scrabble_game_play(scrabble_board, scrabble_player_1, scrabble_player_2)    
+    scrabble_game_play = scrabble_game_play(scrabble_board, scrabble_player_1, scrabble_player_2)    
 
-    #scrabble_game_play.play_game()
+    scrabble_game_play.play_game()
+    '''
 
 
     
