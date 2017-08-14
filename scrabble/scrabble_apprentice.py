@@ -8,9 +8,10 @@ import os, csv, sys, random
 import scrabble_apprentice_gaddag 
 #coloring/config for original scrabble that printed out to console 
 #import termcolor
-#from pympler import asizeof
 
+'''
 #function to grab the sizes of objects--useful for testing memory usage by GADDAG data structure
+from pympler import asizeof
 def get_size(obj):
     obj_size = sys.getsizeof(obj) / (1024 * 1024)
 
@@ -19,6 +20,7 @@ def get_size(obj):
 
     print(str(obj_size) + " megabytes (pympler)")
     return obj_size
+'''
 
 #1: Loading scrabble score and frequency dictionaries, as well as bag and entire corpurs
 #source lexicon: http://www.wordgamedictionary.com/twl06/download/twl06.txt
