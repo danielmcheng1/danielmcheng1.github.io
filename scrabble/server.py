@@ -21,10 +21,29 @@ def add_numbers():
     if request.json:
         print('Received json {0}'.format(request.json), file=sys.stderr)
     
+    session_id ='test'
+    last_move = {}
+    session_data = SCRABBLE_APPRENTICE_DATA.setdefault(session_id, {})
+    
+    #reset the front-end wrapper and save the last move for the back end
+    session_data["scrabble_game_play_wrapper"] = {} 
+    
+    #save the last move 
+    session_data["scrabble_game_play_wrapper"]["last_move"] = last_move 
+    
+    
+    #now process on the back end
+    SCRABBLE_APPRENTICE_DATA[session_id] = scrabble_apprentice.wrapper_play_next_move(session_data)
+    print("\nresult:")
+    print(session_data)
+    #return the wrapped play object back to the front end
+    scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_DATA[session_id]["scrabble_game_play_wrapper"]
+    #emit('moveDoneComputer', scrabble_game_play_wrapper) 
+  
     #a = request.args.get('a', 0, type=int)
     #a = request.args.get('keyA')
     #b = request.args.get('keyB') + request.args.get('junk')
-    return jsonify(result=1.23)
+    return jsonify(scrabble_game_play_wrapper)
     
 #def index():
 #    return render_template('index.html')

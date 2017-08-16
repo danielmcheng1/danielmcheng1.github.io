@@ -77,21 +77,8 @@ function postData() {
     });
 };
 function handleData(data) {
-    alert('Received from server: ' + data);
-};
-$("#startGame").click (function(event) {
-    postData().done(handleData);
-})
-/*
-$("#startGame").click (function(event) {
-    if (!$(this).hasClass("buttonClicked")) {
         playBackgroundMusic();
-        socket.emit('moveDoneHuman', {});  
-        $(this).addClass("buttonClicked");
-    };
-});
-*/
-socket.on('moveDoneComputer', function(data) {
+    alert('Received from server: ' + data);
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
@@ -218,6 +205,20 @@ socket.on('moveDoneComputer', function(data) {
             };
         } 
     });
+};
+$("#startGame").click (function(event) {
+    postData().done(handleData);
+})
+/*
+$("#startGame").click (function(event) {
+    if (!$(this).hasClass("buttonClicked")) {
+        playBackgroundMusic();
+        socket.emit('moveDoneHuman', {});  
+        $(this).addClass("buttonClicked");
+    };
+});
+*/
+socket.on('moveDoneComputer', function(data) {
 });
 
 function parseIntoRowCol(id) {
