@@ -101,7 +101,7 @@ Level.prototype.updateStatus = function() {
         livesStatusNode.setAttribute("id", "livesStatus");
         document.getElementById("livesStatusBr").appendChild(livesStatusNode);
     };*/
-    livesStatusNode.innerText = "Lives Used:" + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives") + " (" + globalLivesUsed + " " + (globalLivesUsed == 1 ? "life" : "lives") + " across all levels)";
+    livesStatusNode.innerText = "Lives Used: " + this.livesUsed + " " + (this.livesUsed == 1? "life" : "lives") + " (" + globalLivesUsed + " " + (globalLivesUsed == 1 ? "life" : "lives") + " across all levels)";
 	
     var coinsStatusNode = document.getElementById("coinsStatus");
     /*if (!coinsStatusNode) {
