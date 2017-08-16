@@ -17,7 +17,10 @@ def write_gaddag_for_one_letter(letter, scrabble_corpus_by_letter):
 def read_gaddag_by_letter(letter):
     input_file = open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'gaddag_' + letter + '.txt'), 'rb')
     return pickle.load(input_file)
-    
+
+def read_gaddag_full():
+    input_file = open(os.path.join(os.path.dirname(__file__), 'static', 'data', 'gaddag_full.txt'), 'rb') 
+    return pickle.load(input_file)
     
    
 #the hook represents where the prefix ends (up to and including the intersection tile)

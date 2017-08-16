@@ -75,12 +75,14 @@ function postData(data) {
 };
 
 $("#startGame").click (function(event) {
-    postData({"var1": 1, "var2": 2.2}).done(handleData);
+    if (!$(this).hasClass("buttonClicked")) {
+        $(this).addClass("buttonClicked");
+        playBackgroundMusic();
+        postData({}).done(handleData); 
+    };
 })
 
 function handleData(data) {
-    alert('Received from server: ' + data);
-    playBackgroundMusic();
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
@@ -98,7 +100,7 @@ function handleData(data) {
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
                 //socket.emit('moveDoneHuman', {"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
-                postData({"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
+                postData({"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}}).done(handleData);
                 $(this).addClass("buttonClicked");
             };
         };
@@ -118,7 +120,7 @@ function handleData(data) {
                     return elem != "";
                 }).toArray();
                 //socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
-                postData({"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
+                postData({"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}}).done(handleData);
                 $(this).addClass("buttonClicked");
             };
         };
@@ -130,7 +132,7 @@ function handleData(data) {
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
                 //socket.emit('moveDoneHuman', {"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}});
-                postData({"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}});
+                postData({"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}}).done(handleData);
                 $(this).addClass("buttonClicked");                    
             };            
         };

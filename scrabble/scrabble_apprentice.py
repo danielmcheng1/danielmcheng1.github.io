@@ -325,6 +325,7 @@ class board:
         self.bag = bag
         self.scrabble_score_dict = score_dict
         self.scrabble_corpus = corpus
+        self.gaddag = scrabble_apprentice_gaddag.read_gaddag_full()
         
     def clear_comp(self):
         self.comp_max_score = 0
@@ -862,8 +863,8 @@ class board:
                 print(indent + GEN_MOVES_PRINT_INDENT + "found an existing tile " + letter + " at " + str((curr_row, curr_col)))
             #read in the gaddag file for this letter 
             if curr_node is None:
-                curr_node = scrabble_apprentice_gaddag.read_gaddag_by_letter(letter).start_node
-                
+                #curr_node = scrabble_apprentice_gaddag.read_gaddag_by_letter(letter).start_node
+                curr_node = self.gaddag.start_node
             self.concatenate_next(letter, curr_node, curr_rack, curr_word,
                        curr_offset, hook_row, hook_col, direction, boundary,
                        valid_crossword_score_dict, indent + GEN_MOVES_PRINT_INDENT + GEN_MOVES_PRINT_INDENT)
@@ -883,7 +884,8 @@ class board:
                             print(indent + GEN_MOVES_PRINT_INDENT + "found letter " + letter + "--new rack is " + str(new_rack))
                         #read in the gaddag file for this letter 
                         if curr_node is None:
-                            curr_node = scrabble_apprentice_gaddag.read_gaddag_by_letter(letter).start_node
+                            #curr_node = scrabble_apprentice_gaddag.read_gaddag_by_letter(letter).start_node
+                            curr_node = self.gaddag.start_node
                         self.concatenate_next(letter, curr_node, new_rack, curr_word,
                                    curr_offset, hook_row, hook_col, direction, boundary,
                                    valid_crossword_score_dict, indent + GEN_MOVES_PRINT_INDENT + GEN_MOVES_PRINT_INDENT)
