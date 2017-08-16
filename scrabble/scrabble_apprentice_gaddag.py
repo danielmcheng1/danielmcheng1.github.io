@@ -13,10 +13,16 @@ def write_gaddag_for_one_letter(letter, scrabble_corpus_by_letter):
     output_file = open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'gaddag_' + letter + '.txt'), 'wb')
     scrabble_gaddag = gaddag(scrabble_corpus_by_letter[letter], output_file)
     output_file.close()
-
+    
 def read_gaddag_by_letter(letter):
     input_file = open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'gaddag_' + letter + '.txt'), 'rb')
     return pickle.load(input_file)
+
+    
+def write_gaddag_full(scrabble_corpus):
+    output_file = open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'gaddag_full.txt'), 'wb')
+    scrabble_gaddag = gaddag(scrabble_corpus, output_file)
+    output_file.close()
 
 def read_gaddag_full():
     input_file = open(os.path.join(os.path.dirname(__file__), 'static', 'data', 'gaddag_full.txt'), 'rb') 

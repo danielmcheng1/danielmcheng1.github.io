@@ -32,7 +32,7 @@ MIN_WORD_LENGTH = 2
 def load_scrabble_corpus():
     scrabble_corpus= []
     #os.pardir to go back up a level
-    with open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'FreeScrabbleDictionary_twl06.txt'), newline = '') as raw_corpus:
+    with open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'Google10000.txt'), newline = '') as raw_corpus:
         for word in csv.reader(raw_corpus):
             cleaned_word = ''.join(word).upper()
             if len(cleaned_word) >= MIN_WORD_LENGTH: #this excludes 'A' and 'I'...for now...TBD
