@@ -11,6 +11,7 @@ SCRABBLE_APPRENTICE_DATA = {}
 
 @app.route('/',methods=['GET','POST'])
 def play_game():
+    print('#######' + request.sid)
     return render_template('game.html', data = {'key1': 1, 'key2': 2, 'key3': 4})
 
 
