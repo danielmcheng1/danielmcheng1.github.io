@@ -53,9 +53,6 @@ DATA STRUCTURES
  */
 
 
- /*socket connection*/
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-
 
 var sourceTile;
 var sourceCell;
@@ -67,18 +64,23 @@ $("#playMoveHuman").addClass("buttonClicked");
 $("#exchangeTilesHuman").addClass("buttonClicked");
 $("#passHuman").addClass("buttonClicked");
  
-function postData() {
+function postData(data) {
     return $.ajax({
-            type: 'POST',
-            url: $SCRIPT_ROOT + '/_add_numbers', //window.location.href,
-            data: JSON.stringify({a: 1}),
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8'
+        type: 'POST',
+        url: $SCRIPT_ROOT + '/moveDoneHuman', //window.location.href,
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8'
     });
 };
+
+$("#startGame").click (function(event) {
+    postData({"var1": 1, "var2": 2.2}).done(handleData);
+})
+
 function handleData(data) {
-        playBackgroundMusic();
     alert('Received from server: ' + data);
+    playBackgroundMusic();
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
@@ -95,7 +97,8 @@ function handleData(data) {
         //enter key or mouse click 
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
-                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
+                //socket.emit('moveDoneHuman', {"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
+                postData({"last_move": {"action": "Try Placing Tiles", "player": "Human", "detail": placedTilesHuman}});
                 $(this).addClass("buttonClicked");
             };
         };
@@ -114,7 +117,8 @@ function handleData(data) {
                 }).filter(function(index, elem) {
                     return elem != "";
                 }).toArray();
-                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
+                //socket.emit('moveDoneHuman', {"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
+                postData({"last_move": {"action": "Try Exchanging Tiles", "player": "Human", "detail": toExchange}});
                 $(this).addClass("buttonClicked");
             };
         };
@@ -125,7 +129,8 @@ function handleData(data) {
         //enter key or mouse click 
         if (event.which === 13 || event.type === 'click') {
             if (!$(this).hasClass("buttonClicked")) {
-                socket.emit('moveDoneHuman', {"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}});
+                //socket.emit('moveDoneHuman', {"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}});
+                postData({"last_move": {"action": "Try Passing", "player": "Human", "detail": ""}});
                 $(this).addClass("buttonClicked");                    
             };            
         };
@@ -206,21 +211,6 @@ function handleData(data) {
         } 
     });
 };
-$("#startGame").click (function(event) {
-    postData().done(handleData);
-})
-/*
-$("#startGame").click (function(event) {
-    if (!$(this).hasClass("buttonClicked")) {
-        playBackgroundMusic();
-        socket.emit('moveDoneHuman', {});  
-        $(this).addClass("buttonClicked");
-    };
-});
-*/
-socket.on('moveDoneComputer', function(data) {
-});
-
 function parseIntoRowCol(id) {
     var regexResult = /.*_([0-9]+)_([0-9]+)/.exec(id);
     var rv;
@@ -399,3 +389,18 @@ function playBackgroundMusic() {
         });
     };
 };
+
+
+/*
+var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+$("#startGame").click (function(event) {
+    if (!$(this).hasClass("buttonClicked")) {
+        playBackgroundMusic();
+        socket.emit('moveDoneHuman', {});  
+        $(this).addClass("buttonClicked");
+    };
+});
+socket.on('moveDoneComputer', function(data) {
+});
+*/
