@@ -356,6 +356,7 @@ class board:
     #https://pypi.python.org/pypi/termcolor
     #http://stackoverflow.com/questions/22104920/how-do-i-print-a-grid-from-a-list-of-lists-with-numbered-rows-and-columns
     #0:02d to pad with zero, if col else "  " for ignoring 0
+    '''
     def print_board(self):  
         labels_to_print = [0, 3, 7, 11, 14]   
         print()
@@ -368,7 +369,7 @@ class board:
                 (cell_cleaned, cell_color) = self.print_board_color_cleaner(cell)
                 print(termcolor.colored(cell_cleaned, cell_color), end="|")
             print("")
-
+    '''
         
     def print_board_color_cleaner(self, cell):
         if cell.isalpha():

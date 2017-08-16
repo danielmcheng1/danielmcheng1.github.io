@@ -1,20 +1,36 @@
 
-from flask import Flask, render_template, request
-from flask_socketio import SocketIO, emit, send
+from flask import Flask, render_template, request, jsonify
+#from flask_socketio import SocketIO, emit, send
 
 import sys 
 import scrabble_apprentice 
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+#socketio = SocketIO(app)
 SCRABBLE_APPRENTICE_DATA = {}
 
 @app.route('/',methods=['GET','POST'])
-def index():
-    return render_template('index.html')
+def play_game():
+    return render_template('game.html', data = {'key1': 1, 'key2': 2, 'key3': 4})
 
 
-@socketio.on('moveDoneHuman')
+@app.route('/_add_numbers',methods=['GET','POST'])    
+def add_numbers():
+    if request.args:
+        print('Received args {0}'.format(request.args), file=sys.stderr)
+    if request.json:
+        print('Received json {0}'.format(request.json), file=sys.stderr)
+    
+    #a = request.args.get('a', 0, type=int)
+    #a = request.args.get('keyA')
+    #b = request.args.get('keyB') + request.args.get('junk')
+    return jsonify(result=1.23)
+    
+#def index():
+#    return render_template('index.html')
+
+
+#@socketio.on('moveDoneHuman')
 def process_human_move(data):
     #print("Received human move", file = sys.stderr)
     print("Received request {0}, {1}".format(request, request.sid))
@@ -50,5 +66,5 @@ def process_human_move(data):
     
 
 if __name__ == '__main__':
-    #app.run()
-    socketio.run(app)
+    app.run()
+    #socketio.run(app)

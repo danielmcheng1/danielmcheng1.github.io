@@ -51,8 +51,8 @@ DATA STRUCTURES
     //bonus text not centered 
     '''
  */
- 
- 
+
+
  /*socket connection*/
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 
@@ -66,7 +66,23 @@ var placedTilesHuman;
 $("#playMoveHuman").addClass("buttonClicked");
 $("#exchangeTilesHuman").addClass("buttonClicked");
 $("#passHuman").addClass("buttonClicked");
-
+ 
+function postData() {
+    return $.ajax({
+            type: 'POST',
+            url: $SCRIPT_ROOT + '/_add_numbers', //window.location.href,
+            data: JSON.stringify({a: 1}),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+    });
+};
+function handleData(data) {
+    alert('Received from server: ' + data);
+};
+$("#startGame").click (function(event) {
+    postData().done(handleData);
+})
+/*
 $("#startGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         playBackgroundMusic();
@@ -74,7 +90,7 @@ $("#startGame").click (function(event) {
         $(this).addClass("buttonClicked");
     };
 });
-
+*/
 socket.on('moveDoneComputer', function(data) {
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
