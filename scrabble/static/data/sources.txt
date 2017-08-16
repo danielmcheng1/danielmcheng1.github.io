@@ -4,3 +4,6 @@ https://www.wordgamedictionary.com/twl06/download/twl06.txt
 Google10000
 https://github.com/first20hours/google-10000-english/blob/master/google-10000-english.txt
 
+Top50000
+http://www.mieliestronk.com/corncob_caps.txt
+

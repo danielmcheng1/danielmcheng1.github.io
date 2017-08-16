@@ -1281,8 +1281,8 @@ class game_play:
             player.print_player_state()
           
 if __name__ == "__main__":
-    (scrabble_score_dict, scrabble_freq_dict, scrabble_bag, scrabble_corpus) = load_all()
-    scrabble_apprentice_gaddag.write_gaddags_by_letter(scrabble_corpus)
+    scrabble_corpus = load_scrabble_corpus()
+    scrabble_apprentice_gaddag.write_gaddag_full(scrabble_corpus)
 
     
     

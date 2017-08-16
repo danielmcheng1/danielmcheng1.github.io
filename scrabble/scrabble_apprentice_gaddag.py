@@ -18,7 +18,6 @@ def read_gaddag_by_letter(letter):
     input_file = open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'gaddag_' + letter + '.txt'), 'rb')
     return pickle.load(input_file)
 
-    
 def write_gaddag_full(scrabble_corpus):
     output_file = open(os.path.join(os.path.dirname( __file__ ), 'static', 'data', 'gaddag_full.txt'), 'wb')
     scrabble_gaddag = gaddag(scrabble_corpus, output_file)
