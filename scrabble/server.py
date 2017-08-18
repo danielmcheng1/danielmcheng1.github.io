@@ -15,7 +15,7 @@ login_manager.init_app(app)
 
 class User(flask_login.UserMixin): 
     pass 
-
+    
 @login_manager.user_loader 
 def user_loader(username):
     print('entering user loader with username: ' + str(username))
@@ -37,20 +37,12 @@ def request_loader(request):
     
     user.is_authenticated = request.form['password'] == users[username]['password']
     return user 
-    
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     print('entering login function') 
     if flask.request.method == 'GET':
-        return flask.render_template('login.html')
-        return '''
-            <form action='login' method='POST'>
-                <input type='text' name='username' id='username' placeholder='username'></input>
-                <input type='password' name='password' id='password' placeholder='password'></input>
-                <input type='submit' name='submit'></input>
-            </form>
-            '''    
+        return flask.render_template('login.html')  
     print('getting data from form')
     username = flask.request.form['username']
     password = flask.request.form['password']
@@ -78,7 +70,7 @@ def unauthorized_handler():
 @flask_login.login_required
 def play_game():
     print('Logged in as: ' + flask_login.current_user.id)
-    return flask.render_template('game.html', data = {'key1': 1, 'key2': 2, 'key3': 4})
+    return flask.render_template('game.html')
 
 
 SCRABBLE_APPRENTICE_DATA = {}
@@ -90,7 +82,7 @@ def process_human_move():
     if flask.request.json:
         print('Received json {0}'.format(flask.request.json), file=sys.stderr)
     
-    session_id = 'test' # request.sid
+    session_id = flask_login.current_user.id
     session_data = SCRABBLE_APPRENTICE_DATA.setdefault(session_id, {})
     
     #reset the front-end wrapper and save the last move for the back end
