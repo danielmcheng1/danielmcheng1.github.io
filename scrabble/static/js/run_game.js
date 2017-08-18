@@ -74,14 +74,18 @@ function postData(data) {
     });
 };
 
-$("#startGame").click (function(event) {
+$("#restartGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         $(this).addClass("buttonClicked");
-        playBackgroundMusic();
         postData({}).done(handleData); 
     };
-})
+});
 
+$(document).ready(function() {
+    playBackgroundMusic();
+    postData({}).done(handleData); 
+});
+    
 function handleData(data) {
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
@@ -92,6 +96,9 @@ function handleData(data) {
     var board = data["board"];
     
     var soundEffectsDOM = document.createElement("audio"); //for tile placement, bag shuffling, etc.
+    
+    //once data has refreshed, allow player to restart game
+    $("#restartGame").removeClass("buttonClicked");
     
     //once data has refreshed, allow player to send move 
     $("#playMoveHuman").removeClass("buttonClicked");
@@ -396,7 +403,7 @@ function playBackgroundMusic() {
 /*
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-$("#startGame").click (function(event) {
+$("#restartGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         playBackgroundMusic();
         socket.emit('moveDoneHuman', {});  

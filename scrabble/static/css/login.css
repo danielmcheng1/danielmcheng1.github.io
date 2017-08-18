@@ -19,7 +19,9 @@ background-color: #FFF;
 padding: 20px;
 border-radius: 5px
 }
- 
+.login-failure-message{
+color:red;
+}
 .app-title {
 text-align: center;
 color: #777;
