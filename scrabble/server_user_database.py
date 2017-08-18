@@ -1,2 +1,2 @@
 # Our mock database.
-users = {'root': {'pw': 'root'}}
+users = {'root': {'password': 'root'}}

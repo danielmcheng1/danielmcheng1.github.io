@@ -18,7 +18,7 @@ class User(flask_login.UserMixin):
 
 @login_manager.user_loader 
 def user_loader(username):
-    print('entering user loader')
+    print('entering user loader with username: ' + str(username))
     if username not in server_user_database.users:
         return 
     user = User() 
@@ -27,35 +27,38 @@ def user_loader(username):
 
 @login_manager.request_loader 
 def request_loader(request):
-    print('entering request loader')
+    print('entering request loader with request: ' + str(request))
     username = request.form.get('username')
+    print('username: ' + username  if username is not None else '')
     if username not in server_user_database.users:
         return 
     user = User()
     user.id = email 
     
-    user.is_authenticated = request.form['pw'] == users[username]['pw']
+    user.is_authenticated = request.form['password'] == users[username]['password']
     return user 
     
-SCRABBLE_APPRENTICE_DATA = {}
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    print('entering login function') 
     if flask.request.method == 'GET':
+        return flask.render_template('login.html')
         return '''
             <form action='login' method='POST'>
                 <input type='text' name='username' id='username' placeholder='username'></input>
-                <input type='password' name='pw' id='pw' placeholder='password'></input>
+                <input type='password' name='password' id='password' placeholder='password'></input>
                 <input type='submit' name='submit'></input>
             </form>
             '''    
+    print('getting data from form')
     username = flask.request.form['username']
-    pw = flask.request.form['pw']
+    password = flask.request.form['password']
     print('checking')
     if username not in server_user_database.users:
         print('created new user')
-        server_user_database.users[username] = {'pw': pw}
-    if pw == server_user_database.users[username]['pw']:
+        server_user_database.users[username] = {'password': password}
+    if password == server_user_database.users[username]['password']:
         print('validated!')
         user = User() 
         user.id = username 
@@ -71,13 +74,14 @@ def login():
 def unauthorized_handler():
     return 'Unauthorized. Please sign in'
         
-@app.route('/protected',methods=['GET','POST'])
+@app.route('/game',methods=['GET','POST'])
 @flask_login.login_required
 def play_game():
     print('Logged in as: ' + flask_login.current_user.id)
     return flask.render_template('game.html', data = {'key1': 1, 'key2': 2, 'key3': 4})
 
 
+SCRABBLE_APPRENTICE_DATA = {}
 @app.route('/moveDoneHuman',methods=['GET','POST'])    
 def process_human_move():
     print('Logged in as: ' + flask_login.current_user.id)
