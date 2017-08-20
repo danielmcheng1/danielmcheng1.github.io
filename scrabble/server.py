@@ -107,6 +107,7 @@ def process_human_move():
     #a = request.args.get('a', 0, type=int)
     #a = request.args.get('keyA')
     #b = request.args.get('keyB') + request.args.get('junk')
+    print("Sending back:\n" + str(scrabble_game_play_wrapper))
     return flask.jsonify(scrabble_game_play_wrapper)
     
     

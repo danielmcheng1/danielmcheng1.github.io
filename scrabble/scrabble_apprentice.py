@@ -186,6 +186,7 @@ def wrapper_play_next_move(data):
     
     #in case no data is passed through (e.g. relogging back into a session) 
     if data["scrabble_game_play_wrapper"]["last_move"] == {}:
+        last_move_to_send = {"action": "Continuing Game from Previous Session", "player": "", "detail": ""}
         return wrapper_save_game_play(scrabble_game_play, last_move_to_send)
     
     #make human move    
@@ -483,7 +484,7 @@ class board:
                     raise ValueError('Please place only letters on the board')
                 if self.is_scrabble_tile(curr_row, curr_col) and self.board[curr_row][curr_col] != to_place:
                     (self.board[start_row][:], self.board[:][start_col]) = (saved_row, saved_col) 
-                    raise ValueError('Attempted to overlap existing tiles. Word will not be placed')
+                    raise ValueError('Your tile {0} overlaps existing tiles on the board (perhaps from a concurrent session?)'.format(to_place))
                 #remove from rack and place if this isn't an existing tile on the board
                 if self.board[curr_row][curr_col] != to_place:
                     self.board[curr_row][curr_col] = to_place
@@ -970,7 +971,7 @@ class board:
                         to_place = word[curr_row - start_row + curr_col - start_col] #the extra blank padding only appears when printing
                         if self.is_scrabble_tile(curr_row, curr_col):
                             if self.board[curr_row][curr_col] != to_place:
-                                raise ValueError("You are trying to overlap existing tiles at " + str((curr_row, curr_col)))
+                                raise ValueError('Your tile {0} overlaps existing tiles on the board (perhaps from a concurrent session?)'.format(to_place))
                             else:
                                 hooks_onto_tile = True
                         else:
@@ -982,9 +983,9 @@ class board:
                                 hooks_onto_tile = True
                 #check if we connected to a tile at some point in the word
                 if not hooks_onto_tile:
-                    raise ValueError("Your word must hook onto an existing tile")
+                    raise ValueError("Your tiles must be placed adjacent to at least one tile on the board")
         else:
-            raise ValueError("{0} is not a valid word in the dictionary".format("".join(word)))
+            raise ValueError("{0} is not a valid word in the TWL06 Scrabble dictionary".format("".join(word)))
                         
         #score and place word
         human_score = self.calc_word_score(start_row, start_col, direction, word, valid_crossword_score_dict)

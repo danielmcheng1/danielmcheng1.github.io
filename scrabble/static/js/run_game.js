@@ -86,7 +86,9 @@ $(document).ready(function() {
     postData({}).done(handleData); 
 });
     
+    
 function handleData(data) {
+    console.log(data);
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
@@ -367,7 +369,7 @@ function refreshLastMove(data) {
         var lastMove = data["lastMove"]
         if (lastMove!= undefined) {
             var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
-            return lastMove["player"] + " " + lastMove["action"].toLowerCase() + detail;
+            return lastMove["player"] + " " + lastMove["action"] + detail;
         }
         else {
             return "";
