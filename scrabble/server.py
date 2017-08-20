@@ -65,11 +65,11 @@ def login():
         #return flask.redirect(flask.url_for('process_human_move'))
    
     print('failed')
-    return flask.redirect(flask.url_for('login'), login_failure_message = "Incorrect password. Try again (or create a new username).")
+    return flask.render_template("login.html", login_failure_message = "Incorrect password. Try again (or create a new username).")
 
 @login_manager.unauthorized_handler 
 def unauthorized_handler():
-    return flask.redirect(flask.url_for('login'), login_failure_message = "Please sign in (or create a new username).")
+    return flask.render_template("login.html", login_failure_message = "Please sign in (or create a new username).")
         
 @app.route('/game',methods=['GET','POST'])
 @flask_login.login_required
