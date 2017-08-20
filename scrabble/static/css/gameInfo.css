@@ -1,6 +1,15 @@
-
+.topNavButtons {
+    background-color: light gray;
+    color: black;
+    padding: 6px;
+    font-size: 15px;
+    border: black;
+	border-width: 1px;
+	border-style: none;
+    cursor: pointer;
+}
 #gameInfo {
-    display: block; /* Hidden by default */
+    display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 10%;
@@ -58,7 +67,6 @@
 
 .wordsPlayedRowTotal {
     font-weight: bold;
-    /*text-decoration: underline;*/
 }
 .wordsPlayedRowEven {
     background-color: #ffffff;
@@ -76,21 +84,11 @@
     border: none;
 }
 .wordsPlayedCell {
-    /*
-    border:solid 1px;
-    border-color: #dbdbdb;
-    */
     padding-bottom:6px;
     padding-top:6px;
     padding-left: 6px;
     padding-right:18px;
     vertical-align:center;
     border-radius:5px;
-    /*
-    border: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: gray;
-    */
     
 }
