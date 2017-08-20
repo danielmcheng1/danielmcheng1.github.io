@@ -15,10 +15,6 @@
     <link rel=stylesheet href="/static/css/board.css">
     <link rel=stylesheet href="../static/css/gameInfo.css">
 </head>
-<script type=text/javascript>
-  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    console.log('top', $SCRIPT_ROOT);
-</script>
 
 <body>
     <div id=rackComputer>
@@ -36,6 +32,7 @@
         <button id=passHuman>Pass</button>
     </div>
     
+    <button id=showGameInfo>Game Info</button>
     <div id=gameInfo>
         <div id=gameEndReason></div>
         <div id=lastMove></div>
@@ -46,13 +43,14 @@
             </table>
         </div>
         
-        <div id=gameInfo class="modal"><span class="close">X</span>
+        <div id=gameInfo>
+            <span id="closeGameInfo">X</span>
             <br>
             <div id=lastMove>
                 &nbsp;&nbsp;&nbsp;You made an illeagl movea
             </div><br>
             <div id=tilesLeft>
-                &nbsp;&nbsp;&nbsp;8 tiles left
+                &nbsp;&nbsp;&nbsp;8 tiles left in the Scrabble bag
             </div>
             <div class="lineDivider"></div>
             <table id="wordsPlayedTable">
@@ -103,3 +101,33 @@
     
 </body>
 </html>
+<script type=text/javascript>
+    // Get the modal
+    window.onload = function() {
+        var gameInfo = document.getElementById('gameInfo');
+        console.log(gameInfo);
+
+        // Get the button that opens the modal
+        var showGameInfo = document.getElementById("showGameInfo");
+
+        // Get the <span> element that closes the modal
+        var close = document.getElementById("closeGameInfo");
+        
+        // When the user clicks on the button, open the modal 
+        showGameInfo.onclick = function() {
+            gameInfo.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        close.onclick = function() {
+            gameInfo.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target != gameInfo && event.target != showGameInfo) {
+                gameInfo.style.display = "none";
+            }
+        }
+    }
+</script>
