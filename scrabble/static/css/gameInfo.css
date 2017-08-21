@@ -43,7 +43,7 @@
     top: 10%;
     left: 10%;
     font-weight:bold;
-    margin-left:5px;
+    margin-left:10px;
 }
 .lineDivider {
     display: block;
@@ -57,7 +57,7 @@
     font-size: 15px;
     color: red;
     font-weight:bold;
-    margin-left:5px;
+    margin-left:10px;
 }
 
 #wordsPlayedTable {
@@ -69,6 +69,7 @@
 
 .wordsPlayedRowTotal {
     font-weight: bold;
+    font-size: 17px;
 }
 .wordsPlayedRow {
     background-color: #f5f5f5;

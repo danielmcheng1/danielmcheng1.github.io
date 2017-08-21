@@ -114,7 +114,7 @@ def load_scrabble_bag(scrabble_freq_dict):
     for letter in scrabble_freq_dict.keys():
         scrabble_bag = scrabble_bag + [letter] * scrabble_freq_dict[letter]
     random.shuffle(scrabble_bag)
-    return scrabble_bag
+    return scrabble_bag[0:15]
 
 def load_all():
     scrabble_corpus = load_scrabble_corpus()
@@ -985,7 +985,10 @@ class board:
                 if not hooks_onto_tile:
                     raise ValueError("Your tiles must be placed adjacent to at least one tile on the board")
         else:
-            raise ValueError("{0} is not a valid word in the TWL06 Scrabble dictionary".format("".join(word)))
+            if len(word) < MIN_WORD_LENGTH:
+                raise ValueError("{0} is not a valid word. Words must be at least {1} characters long".format("".join(word), MIN_WORD_LENGTH))
+            else:
+                raise ValueError("{0} is not a valid word in the TWL06 Scrabble dictionary".format("".join(word)))
                         
         #score and place word
         human_score = self.calc_word_score(start_row, start_col, direction, word, valid_crossword_score_dict)
@@ -1005,13 +1008,13 @@ class board:
     def convert_placed_tiles_to_full_placement(self, placed_tiles):
         (filled_rows, filled_cols) = self.find_filled_rows_and_cols(placed_tiles)
         if len(filled_rows) == 0:
-            raise ValueError("You must place at least one tile! If you cannot move, exchange tiles or pass your turn")
+            raise ValueError("You must place at least one tile. If you cannot move: Exchange tiles or simply pass")
         elif len(filled_rows) == 1:
             direction = HORIZONTAL 
         elif len(filled_cols) == 1: 
             direction = VERTICAL 
         else:
-            raise ValueError("You can only place in one row or column!!!")        
+            raise ValueError("You can only place in one row or column")        
         #the leftmost / uppermost point of adjacency 
         anchor_row = min(filled_rows)
         anchor_col = min(filled_cols)        
@@ -1043,7 +1046,7 @@ class board:
             
         #check that there aren't extra tiles placed beyond the end of the word (since we walked down until finding an empty spot 
         if (max(filled_rows) > start_row + len(word) - 1) or (max(filled_cols) > start_col + len(word) - 1):
-            raise ValueError("All of your placed tiles must be connected!") 
+            raise ValueError("All tiles must be connected to each other") 
             
         return {"start_row": start_row, "start_col": start_col, "direction": direction, "word": word}
         
@@ -1162,7 +1165,7 @@ class game_play:
         
         num_tiles_left = len(self.board.bag) 
         if num_tiles_to_draw > num_tiles_left and tiles_to_exchange:
-            raise ValueError("Not enough tiles left--you can only exchange up to {0} tiles".format(num_tiles_left))
+            raise ValueError("Not enough tiles left in the bag for you to exchange {0} tiles".format(num_tiles_to_draw))
         num_tiles_to_draw = min(num_tiles_to_draw, num_tiles_left) 
         
         #not true in game end conditions 
@@ -1181,7 +1184,7 @@ class game_play:
                     new_bag.append(tile)
                     print(tile + " added back to bag")
                 except:
-                    print("Attempted to exchange tiles that are not in your rack. Don't cheat!")
+                    print("Attempted to exchange tiles that are not in your rack. Don't cheat")
                     return
             player.rack = new_rack[:]
             self.board.bag = new_bag[:]

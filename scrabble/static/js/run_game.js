@@ -77,7 +77,7 @@ function postData(data) {
 $("#restartGame").click (function(event) {
     if (!$(this).hasClass("buttonClicked")) {
         $(this).addClass("buttonClicked");
-        postData({}).done(handleData); 
+        postData({"Restart Game": "Y"}).done(handleData); 
     };
 });
 
@@ -343,24 +343,22 @@ function refreshBoard(data) {
     $("#board").empty();
     $("#board").append(table_whole);
 };
-/*
-        var gameEndReason = gameInfo["gameEndReason"] 
-        if (gameEndReason != "") {
-            $("#playMoveHuman").addClass("buttonClicked");
-            $("#exchangeTilesHuman").addClass("buttonClicked");
-            $("#passHuman").addClass("buttonClicked");
-            $("#gameEndReason").text(gameEndReason);
-        };
-        */
+
 function refreshGameInfo(data) {
-    var lastMove = data["lastMove"]
-    var gameInfo = data["gameInfo"];          
+    var lastMove = data["lastMove"];        
+    var lastMoveDetail = parseLastMove(lastMove);
+    var gameInfo = data["gameInfo"];      
+    var gameEndReason = gameInfo["gameEndReason"];
+    var gameInfoDiv = document.getElementById("gameInfo");  
+    
     if (gameInfo != undefined) {
-        if (lastMove != undefined) {
-            $("#lastMove").text(parseLastMove(lastMove));
-        }
+        //show last move information = exception reason from Python if human made an illegal play
+        $("#lastMove").text(lastMoveDetail);
+        
+        //show tiles left in bag
         $("#tilesLeft").text(parseTilesLeft(gameInfo["tilesLeft"]));
                 
+        //build the table of words played x score
         var table_whole = '' +
             '<tr class="wordsPlayedHeader">' + 
                 '<td class="wordsPlayedHeaderCell">' + 
@@ -407,11 +405,46 @@ function refreshGameInfo(data) {
                             '</tr>';
             table_whole = table_whole + table_row;
         };
+        var table_row = '<tr class="wordsPlayedRowTotal">' +
+                            '<td class="wordsPlayedCell">' +
+                                // total row
+                            '</td>' +
+                            '<td class="wordsPlayedCell">' +
+                                gameInfo["scoreHuman"] +
+                            '</td>' +
+                            '<td class="wordsPlayedCell">' +
+                                // dummy column
+                            '</td>' +
+                            '<td class="wordsPlayedCell">' +
+                                // total row
+                            '</td>' +
+                            '<td class="wordsPlayedCell">' +
+                                gameInfo["scoreComputer"] +
+                            '</td>' + 
+                        '</tr>';
+        table_whole = table_whole + table_row;
+        
+            
         $("#wordsPlayedTable").empty();
         $("#wordsPlayedTable").append(table_whole);
-        
     };
+    
+    //decide whether to show this game info hover box
+    if (lastMoveDetail != "" || gameEndReason != "") {
+        gameInfoDiv.style.display = "block";
+    }
+    else {
+        gameInfoDiv.style.display = "none";
+    }
+    
+    if (gameEndReason != "") {
+        $("#playMoveHuman").addClass("buttonClicked");
+        $("#exchangeTilesHuman").addClass("buttonClicked");
+        $("#passHuman").addClass("buttonClicked");
+        $("#lastMove").text(gameEndReason);
+    };    
 };
+
 
 function parseWord(wordsPlayed, index) {
     if (wordsPlayed[index] == undefined) {
@@ -428,32 +461,22 @@ function parseScore(wordsPlayed, index) {
 function parseTilesLeft(tilesLeft) {
     if (tilesLeft == undefined) 
         return "";
-    return tilesLeft + " tiles left in the bag";
+    if (tilesLeft == 1) 
+        tileNoun = "tile";
+    else 
+        tileNoun = "tiles";
+    return tilesLeft + " " + tileNoun + " left in the bag";
 }
 function parseLastMove(lastMove) {
     if (lastMove!= undefined) {
-        var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
-        return lastMove["player"] + " " + lastMove["action"] + detail;
-    }
-    else {
-        return "";
+        //var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
+        if (lastMove["action"].toUpperCase() == "MADE ILLEGAL MOVE") {
+            return "Illegal Move! " + lastMove["detail"];
+        };
     };
+    return "";
 };
 
-function refreshWordsPlayed(id, wordsPlayed, player) {
-    $("#" + id).empty();
-    if (wordsPlayed.length == 0) 
-        return;
-    var table_whole = "<table>";
-    for (var i = 0; i < wordsPlayed.length; i++) {
-        var table_row = "<tr>";
-        var table_cells = "<td>    " + wordsPlayed[i]["word"].join("") + "</td><td>" + wordsPlayed[i]["score"] + "</td>";
-        table_row = table_row + table_cells;
-        table_whole = table_whole + table_row;
-    };
-    table_whole = table_whole + "</table>";
-    $("#" + id).append("Words Played by " + player + table_whole);
-};
 
 
 function playSoundTileMoved(audioDOM) {    
@@ -480,17 +503,3 @@ function playBackgroundMusic() {
     };
 };
 
-
-/*
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-$("#restartGame").click (function(event) {
-    if (!$(this).hasClass("buttonClicked")) {
-        playBackgroundMusic();
-        socket.emit('moveDoneHuman', {});  
-        $(this).addClass("buttonClicked");
-    };
-});
-socket.on('moveDoneComputer', function(data) {
-});
-*/

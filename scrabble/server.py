@@ -65,11 +65,11 @@ def login():
         #return flask.redirect(flask.url_for('process_human_move'))
    
     print('failed')
-    return flask.render_template("login.html", login_failure_message = "Incorrect password. Try again (or create a new username).")
+    return flask.render_template("login.html", login_failure_message = "Incorrect password. Try again (or create a new username)")
 
 @login_manager.unauthorized_handler 
 def unauthorized_handler():
-    return flask.render_template("login.html", login_failure_message = "Please sign in (or create a new username).")
+    return flask.render_template("login.html", login_failure_message = "Please sign in (or create a new username)")
         
 @app.route('/game',methods=['GET','POST'])
 @flask_login.login_required
@@ -82,12 +82,16 @@ SCRABBLE_APPRENTICE_DATA = {}
 @app.route('/moveDoneHuman',methods=['GET','POST'])    
 def process_human_move():
     print('Logged in as: ' + flask_login.current_user.id)
-    if flask.request.json:
-        print('Received json {0}'.format(flask.request.json), file=sys.stderr)
     
     session_id = flask_login.current_user.id
-    session_data = SCRABBLE_APPRENTICE_DATA.setdefault(session_id, {})
     user_data = flask.request.json if flask.request.json is not None else {}
+    print('Received json {0}'.format(user_data), file=sys.stderr)
+    
+    #TBD temporary override--if restarting, we have to force a reset  
+    if user_data.get("Restart Game") == "Y":
+        SCRABBLE_APPRENTICE_DATA[session_id] = {}   
+    #pull data for this session, or create a new session id key
+    session_data = SCRABBLE_APPRENTICE_DATA.setdefault(session_id, {})
     
     #reset the front-end wrapper and save the last move for the back end
     session_data["scrabble_game_play_wrapper"] = {} 
@@ -95,23 +99,13 @@ def process_human_move():
     #save the last move 
     session_data["scrabble_game_play_wrapper"]["last_move"] = user_data.get("last_move", {})
     
-    
     #now process on the back end
     SCRABBLE_APPRENTICE_DATA[session_id] = scrabble_apprentice.wrapper_play_next_move(session_data)
-    #print("\After calling scrabble_apprentice module:")
-    #print(session_data)
-    #return the wrapped play object back to the front end
     scrabble_game_play_wrapper = SCRABBLE_APPRENTICE_DATA[session_id]["scrabble_game_play_wrapper"]
-    #emit('moveDoneComputer', scrabble_game_play_wrapper) 
   
-    #a = request.args.get('a', 0, type=int)
-    #a = request.args.get('keyA')
-    #b = request.args.get('keyB') + request.args.get('junk')
     print("Sending back:\n" + str(scrabble_game_play_wrapper))
     return flask.jsonify(scrabble_game_play_wrapper)
-    
-    
-
+  
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
     #socketio.run(app)
