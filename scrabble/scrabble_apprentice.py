@@ -1010,7 +1010,7 @@ class board:
     def convert_placed_tiles_to_full_placement(self, placed_tiles):
         (filled_rows, filled_cols) = self.find_filled_rows_and_cols(placed_tiles)
         if len(filled_rows) == 0:
-            raise ValueError("You must place at least one tile. If you cannot move: Exchange tiles or simply pass")
+            raise ValueError("You must place at least one tile. If you cannot move, exchange tiles or simply pass")
         elif len(filled_rows) == 1:
             direction = HORIZONTAL 
         elif len(filled_cols) == 1: 
