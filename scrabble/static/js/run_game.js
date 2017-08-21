@@ -93,7 +93,6 @@ function handleData(data) {
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
     refreshRack(data, 'Computer');
-    refreshLastMove(data);
     refreshGameInfo(data);
     var board = data["board"];
     
@@ -221,6 +220,22 @@ function handleData(data) {
             };
         } 
     });
+    
+    //game info toggle 
+    var gameInfo = document.getElementById('gameInfo');    
+    var showGameInfo = document.getElementById("showGameInfo");
+    var close = document.getElementById("closeGameInfo");
+    showGameInfo.onclick = function() {
+        gameInfo.style.display = "block";
+    }
+    close.onclick = function() {
+        gameInfo.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target != gameInfo && event.target != showGameInfo) {
+            gameInfo.style.display = "none";
+        }
+    }
 };
 function parseIntoRowCol(id) {
     var regexResult = /.*_([0-9]+)_([0-9]+)/.exec(id);
@@ -328,18 +343,7 @@ function refreshBoard(data) {
     $("#board").empty();
     $("#board").append(table_whole);
 };
-
-function refreshGameInfo(data) {
-    var gameInfo = data["gameInfo"];          
-    if (gameInfo != undefined) {
-        $("#scoreComputer").text("Computer Score: " + gameInfo["scoreComputer"] + " points");
-        $("#scoreHuman").text("Human Score: " + gameInfo["scoreHuman"] + " points");
-        $("#tilesLeft").text("Tiles Left: " + gameInfo["tilesLeft"] + " tiles");
-        
-        refreshWordsPlayed("wordsPlayedComputer", gameInfo["wordsPlayedComputer"], "Computer");
-        refreshWordsPlayed("wordsPlayedHuman", gameInfo["wordsPlayedHuman"], "Human");
-        
-        console.log(gameInfo)
+/*
         var gameEndReason = gameInfo["gameEndReason"] 
         if (gameEndReason != "") {
             $("#playMoveHuman").addClass("buttonClicked");
@@ -347,8 +351,95 @@ function refreshGameInfo(data) {
             $("#passHuman").addClass("buttonClicked");
             $("#gameEndReason").text(gameEndReason);
         };
+        */
+function refreshGameInfo(data) {
+    var lastMove = data["lastMove"]
+    var gameInfo = data["gameInfo"];          
+    if (gameInfo != undefined) {
+        if (lastMove != undefined) {
+            $("#lastMove").text(parseLastMove(lastMove));
+        }
+        $("#tilesLeft").text(parseTilesLeft(gameInfo["tilesLeft"]));
+                
+        var table_whole = '' +
+            '<tr class="wordsPlayedHeader">' + 
+                '<td class="wordsPlayedHeaderCell">' + 
+                'Your Move' + 
+                '</td>' + 
+                '<td class="wordsPlayedHeaderCell">' + 
+                'Score' + 
+                '</td>' + 
+                '<td class="wordsPlayedHeaderCell">' + 
+                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' +      
+                '</td>' + 
+                '<td class="wordsPlayedHeaderCell">' + 
+                'Computer Move' + 
+                '</td>' + 
+                '<td class="wordsPlayedHeaderCell">' + 
+                'Score' + 
+                '</td>' + 
+            '</tr>';
+        ;
+            
+        var wordsPlayedComputer = gameInfo["wordsPlayedComputer"];
+        var wordsPlayedHuman = gameInfo["wordsPlayedHuman"];
+        for (var i = 0; i < Math.max(wordsPlayedComputer.length, wordsPlayedHuman.length); i++) {
+            var wordHuman = parseWord(wordsPlayedHuman, i);
+            var wordComputer = parseWord(wordsPlayedComputer, i);
+            var scoreHuman = parseScore(wordsPlayedHuman, i);
+            var scoreComputer = parseScore(wordsPlayedComputer, i);
+            var table_row = '<tr class="wordsPlayedRow">' +
+                                '<td class="wordsPlayedCell">' +
+                                    wordHuman +
+                                '</td>' +
+                                '<td class="wordsPlayedCell">' +
+                                    scoreHuman +
+                                '</td>' +
+                                '<td class="wordsPlayedCell">' +
+                                    // dummy column
+                                '</td>' +
+                                '<td class="wordsPlayedCell">' +
+                                    wordComputer +
+                                '</td>' +
+                                '<td class="wordsPlayedCell">' +
+                                    scoreComputer +
+                                '</td>' + 
+                            '</tr>';
+            table_whole = table_whole + table_row;
+        };
+        $("#wordsPlayedTable").empty();
+        $("#wordsPlayedTable").append(table_whole);
+        
     };
 };
+
+function parseWord(wordsPlayed, index) {
+    if (wordsPlayed[index] == undefined) {
+        return "";
+    }
+    return wordsPlayed[index]["word"].join("");
+};
+function parseScore(wordsPlayed, index) {
+    if (wordsPlayed[index] == undefined) {
+        return "";
+    }
+    return wordsPlayed[index]["score"];
+};
+function parseTilesLeft(tilesLeft) {
+    if (tilesLeft == undefined) 
+        return "";
+    return tilesLeft + " tiles left in the bag";
+}
+function parseLastMove(lastMove) {
+    if (lastMove!= undefined) {
+        var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
+        return lastMove["player"] + " " + lastMove["action"] + detail;
+    }
+    else {
+        return "";
+    };
+};
+
 function refreshWordsPlayed(id, wordsPlayed, player) {
     $("#" + id).empty();
     if (wordsPlayed.length == 0) 
@@ -364,18 +455,6 @@ function refreshWordsPlayed(id, wordsPlayed, player) {
     $("#" + id).append("Words Played by " + player + table_whole);
 };
 
-function refreshLastMove(data) {
-    $("#lastMove").text(function () {
-        var lastMove = data["lastMove"]
-        if (lastMove!= undefined) {
-            var detail = lastMove["action"] == "Made Illegal Move"? ": " + lastMove["detail"] : "";
-            return lastMove["player"] + " " + lastMove["action"] + detail;
-        }
-        else {
-            return "";
-        };
-    });
-};
 
 function playSoundTileMoved(audioDOM) {    
     audioDOM.src = "static/sound/click2.mp3";

@@ -9,16 +9,16 @@
     cursor: pointer;
 }
 #gameInfo {
-    display: none; /* Hidden by default */
+    display: hidden; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    left: 10%;
+    left: 5%;
     top: 10%;
-    width: 50%; /* Full width */
+    width: 40%; /* Full width */
     height: 75%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: #FFF8DC;
-    opacity: 0.9;
+    background-color: #FFFFFF; /*#FFF8DC;*/
+    opacity: 0.98;
     border-radius: 10px;
     
 }
@@ -43,6 +43,7 @@
     top: 10%;
     left: 10%;
     font-weight:bold;
+    margin-left:5px;
 }
 .lineDivider {
     display: block;
@@ -56,6 +57,7 @@
     font-size: 15px;
     color: red;
     font-weight:bold;
+    margin-left:5px;
 }
 
 #wordsPlayedTable {
@@ -68,16 +70,9 @@
 .wordsPlayedRowTotal {
     font-weight: bold;
 }
-.wordsPlayedRowEven {
-    background-color: #ffffff;
-}
-.wordsPlayedRowOdd {
+.wordsPlayedRow {
     background-color: #f5f5f5;
 }
-.wordsPlayedRowBlank {
-    height:75px;
-}
-
 
 .wordsPlayedHeaderCell {
     font-weight: bold;

@@ -13,6 +13,7 @@
     <script>window.io    || document.write('<script src="../static/lib/1.3.6.socket.io.min.js"><\x3C/script>');</script>
     
     <link rel=stylesheet href="/static/css/board.css">
+    <link rel=stylesheet href="/static/css/gameInfo.css">
 </head>
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -20,8 +21,10 @@
 </script>
 
 <body>
+
     <div id=rackComputer>
     </div>
+    
     
     <div id=board>
     </div>
@@ -29,28 +32,23 @@
     </div>
     
     <div id=actionsHuman>
-        <button id=restartGame>Restart Game</button>
+        <button id=restartGame>Start Over</button>
         <button id=playMoveHuman>Play Move</button>
         <button id=exchangeTilesHuman>Exchange Tiles</button>
         <button id=passHuman>Pass</button>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <button id=showGameInfo>Game Info</button> 
     </div>
-    
     <div id=gameInfo>
-        <div id=gameEndReason></div>
+        <span id="closeGameInfo">X</span>
+        <br>
         <div id=lastMove></div>
-        <div id=scoreComputer></div>
-        <div id=scoreHuman></div>
+        <br>
         <div id=tilesLeft></div>
-        <div id=wordsPlayedComputer>
-            <table>
-            </table>
-        </div>
-        <div id=wordsPlayedHuman>
-            <table>
-            </table>
-        </div>
-    </div>  
-    
+        <div class="lineDivider"></div>
+        <table id="wordsPlayedTable">
+        </table>
+    </div>
 </body>
 </html>
 
