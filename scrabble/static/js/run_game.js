@@ -237,17 +237,16 @@ function handleData(data) {
     };
     //toggleInstructions 
     var instructions = document.getElementById('instructions');
-    var imageNode = document.createElement('img');
-    imageNode.src = "../static/img/instructions.png";
-    imageNode.alt = "instructions.png";
-    instructions.appendChild(imageNode);
-    instructions.style.display = "block";
+    var showInstructions = document.getElementById('showInstructions');
+    var instructionsImage = document.getElementById('instructionsImage');
+    instructionsImage.src = "../static/img/instructions.png";
+    instructionsImage.alt = "instructions.png";
     window.onclick = function(event) {
         instructions.style.display = "none";
-    }
-    instructions.onclick = function() {
+    };
+    showInstructions.onclick = function() {
         instructions.style.display = "block";
-    }
+    };
 };
 function parseIntoRowCol(id) {
     var regexResult = /.*_([0-9]+)_([0-9]+)/.exec(id);

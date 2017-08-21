@@ -9,7 +9,6 @@
     cursor: pointer;
 }
 #instructions {
-    display: hidden; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 2; /* Sit on top */
     left: 0%;
