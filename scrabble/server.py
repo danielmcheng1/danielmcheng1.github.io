@@ -35,7 +35,7 @@ def request_loader(request):
     user = User()
     user.id = username 
     
-    user.is_authenticated = request.form['password'] == users[username]['password']
+    user.is_authenticated = request.form['password'] == server_user_database.users[username]['password']
     return user 
 
 @app.route('/login', methods=['GET', 'POST'])
