@@ -9,6 +9,7 @@ body {
     font-family: Arial;
     background-color: #3498DB;
     padding: 50px;
+    background-image:url("..\img\instruction_base.png")
 }
 .notes {
     font-style:italic;
@@ -19,7 +20,7 @@ body {
 
 .login {
     margin: 20px auto;
-    width: 300px;
+    width: 400px;
 }
 .login-screen {
     background-color: #FFF;

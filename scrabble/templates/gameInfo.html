@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-    <title>Scrabble Apprentice</title>
+    <title>Scrabble AI</title>
     <meta charset="utf-8"/>
     <!--Local download location
     https://jquery.com/download/ (minified)
@@ -89,35 +89,23 @@
         </table>
     </div>
     
+    <div id=instructions>
+    </div>
 </body>
 </html>
 <script type=text/javascript>
     // Get the modal
     window.onload = function() {
-        var gameInfo = document.getElementById('gameInfo');
-        console.log(gameInfo);
-
-        // Get the button that opens the modal
-        var showGameInfo = document.getElementById("showGameInfo");
-
-        // Get the <span> element that closes the modal
-        var close = document.getElementById("closeGameInfo");
-        
-        // When the user clicks on the button, open the modal 
-        showGameInfo.onclick = function() {
-            gameInfo.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        close.onclick = function() {
-            gameInfo.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target != gameInfo && event.target != showGameInfo) {
-                gameInfo.style.display = "none";
-            }
-        }
+      
+    var gameInfo = document.getElementById('gameInfo');
+        gameInfo.style.display = "none";
+            
+    //toggleInstructions 
+        var instructions = document.getElementById('instructions');
+        var imageNode = document.createElement('img');
+        imageNode.src = "../static/img/instructions.png";
+        imageNode.alt = "instructions.png";
+        instructions.appendChild(imageNode);
+        instructions.style.display = "block";
     }
 </script>

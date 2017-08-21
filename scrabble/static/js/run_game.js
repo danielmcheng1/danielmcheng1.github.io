@@ -234,6 +234,19 @@ function handleData(data) {
         if (event.target != gameInfo && event.target != showGameInfo) {
             gameInfo.style.display = "none";
         }
+    };
+    //toggleInstructions 
+    var instructions = document.getElementById('instructions');
+    var imageNode = document.createElement('img');
+    imageNode.src = "../static/img/instructions.png";
+    imageNode.alt = "instructions.png";
+    instructions.appendChild(imageNode);
+    instructions.style.display = "block";
+    window.onclick = function(event) {
+        instructions.style.display = "none";
+    }
+    instructions.onclick = function() {
+        instructions.style.display = "block";
     }
 };
 function parseIntoRowCol(id) {
