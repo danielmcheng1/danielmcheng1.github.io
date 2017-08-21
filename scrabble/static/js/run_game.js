@@ -240,7 +240,7 @@ function handleData(data) {
     var showInstructions = document.getElementById('showInstructions');
     var instructionsImage = document.getElementById('instructionsImage');
     instructionsImage.src = "../static/img/instructions.png";
-    instructionsImage.alt = "instructions.png";
+    instructionsImage.alt = "Loading instructions...";
     window.onclick = function(event) {
         instructions.style.display = "none";
     };
