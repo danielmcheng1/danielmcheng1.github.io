@@ -2,6 +2,7 @@ click==6.7
 enum-compat==0.0.2
 eventlet==0.21.0
 Flask==0.12.2
+Flask-Login==0.4.0
 Flask-SocketIO==2.9.2
 gunicorn==19.7.1
 greenlet==0.4.12
