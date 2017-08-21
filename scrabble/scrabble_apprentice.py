@@ -114,7 +114,7 @@ def load_scrabble_bag(scrabble_freq_dict):
     for letter in scrabble_freq_dict.keys():
         scrabble_bag = scrabble_bag + [letter] * scrabble_freq_dict[letter]
     random.shuffle(scrabble_bag)
-    return scrabble_bag[0:15]
+    return scrabble_bag
 
 def load_all():
     scrabble_corpus = load_scrabble_corpus()
@@ -172,6 +172,8 @@ def wrapper_play_next_move(data):
         human_player = scrabble_player("Human", IS_HUMAN, scrabble_board)  
         computer_player = scrabble_player("Computer", IS_COMPUTER, scrabble_board)  
         scrabble_game_play = game_play(scrabble_board, human_player, computer_player) 
+        computer_player.rack = list("SCRABBL")
+        human_player.rack = list("WINNERS")
         last_move_to_send = {"action": "Game Started", "player": "", "detail": ""}
         return wrapper_save_game_play(scrabble_game_play, last_move_to_send)
     
@@ -784,7 +786,7 @@ class board:
             self.comp_all_possible_moves[direction][(start_row, start_col)] = {}
             self.comp_all_possible_moves[direction][(start_row, start_col)][cleaned_word] = word_score
             
-        if word_score > self.comp_max_score:
+        if word_score > self.comp_max_score and ''.join(word) != 'CLABBERS':
             self.comp_max_score = word_score
             self.comp_max_word = word #save this as a list since this is the standard type throughout
             self.comp_max_row = start_row

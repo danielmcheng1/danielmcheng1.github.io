@@ -88,7 +88,6 @@ $(document).ready(function() {
     
     
 function handleData(data) {
-    console.log(data);
     refreshBoard(data);
     refreshPlacedTilesHuman(data);
     refreshRack(data, 'Human');
@@ -96,7 +95,7 @@ function handleData(data) {
     refreshGameInfo(data);
     var board = data["board"];
     
-    var soundEffectsDOM = document.createElement("audio"); //for tile placement, bag shuffling, etc.
+    var soundEffectsDOM = document.getElementById("soundEffects"); //for tile placement, bag shuffling, etc.
     
     //once data has refreshed, allow player to restart game
     $("#restartGame").removeClass("buttonClicked");
@@ -488,16 +487,20 @@ function playSoundTileMoved(audioDOM) {
 function playBackgroundMusic() {
     //check if exists because Flask will re-render each time
     var audioDOM = document.getElementById("backgroundMusic");
-    if (audioDOM == null) {
-        var audioDOM = document.createElement("audio");
-        audioDOM.setAttribute("id", "backgroundMuisc");
-        audioDOM.src = "static/sound/background_jazz.mp3";
+    var audioPlaylist = ["background_waxcat", "background_completemusiccircle", "background_firefly", "background_newrain", "background_siesta", "background_oceanmist"]
+    
+    if (audioDOM.src == "") {
+        //var audioDOM = document.createElement("audio");
+        //audioDOM.setAttribute("id", "backgroundMusic");
+        audioDOM.src = "static/sound/" + audioPlaylist[0] + ".mp3";
         audioDOM.volume = 0.7;
         audioDOM.load();
         audioDOM.play();
         audioDOM.addEventListener('ended', function() {
             var parsedSrc = audioDOM.src.match(/.*\/(.*)\.mp3/)[1] || "";
-            audioDOM.src = (parsedSrc == "background_jazz"? "static/sound/background_normal.mp3" : "static/sound/background_jazz.mp3");
+            var playlistIndex = audioPlaylist.indexOf(parsedSrc);
+            var nextSong = audioPlaylist[(playlistIndex + 1) % audioPlaylist.length];
+            audioDOM.src = "static/sound/" + nextSong + ".mp3";
             audioDOM.play();
         });
     };
