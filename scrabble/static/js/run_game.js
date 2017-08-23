@@ -518,7 +518,3 @@ function playBackgroundMusic() {
         });
     };
 };
-
-return 
-
-

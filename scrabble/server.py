@@ -1,7 +1,6 @@
 
 import sys 
 import flask 
-#from flask import Flask, render_template, request, jsonify, session
 import flask_login 
 
 import scrabble_apprentice 
@@ -18,7 +17,6 @@ class User(flask_login.UserMixin):
     
 @login_manager.user_loader 
 def user_loader(username):
-    print('entering user loader with username: ' + str(username))
     if username not in server_user_database.users:
         return 
     user = User() 
@@ -27,9 +25,7 @@ def user_loader(username):
 
 @login_manager.request_loader 
 def request_loader(request):
-    print('entering request loader with request: ' + str(request))
     username = request.form.get('username')
-    print('username: ' + username  if username is not None else '')
     if username not in server_user_database.users:
         return 
     user = User()
@@ -40,15 +36,14 @@ def request_loader(request):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print('entering login function') 
     if flask.request.method == 'GET':
-        return flask.render_template('login.html')  
-    print('getting data from form')
+        return flask.render_template('login.html') 
+        
     username = flask.request.form['username']
-    password = flask.request.form['password']
-    print('checking')
+    password = ''
+    if username == '':
+        return flask.render_template("login.html", login_failure_message = "Please enter a username")
     if username not in server_user_database.users:
-        print('created new user')
         server_user_database.users[username] = {'password': password}
         user = User() 
         user.id = username 
@@ -61,8 +56,6 @@ def login():
         user.id = username 
         flask_login.login_user(user) 
         return flask.redirect(flask.url_for('play_game'))
-        #TBD have to change process_human_move to rerender template 
-        #return flask.redirect(flask.url_for('process_human_move'))
    
     print('failed')
     return flask.render_template("login.html", login_failure_message = "Incorrect password. Try again (or create a new username)")
