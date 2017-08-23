@@ -504,7 +504,8 @@ function playBackgroundMusic() {
     if (audioDOM.src == "") {
         //var audioDOM = document.createElement("audio");
         //audioDOM.setAttribute("id", "backgroundMusic");
-        audioDOM.src = "static/sound/" + audioPlaylist[0] + ".mp3";
+        var startingSongId = Math.floor(Math.random() * (audioPlaylist.length));
+        audioDOM.src = "static/sound/" + audioPlaylist[startingSongId] + ".mp3";
         audioDOM.volume = 0.7;
         audioDOM.load();
         audioDOM.play();
@@ -517,4 +518,7 @@ function playBackgroundMusic() {
         });
     };
 };
+
+return 
+
 
