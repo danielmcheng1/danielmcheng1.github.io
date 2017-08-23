@@ -42,7 +42,7 @@ def login():
     username = flask.request.form['username']
     password = ''
     if username == '':
-        return flask.render_template("login.html", login_failure_message = "Please enter a username")
+        return flask.render_template("login.html", login_failure_message = "Please create a username to begin play")
     if username not in server_user_database.users:
         server_user_database.users[username] = {'password': password}
         user = User() 
@@ -58,11 +58,11 @@ def login():
         return flask.redirect(flask.url_for('play_game'))
    
     print('failed')
-    return flask.render_template("login.html", login_failure_message = "Incorrect password. Try again (or create a new username)")
+    return flask.render_template("login.html", login_failure_message = "Please create a username to begin play")
 
 @login_manager.unauthorized_handler 
 def unauthorized_handler():
-    return flask.render_template("login.html", login_failure_message = "Please sign in (or create a new username)")
+    return flask.render_template("login.html", login_failure_message = "Please create a username to begin play")
         
 @app.route('/game',methods=['GET','POST'])
 @flask_login.login_required
