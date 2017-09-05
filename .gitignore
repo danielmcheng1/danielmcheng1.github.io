@@ -8,9 +8,4 @@
 **/venv/
 
 deploy-*/
-dev/betty
-dev/chatbot_apiai
-dev/chatbot_ellieslack
-dev/emotibot_v1.0
-dev/flask
 
