@@ -71,49 +71,19 @@ Furthermore, any production code must also be properly documented and thoroughly
 
 ## Projects in Progress 
 ### Abstract Syntax Tree
-I built a initial prototype (using regex/string matching) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within and between SAS codes executed in weekly ETLs. 
+I built an initial prototype (using regex/string matching) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within and between SAS codes executed in weekly ETLs. 
 
 I am currently working to rebuild this using [ANTLR](http://www.antlr.org/). After defining a grammar, I will use ANTLR to create a lexer and parser, ultimately generating an abstract syntax tree. After that, it would be a straightforward exercise to use a listener or visitor to walk down the abstract syntax tree and identify datasets and dependencies. This would then be transformed into a front-end interface for users to quickly drilldown into their code structure. 
 
 SCREENSHOT 
 
-Lexical Parser ### Virtual Therapist 
+### Virtual Therapist 
+I built a simple interface for users to speak to a virtual AI therapist. I used Python to drive the backend logic, first calling the NLTK chat modules, before adding in additional emotion identifiers based on indico's [emotion recognition API](https://indico.io/docs).  
 
-<!doctype html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Daniel M Cheng</title>
-    <link rel=stylesheet href="static/css/index.css">
-</head>
-<body>
-    
-    
-    
-    <a href="obstructio/obstructio.html" style="color:black">
-    <h2>Obstructio: The Block Game to Break Your Will</h2>
-        <img src="/static/img/obstructio.png"></img>
-    </a>
-    
-    
-    <a href="http://danielmcheng1-therapist.herokuapp.com" style="color:black">
-    <h2>Speak to Your Virtual AI Therapist</h2>
-        <img src="/static/img/therapist.png"></img>
-    </a>
-    
-    SAS module /API
-</body>
+Training a bot to recognize emotions is of particular interest to me, particularly with this latest "Emotional Chatting Machine" blurring the boundary between human and robot (see [_theguardian_ news briefing](https://www.theguardian.com/technology/2017/may/05/human-robot-interactions-take-step-forward-with-emotional-chatting-machine-chatbot) and the latest [research](https://arxiv.org/abs/1704.01074) on this frontier).
 
-<!--html lang="en-US">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="refresh" content="1; url=https://danielmcheng1.github.io/obstructio/obstructio.html?">
-        <script type="text/javascript">
-            window.location.href = "https://danielmcheng1.github.io/obstructio/obstructio.html?"
-        </script>
-        <title>Page Redirection</title>
-    </head>
-    <body>
-        If you are not redirected automatically, follow this <a href='http://danielmcheng1.githubio.com/obstructio'>link to example</a>.
-    </body>
-</html-->
+I'd like to improve this bot to blend more sophisticated emotion APIs, and ultimately apply this towards enhancing psychotherapy. [Several companies](https://www.wired.com/2017/06/facebook-messenger-woebot-chatbot-therapist/) have already started to apply this. 
+
+You can chat with the AI therapist yourself at the following [link](http://danielmcheng1-therapist.herokuapp.com/). I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
+
+This bot is hosted on Heroku, using [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) to transmit chat messages between human user and AI therapist. 
