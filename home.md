@@ -11,22 +11,39 @@ One significant technical challenge was in troubleshooting multithreading issues
 
 You can review the [drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md) to learn more about these technical challenges, softer project skills (defining user requirements and completing an MVP), and the overall software architecture. 
 
-##Scrabble AI
+## Scrabble AI
 [link](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)
 This is a complete Scrabble application with:
-1. AI running greedy backtracking algorithm to play optimal move each turn 
-2. Validation and scoring for all human moves
-Click [here]((http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)) to test your own lexical skills against the Scrabble AI.
+1. AI running greedy backtracking algorithm to search for the optimal tile placement 
+2. Complete game logic for validating and scoring human moves
 
-The entire move algorithm was built from scratch based on the algorithms
+The entire move algorithm was built from scratch based on the data structures explained in [Appel & Jacobson's research paper](https://www.cs.cmu.edu/afs/cs/academic/class/15451-s06/www/lectures/scrabble.pdf). They optimize the search for valid Scrabble placements through three techniques:
+1. __Space-Efficient Data Structure__: Load the lexicon into a DAWG (directed acyclic word graph), essentially a trie with all common suffixes merged
+2. __Precompute Constraints__: Precompute all hook spots and crossword letters to reduce branching factor 
+3. __Backtracking__: Prune your search by terminating as early in the prefix as possible 
 
-    <h2>Play the Classic Word Game against the Scrabble AI</h2>
-        <img src="/static/img/scrabble.png"></img>
-    </a>
-Building a Scrabble validator and AI is a more complex exercise than at first glance.
+I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by [Steven A. Gordon](http://ericsink.com/downloads/faster-scrabble-gordon.pdf). Since Scrabble tiles must "hook" onto existing tiles (i.e. at least one tile must be adjacent to an existing tile on the board), the GADDAG stores every reversed prefix of every word. 
 
-Details on GADDAG: https://en.wikipedia.org/wiki/GADDAG 
-3 constraints
+For example, in a regular trie, the word "ORANGE" would be traced exactly once. But in a GADDAG, "ORANGE" would appear six times:
+```python
+O+RANGE
+RO+ANGE
+ARO+NGE
+NARO+GE
+GNARO+E
+EGNARO+
+```
+Take the second representation, "RO+ANGE". Given a starting hook spot, you would first place "R", then move _left_ and place "O". Hence you are generating the prefix _in reverse_ from the hook spot. Upon encountering the "+" symbol, you now switch from prefix generation to suffix generation. You place "A" one spot to the right of the hook spot, then "N", "G", and "E". Thus the GADDAG structure makes the search for prefixes deterministic: branches are searched only if the first letter can hook onto the board. 
+
+Hence, using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
+
+For further details on the GADDAG search algorithm, as well as precomputing constraints and backtracking, please see the writeup here.
+
+You can also click [here]((http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)) to test your own lexical skills against the Scrabble AI.
+<img src="/static/img/scrabble.png"></img>
+        
+
+## Obstructio: A Javascript Game 
 
 <!doctype html>
 <head>
