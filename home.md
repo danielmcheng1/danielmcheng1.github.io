@@ -44,6 +44,19 @@ You can also click [here]((http://ec2-52-11-200-166.us-west-2.compute.amazonaws.
         
 
 ## Obstructio: A Javascript Game 
+Obstructio is a full-fledged animated web game complete with levels, sound effects, and game stats. This was a small side project for gaining experience building a fully functional product from start to finish. I completed the build for this in a week (subsequent revisions were primarily with tweaking and adding new levels). 
+
+I based the initial prototype off of the [Eloquent Javascript tutorial](eloquentjavascript.net/15_game.html), before adding my own custom advanced features, including:
+* Water and bomb power-ups 
+* Traveling on ice blocks 
+* Hidden enemies and checkpoints 
+
+In terms of applicability to software engineering, this build hit on three core CS concepts:
+1. _Scope_: Establish scope properly based on the need to share between methods, to maintain readable code, and to prevent unintended side effects. This was particularly important in building this game in determining how to transmit information between levels  
+2. _Serialization_: Convert an object state into byte stream for transmission. In this game, I serialized the game state to enable the player to restart at the last checkpoint. Saving state is crucial for transmitting data across points in time and across different database systems.
+3. _Asynchronous Callbacks_: Pass code to be executed on a separate thread at a later point in time. In this game, callbacks enabled interactivity--e.g. "When I click on this button, run this animation" 
+
+Click [here](https://danielmcheng1.github.io/obstructio/obstructio.html) to see if you can beat all 16 levels in this game.
 
 <!doctype html>
 <head>
