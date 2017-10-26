@@ -43,8 +43,8 @@ You can also click [here]((http://ec2-52-11-200-166.us-west-2.compute.amazonaws.
 <img src="/static/img/scrabble.png"></img>
         
 
-## Obstructio: A Javascript Game 
-Obstructio is a full-fledged animated web game complete with levels, sound effects, and game stats. This was a small side project for gaining experience building a fully functional product from start to finish. I completed the build for this in a week (subsequent revisions were primarily with tweaking and adding new levels). 
+## Obstruct.io: A Javascript Game 
+Obstruct.io is a full-fledged animated web game complete with levels, sound effects, and game stats. This was a small side project for gaining experience building a fully functional product from start to finish. I completed the build for this in a week (subsequent revisions were primarily with tweaking and adding new levels). 
 
 I based the initial prototype off of the [Eloquent Javascript tutorial](eloquentjavascript.net/15_game.html), before adding my own custom advanced features, including:
 * Water and bomb power-ups 
@@ -57,6 +57,19 @@ In terms of applicability to software engineering, this build hit on three core 
 3. _Asynchronous Callbacks_: Pass code to be executed on a separate thread at a later point in time. In this game, callbacks enabled interactivity--e.g. "When I click on this button, run this animation" 
 
 Click [here](https://danielmcheng1.github.io/obstructio/obstructio.html) to see if you can beat all 16 levels in this game.
+
+## Utility Library Suite for ETLs and QC's in SAS 
+I wrote a suite of SAS utilities to support the following needs:
+* _Comparison_: How do two datasets differ by key? What sequence of update, delete, and insert commands will transform one dataset into the other? 
+* _Assertion_: Validate standard dataset checks such as uniqueness check and null check 
+* _Type Conversion_: Convert correctly and quickly between different data types to allow for proper joins and comparisons 
+* _ETL Performance_: Speed up daily loads by selecting the optimal algorithm for the given datasets (e.g. hash lookup vs. binary search)
+
+Building this library suite required me to properly define an API for each utility. The calling client does not have to know the implementation within my code base, but my code has to reliably fulfill the terms of the API contract, with both the input parameters and output result.
+
+Furthermore, any production code must also be properly documented and thoroughly tested--available through the supplementary set of unit tests on each utility. 
+
+## Virtual Therapist 
 
 <!doctype html>
 <head>
