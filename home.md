@@ -69,7 +69,15 @@ Building this library suite required me to properly define an API for each utili
 
 Furthermore, any production code must also be properly documented and thoroughly tested--available through the supplementary set of unit tests on each utility. 
 
-## Virtual Therapist 
+## Projects in Progress 
+### Abstract Syntax Tree
+I built a initial prototype (using regex/string matching) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within and between SAS codes executed in weekly ETLs. 
+
+I am currently working to rebuild this using [ANTLR](http://www.antlr.org/). After defining a grammar, I will use ANTLR to create a lexer and parser, ultimately generating an abstract syntax tree. After that, it would be a straightforward exercise to use a listener or visitor to walk down the abstract syntax tree and identify datasets and dependencies. This would then be transformed into a front-end interface for users to quickly drilldown into their code structure. 
+
+SCREENSHOT 
+
+Lexical Parser ### Virtual Therapist 
 
 <!doctype html>
 <head>
