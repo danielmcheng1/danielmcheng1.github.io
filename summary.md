@@ -82,7 +82,7 @@ I strove towards clean code by:
 [You can also view the code base here.](https://github.com/danielmcheng1/danielmcheng1.github.io/tree/master/obstructio)
 
 ## Library of SAS utilities for ETLs and QC
-I wrote a [library of SAS utilities](https://github.com/danielmcheng1/SAS) to:
+I wrote a [library of SAS utilities](https://github.com/danielmcheng1/sas-utility-library) to:
 * __Calculate Transformation Sequence__: How do two datasets differ? What sequence of update, delete, and insert commands will transform one dataset into the other? 
 * __Perform Validation__: Validate standard checks such as uniqueness check and null check 
 * __Perform Type Conversion__: Convert correctly and quickly between different data types to allow proper joins and comparisons 
@@ -90,7 +90,7 @@ I wrote a [library of SAS utilities](https://github.com/danielmcheng1/SAS) to:
 
 Building this library required me to carefully think from the client's perspective to properly define an API. This produced a robust API where the calling client didn't need to know any details within my code base, but could still expect intuitive behavior. Hence to do this, I had to fulfill the API contract for a wide variety of input parameters.
 
-Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/SAS) provides thorough documentation as well as unit tests for each utility. 
+Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/sas-utility-library) provides thorough documentation as well as unit tests for each utility. 
 
 ## Abstract Syntax Tree
 I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within SAS codes executed in daily ETLs. 
