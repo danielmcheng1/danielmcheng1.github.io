@@ -1,5 +1,5 @@
 ## Daniel M. Cheng
-### Projects 
+### Completed Projects 
 1. [Automated Drone Photo Service](#automated-drone-photo-service)
 2. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
 3. [Obstruct.io: A Javascript Game](#obstruct-io-a-javascript-game)
@@ -17,7 +17,7 @@ I built [Numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5
 
 [VIDEO]
 
-In terms of architecture, I built a custom Android app to automate mission control of the drone (via [DJI's mobile SDK](https://developer.dji.com/mobile-sdk/)). This then compresses and pushes the photos to the hosting AWS EC2. Python then stitches and cleans the photos using [Hugin](https://wiki.panotools.org/Hugin_executor) and [OpenCV](https://opencv.org/), before posting to the [Flask-hosted website](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos). I completed the entire build in 2 weeks. 
+In terms of architecture, I built a custom Android app to automate mission control of the drone (via [DJI's mobile SDK](https://developer.dji.com/mobile-sdk/)). This then compresses and pushes the photos to the hosting AWS EC2. Python then stitches and cleans the photos using [Hugin](https://wiki.panotools.org/Hugin_executor) and [OpenCV](https://opencv.org/), before posting to the Flask-hosted website. I completed this entire build in 2 weeks. 
 
 ### Technical Challenges: Multithreading and Synchronization 
 One significant technical challenge was in troubleshooting multithreading issues with limited download bandwidth. This problem arose because originally, in transferring photos from the drone to AWS, I allowed the DJI SDK to continually download as many photos in parallel as possible. However, after 5 or more photos, the SDK quickly ran out of bandwidth and failed to download any remaining photos. 
@@ -36,24 +36,11 @@ The entire move algorithm was built from scratch based on the data structures ex
 2. __Precompute Constraints__: Precompute all hook spots and crossword letters to reduce branching factor 
 3. __Backtracking__: Prune your search by terminating as early in the prefix as possible 
 
-I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by [Steven A. Gordon](http://ericsink.com/downloads/faster-scrabble-gordon.pdf). Since Scrabble tiles must "hook" onto existing tiles (i.e. at least one tile must be adjacent to an existing tile on the board), the GADDAG stores every reversed prefix of every word. 
+I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by [Steven A. Gordon](http://ericsink.com/downloads/faster-scrabble-gordon.pdf). Since placed tiles must "hook" onto existing tiles, the GADDAG stores every reversed prefix of every word, so that recursive search algorithm can build deterministically from each hook spot. Hence using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
 
-For example, in a regular trie, the word "ORANGE" would be traced exactly once. But in a GADDAG, "ORANGE" would appear six times:
-```python
-O+RANGE
-RO+ANGE
-ARO+NGE
-NARO+GE
-GNARO+E
-EGNARO+
-```
-As an example, take the second representation, "RO+ANGE". Given a starting hook spot, you would first place "R", then move _left_ and place "O". Hence you are generating the prefix--_in reverse_ from the hook spot. So, upon encountering the "+" symbol, you now switch from prefix generation to suffix generation. You place "A" one spot to the right of the hook spot, then "N", "G", and "E". Thus the GADDAG structure makes the search for prefixes deterministic: branches are searched only if the first letter can hook onto the board. 
+Please read my [Scrabble AI writeup]() for further details on this GADDAG search algorithm.
 
-Hence, using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
-
-Please read my [Scrabble AI writeup]() for further details on this GADDAG search algorithm, as well as precomputing constraints and backtracking, .
-
-Want to test your own lexical skills against the Scrabble AI? Click [here]((http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) to begin play.
+Want to test your own lexical skills against the Scrabble AI? Click [here](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) to begin play.
 
 <img src="static/img/scrabble.png"  alt="Scrabble screenshot"/>        
 
