@@ -15,7 +15,7 @@ Users of this service can request photos in two ways:
 1. Send a text message to trigger the drone to start its mission 
 2. Schedule the drone to fly every 10 minutes over the same area each day 
 
-[VIDEO]
+[![Click to play drone video](static/img/drone_video_screenshot.PNG)](https://www.youtube.com/watch?v=UiqQyx3WbLQ "Drone Overview Video")
 
 This service has two parts: 
 1. A custom Android app that automates mission control via DJI's SDK, before compressing and pushign the photos to the backend.
@@ -62,8 +62,8 @@ Obstruct.io is a full-fledged game complete with user editable levels. This proj
 
 I started off with a simple prototype where the objective was to jump over obstacles and avoid lava. I then added advanced features like shooting water to destroy lava blocks, destroying obstacles using bombs, and jumping on floating ice blocks to pass over lava. I also built simple killer bots that honed in to attack wherever the player was.
 
-<img src="static/img/sample_obstructio.gif" alt="obstructio gif"/> 
 <img src="static/img/sample_obstructio2.gif" alt="obstructio gif 2"/> 
+
 
 I strove towards clean code by:
 1. __Scoping__: I scoped down variables to maintain readable code and to prevent unintended side effects. This was particularly important in transmitting information between levels--a key requirement of this game.
