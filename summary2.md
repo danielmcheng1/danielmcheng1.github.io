@@ -3,12 +3,11 @@
 1. [Automated Drone Photo Service](#automated-drone-photo-service)
 2. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
 3. [Obstruct.io: A Javascript Game](#obstruct-io-a-javascript-game)
-4. [ETL Utility Library Suite](#utility-library-suite-for-etls-and-qcs-in-sas)
+4. [ETL Utility Library Suite](#library-of-sas-utilities-for-etls-and-qc)
 
 ### In Progress 
-* [Abstract Syntax Tree](#abstract-syntax-tree)
+* [Abstract Syntax Tree](#abstract-syntax-tree-parser)
 * [Virtual AI Therapist](#virtual-ai-therapist)
-
 
 ## Automated Drone Photo Service 
 [Numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting at the carpool).
@@ -33,8 +32,8 @@ To solve this, I first maintained a queue of photos. I then implemented a lock t
 
 **[Read through my drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed during the course of this project.
 
-### Architecture of Hardware and Software Components
-<img src="static/img/overallarchitecture.png" width="80%" alt="Diagram of overall project architecture"/>
+### Architecture for Drone Service
+<img src="static/img/architecture_drone.png" width="80%" alt="Diagram of drone architecture"/>
 
 ## Scrabble AI
 I built a [complete Scrabble application](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) where players can play against the computer. The two main features are:
@@ -50,9 +49,13 @@ I further sped up search performance by converting Appel & Jacobson's DAWG struc
 
 Please read my [Scrabble AI writeup]() for further details on this GADDAG search algorithm.
 
-**[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)**
+[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)
  
 <img src="static/img/sample_scrabble.gif" alt="Scrabble gif"/>     
+
+### Architecture for Scrabble
+<img src="static/img/architecture_scrabble.png" alt="Diagram of Scrabble architecture"/>
+
 
 ## Obstruct.io: A Javascript Game 
 Obstruct.io is a full-fledged game complete with user editable levels. This project allowed me to gain experience in building a fully functional product from start to finish.
@@ -80,7 +83,7 @@ Building this library required me to carefully think from the client's perspecti
 
 Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/SAS) provides thorough documentation as well as unit tests for each utility. 
 
-## SAS Parser to identify dataset dependencies
+## Abstract Syntax Tree / Parser
 I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within SAS codes executed in daily ETLs. 
 
 This allows clients to quickly identify which input data sets affect which output data sets across a series of SAS codes. So for instance, if you discover an error in one input data set and need to update this input, you would be able to quickly tell what output datasets would be affected.
