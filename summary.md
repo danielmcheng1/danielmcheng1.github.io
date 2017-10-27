@@ -7,7 +7,7 @@
 
 ### In Progress 
 * [Abstract Syntax Tree](#abstract-syntax-tree)
-* [Virtual Therapist](#irtual-therapist)
+* [Virtual AI Therapist](#virtual-ai-therapist)
 
 
 ## Automated Drone Photo Service 
@@ -76,7 +76,7 @@ I am currently working to rebuild this using [ANTLR](http://www.antlr.org/). Aft
 
 SCREENSHOT 
 
-## Virtual Therapist
+## Virtual AI Therapist
 I built a WebSocket interface for users to speak to a virtual AI therapist. I used Python to drive the backend logic, first calling the NLTK chat modules, before adding in additional emotion identifiers based on [indico's emotion recognition API](https://indico.io/docs).  
 
 <img src="static/img/therapist.png"  alt="AI therapist screenshot"/>
