@@ -48,8 +48,8 @@ I further sped up search performance by converting Appel & Jacobson's DAWG struc
 Please read my [Scrabble AI writeup]() for further details on this GADDAG search algorithm.
 
 **[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)**
-
-<img src="static/img/scrabble.png"  alt="Scrabble screenshot"/>        
+ 
+<img src="static/img/sample_scrabble.gif" alt="Scrabble gif"/>     
 
 ## Obstruct.io: A Javascript Game 
 Obstruct.io is a full-fledged game complete with user editable levels. This project allowed me to gain experience in building a fully functional product from start to finish.
@@ -84,12 +84,12 @@ This allowed one to identify which input data sets affected which output data se
 
 I am currently working to rebuild this using [ANTLR](http://www.antlr.org/). After defining a grammar, I will use ANTLR to create a lexer and parser, ultimately generating an abstract syntax tree. After that, it would be a straightforward exercise to use a listener or visitor to walk down the abstract syntax tree and identify datasets and dependencies. This would then be transformed into a front-end interface for users to quickly drilldown into their code structure. 
 
-SCREENSHOT 
+<img src="static/img/sample_parser.gif"  alt="SAS parser gif"/>
 
 ## Virtual AI Therapist
 I built a Facebook Messenger-like Javascript widget for users to speak to multiple virtual AI therapists. The backend is in Python. It uses the Python Natural Languate Tool Kit (NLTK) chat modules, then calls out to indico's emotion recognition API to tag emotions in the user's message. This allows the AI therapist to be more empathic in the response it generates.
 
-<img src="static/img/therapist.png"  alt="AI therapist screenshot"/>
+<img src="static/img/sample_therapist.gif"  alt="AI therapist gif"/>
 
 Training a bot to recognize emotions is of particular interest to me, particularly with this latest "Emotional Chatting Machine" blurring the boundary between human and robot (see [_The Guardian_ news briefing](https://www.theguardian.com/technology/2017/may/05/human-robot-interactions-take-step-forward-with-emotional-chatting-machine-chatbot)). I'd like to improve this bot to blend more sophisticated emotion APIs, and ultimately apply this towards enhancing psychotherapy. Several companies have already started doing this. 
 
