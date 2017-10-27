@@ -54,16 +54,17 @@ Please read my [Scrabble AI writeup]() for further details on this GADDAG search
 ## Obstruct.io: A Javascript Game 
 Obstruct.io is a full-fledged game complete with user editable levels. This project allowed me to gain experience in building a fully functional product from start to finish.
 
-I started off with a simple prototype where the objective was to jump over obstacles and avoid lava. I then added advanced features like shooting water to destroy lava blocks, destroying obstacles using bombs, and jumping on floating ice blocks to pass over lava.
+I started off with a simple prototype where the objective was to jump over obstacles and avoid lava. I then added advanced features like shooting water to destroy lava blocks, destroying obstacles using bombs, and jumping on floating ice blocks to pass over lava. I also built simple killer bots that honed in to attack wherever the player was.
 
-<img src="static/img/obstructio.png"  alt="obstructio screenshot"/> 
+<img src="static/img/sample_obstructio.gif" alt="obstructio gif"/> 
+<img src="static/img/sample_obstructio2.gif" alt="obstructio gif 2"/> 
 
 I strove towards clean code by:
 1. __Scoping__: I scoped down variables to maintain readable code and to prevent unintended side effects. This was particularly important in transmitting information between levels--a key requirement of this game.
 2. __Serialization__: I converted an object state into byte stream for transmission. This allows restarting at the last checkpoint.
 3. __Asynchronous Callbacks__: Callbacks enable interactivity in the game e.g. "When I click on this button, run this animation" 
 
-**[Click here to see if you can beat all 16 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html)**
+**[Click here to see if you can beat all 16 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html)** Be sure to use your headphones!
 
 ## Library of SAS utilities for ETLs and QC
 I wrote a [library of SAS utilities](https://github.com/danielmcheng1/SAS) to:
