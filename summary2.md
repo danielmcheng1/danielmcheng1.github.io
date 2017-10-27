@@ -15,6 +15,8 @@ Users of this service can request photos in two ways:
 1. Send a text message to trigger the drone to start its mission 
 2. Schedule the drone to fly every 10 minutes over the same area each day 
 
+_Click below to view the drone service in action_ 
+
 [![Click to play drone video](static/img/drone_video_screenshot.PNG)](https://www.youtube.com/watch?v=UiqQyx3WbLQ "Drone Overview Video")
 
 This service has two parts: 
@@ -36,7 +38,7 @@ To solve this, I first maintained a queue of photos. I then implemented a lock t
 <img src="static/img/architecture_drone.png" width="80%" alt="Diagram of drone architecture"/>
 
 ## Scrabble AI
-I built a [complete Scrabble application](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) where players can play against the computer. The two main features are:
+I built a complete Scrabble application where players can play against the computer. The two main features are:
 1. AI running greedy backtracking algorithm to search for the optimal tile placement 
 2. Complete game logic for validating and scoring human moves
 
@@ -49,9 +51,11 @@ I further sped up search performance by converting Appel & Jacobson's DAWG struc
 
 Please read my [Scrabble AI writeup]() for further details on this GADDAG search algorithm.
 
-[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login)
+[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login). Chrome is the optimal browser for this game.
  
+<a href="http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login">
 <img src="static/img/sample_scrabble.gif" alt="Scrabble gif"/>     
+</a>
 
 ### Architecture for Scrabble
 <img src="static/img/architecture_scrabble.png" alt="Diagram of Scrabble architecture"/>
@@ -62,7 +66,9 @@ Obstruct.io is a full-fledged game complete with user editable levels. This proj
 
 I started off with a simple prototype where the objective was to jump over obstacles and avoid lava. I then added advanced features like shooting water to destroy lava blocks, destroying obstacles using bombs, and jumping on floating ice blocks to pass over lava. I also built simple killer bots that honed in to attack wherever the player was.
 
-<img src="static/img/sample_obstructio2.gif" alt="obstructio gif 2"/> 
+<a href="https://danielmcheng1.github.io/obstructio/obstructio.html">
+<img src="static/img/sample_obstructio2.gif" alt="obstructio gif 2"/>
+</a>
 
 
 I strove towards clean code by:
@@ -95,7 +101,9 @@ I am currently working to rebuild this using ANTLR. After defining a grammar, I 
 ## Virtual AI Therapist
 I built a Facebook Messenger-like Javascript widget for users to speak to multiple virtual AI therapists. The backend is in Python. It uses the Python Natural Languate Tool Kit (NLTK) chat modules, then calls out to indico's emotion recognition API to tag emotions in the user's message. This allows the AI therapist to be more empathic in the response it generates.
 
+<a href="http://danielmcheng1-therapist.herokuapp.com/">
 <img src="static/img/sample_therapist.gif"  alt="AI therapist gif"/>
+</a>
 
 Training a bot to recognize emotions is of particular interest to me, particularly with this latest "Emotional Chatting Machine" blurring the boundary between human and robot (see [_The Guardian_ news briefing](https://www.theguardian.com/technology/2017/may/05/human-robot-interactions-take-step-forward-with-emotional-chatting-machine-chatbot)). I'd like to improve this bot to blend more sophisticated emotion APIs, and ultimately apply this towards enhancing psychotherapy. Several companies have already started doing this. 
 
