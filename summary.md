@@ -51,7 +51,7 @@ The entire move algorithm was built from scratch based on the data structures ex
 
 I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by Steven A. Gordon. Since placed tiles must "hook" onto existing tiles, the GADDAG stores every reversed prefix of every word, so that the recursive search algorithm can build deterministically from each hook spot. Hence using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
 
-[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login). Chrome is the optimal browser for this game.
+[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) Chrome is the optimal browser for this game.
  
 <a href="http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login">
 <img src="static/img/sample_scrabble.gif" alt="Scrabble gif"/>     
