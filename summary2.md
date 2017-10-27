@@ -19,19 +19,22 @@ Users of this service can request photos in two ways:
 [VIDEO]
 
 This service has two parts: 
-1. A custom Android app that automates mission control of the drone DJI's mobile SDK. And then compresses and pushes the photos to the backend.
-2. AWS-hosted backend that stitches and cleans photos using [OpenCV](https://opencv.org/) before displaying on Flask Website in realtime
+1. A custom Android app that automates mission control via DJI's SDK, before compressing and pushign the photos to the backend.
+2. AWS-hosted backend that stitches and cleans photos using OpenCV before displaying on Flask Website in realtime
 
 **[Click here to visit numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos)** to see photos collected by previous drone missions.
 
 ### Technical Challenges: Multithreading and Synchronization 
-A significant challenge was in troubleshooting why realtime downloads of image would stop after 5 or more photos. After digging deep into the code I found out that triggering a download as soon as each photo is taken very quickly saturates the limited radio bandwidth and leads to dropped packets that corrupt the jpgs.
+A significant challenge was in troubleshooting why realtime downloads of image would get corrupted after about 5 photos. After digging deep into the code, I found out that triggering a download as soon as each photo is taken very quickly saturates the limited radio bandwidth and leads to dropped packets that corrupt the jpgs.
 
 The naive solution here is to add photos to a queue and download them in sequence. However, because the download method is asynchronous, it instantly returns; hence sequentially processing the queue leads to the same bandwidth saturating behavior as before.
 
 To solve this, I first maintained a queue of photos. I then implemented a lock to prevent a second download from running as long as one photo is downloading. While this slowed down the download process, this solution guaranteed reliability, a far more valuable feature for this drone service. 
 
 **[Read through my drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed during the course of this project.
+
+### Architecture of Hardware and Software Components
+<img src="static/img/overallarchitecture.png" width="80%" alt="Diagram of overall project architecture"/>
 
 ## Scrabble AI
 I built a [complete Scrabble application](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) where players can play against the computer. The two main features are:
@@ -73,16 +76,16 @@ I wrote a [library of SAS utilities](https://github.com/danielmcheng1/SAS) to:
 * __Perform Type Conversion__: Convert correctly and quickly between different data types to allow proper joins and comparisons 
 * __Optimize ETL Performance__: Speed up daily loads by selecting the optimal algorithm for the given datasets (e.g. hash lookup vs. binary search)
 
-Building this library required me to properly define an API for each utility. The calling client does not have to know the implementation within my code base, but my code has to reliably fulfill the terms of the API contract for a wide variety of input parameters.
+Building this library required me to carefully think from the client's perspective to properly define an API. This produced a robust API where the calling client didn't need to know any details within my code base, but could still expect intuitive behavior. Hence to do this, I had to fulfill the API contract for a wide variety of input parameters.
 
 Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/SAS) provides thorough documentation as well as unit tests for each utility. 
 
 ## SAS Parser to identify dataset dependencies
-I built an initial prototype (using regex/string matching) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within SAS codes executed in daily ETLs. 
+I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within SAS codes executed in daily ETLs. 
 
-This allowed one to identify which input data sets affected which output data sets in a piece of SAS code. So for instance, if you discovered an error in one input data set and wanted to change it, you would be able to quickly tell what output datasets would be affected.
+This allows clients to quickly identify which input data sets affect which output data sets across a series of SAS codes. So for instance, if you discover an error in one input data set and need to update this input, you would be able to quickly tell what output datasets would be affected.
 
-I am currently working to rebuild this using [ANTLR](http://www.antlr.org/). After defining a grammar, I will use ANTLR to create a lexer and parser, ultimately generating an abstract syntax tree. After that, it would be a straightforward exercise to use a listener or visitor to walk down the abstract syntax tree and identify datasets and dependencies. This would then be transformed into a front-end interface for users to quickly drilldown into their code structure. 
+I am currently working to rebuild this using ANTLR. After defining a grammar, I will use ANTLR to create a lexer and parser, ultimately generating an abstract syntax tree. After that, it would be a straightforward exercise to use a listener or visitor to walk down the abstract syntax tree and identify datasets and dependencies. This would then be transformed into a front-end interface for users to quickly drilldown into their code structure. 
 
 <img src="static/img/sample_parser.gif"  alt="SAS parser gif"/>
 
