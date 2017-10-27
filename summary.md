@@ -2,11 +2,11 @@
 ### Completed Projects 
 1. [Automated Drone Photo Service](#automated-drone-photo-service)
 2. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
-3. [Obstruct.io: A Javascript Game](#obstruct-io-a-javascript-game)
+3. [Obstruct.io: A Javascript Game](#obstructio-a-javascript-game)
 4. [ETL Utility Library Suite](#library-of-sas-utilities-for-etls-and-qc)
 
 ### In Progress 
-* [Abstract Syntax Tree](#abstract-syntax-tree-parser)
+* [Abstract Syntax Tree](#abstract-syntax-tree)
 * [Virtual AI Therapist](#virtual-ai-therapist)
 
 ## Automated Drone Photo Service 
@@ -51,8 +51,6 @@ The entire move algorithm was built from scratch based on the data structures ex
 
 I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by Steven A. Gordon. Since placed tiles must "hook" onto existing tiles, the GADDAG stores every reversed prefix of every word, so that the recursive search algorithm can build deterministically from each hook spot. Hence using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
 
-Please read my [Scrabble AI writeup]() for further details on this GADDAG search algorithm.
-
 [Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login). Chrome is the optimal browser for this game.
  
 <a href="http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login">
@@ -79,7 +77,7 @@ I strove towards clean code by:
 2. __Serialization__: I converted an object state into byte stream for transmission. This allows restarting at the last checkpoint.
 3. __Asynchronous Callbacks__: Callbacks enable interactivity in the game e.g. "When I click on this button, run this animation" 
 
-**[Click here to see if you can beat all 16 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html)** Be sure to use your headphones!
+[Click here to see if you can beat all 16 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html) Be sure to use your headphones!
 
 [You can also view the code base here.](https://github.com/danielmcheng1/danielmcheng1.github.io/tree/master/obstructio)
 
@@ -94,7 +92,7 @@ Building this library required me to carefully think from the client's perspecti
 
 Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/SAS) provides thorough documentation as well as unit tests for each utility. 
 
-## Abstract Syntax Tree / Parser
+## Abstract Syntax Tree
 I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within SAS codes executed in daily ETLs. 
 
 This allows clients to quickly identify which input data sets affect which output data sets across a series of SAS codes. So for instance, if you discover an error in one input data set and need to update this input, you would be able to quickly tell what output datasets would be affected.
