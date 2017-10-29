@@ -10,29 +10,31 @@
 * [Virtual AI Therapist](#virtual-ai-therapist)
 
 ## Automated Drone Photo Service 
-[Numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting at the carpool).
+[Numerate.io](https://goo.gl/3yVGLa) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting in line).
 Users of this service can request photos in two ways:
 1. Send a text message to trigger the drone to start its mission 
 2. Schedule the drone to fly every 10 minutes over the same area each day 
 
 _Click below to view the drone service in action_ 
 
-[![Click to play drone video](static/img/drone_video_screenshot.PNG)](https://www.youtube.com/watch?v=UiqQyx3WbLQ "Drone Overview Video")
+<a href="https://goo.gl/4taYny">
+<img src="static/img/play_button2.jpg" width = 40% alt="Drone Overview Video"/>     
+</a>
 
 This service has two parts: 
-1. A custom Android app that automates mission control via DJI's SDK, before compressing and pushign the photos to the backend.
-2. AWS-hosted backend that stitches and cleans photos using OpenCV before displaying on Flask Website in realtime
+1. Custom Android app that automates mission control via DJI's SDK, before compressing and pushing the photos to the backend
+2. AWS-hosted backend that stitches and cleans photos using OpenCV before displaying on the Flask website in realtime
 
-**[Click here to visit numerate.io](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:5000/photos)** to see photos collected by previous drone missions.
+**[Click here to visit numerate.io](https://goo.gl/3yVGLa)** to see photos collected by previous drone missions.
 
 ### Technical Challenges: Multithreading and Synchronization 
-A significant challenge was in troubleshooting why realtime downloads of image would get corrupted after about 5 photos. After digging deep into the code, I found out that triggering a download as soon as each photo is taken very quickly saturates the limited radio bandwidth and leads to dropped packets that corrupt the jpgs.
+A significant challenge was in troubleshooting why realtime downloads of images would get corrupted after about 5 photos. After digging deep into the code, I found that triggering a download immediately after photo capture quickly saturated the limited radio bandwidth and caused dropped packets that corrupted the jepgs.
 
 The naive solution here is to add photos to a queue and download them in sequence. However, because the download method is asynchronous, it instantly returns; hence sequentially processing the queue leads to the same bandwidth saturating behavior as before.
 
 To solve this, I first maintained a queue of photos. I then implemented a lock to prevent a second download from running as long as one photo is downloading. While this slowed down the download process, this solution guaranteed reliability, a far more valuable feature for this drone service. 
 
-**[Read through my drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed during the course of this project.
+**[Read through my drone writeup](https://goo.gl/rLVcGm)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed greatly during the course of this project.
 
 ### Architecture for Drone Service
 <img src="static/img/architecture_drone.png" width="80%" alt="Diagram of drone architecture"/>
@@ -44,16 +46,16 @@ I built a complete Scrabble application where players can play against the compu
 1. AI running greedy backtracking algorithm to search for the optimal tile placement 
 2. Complete game logic for validating and scoring human moves
 
-The entire move algorithm was built from scratch based on the data structures explained in Appel & Jacobson's research paper. They optimize the search for valid Scrabble placements through three techniques:
+The entire move algorithm was built from scratch based on the data structures explained in Appel & Jacobson's research paper. I optimized the search for valid Scrabble placements through three techniques:
 1. __Space-Efficient Data Structure__: Load the lexicon into a DAWG (directed acyclic word graph), essentially a trie with all common suffixes merged
 2. __Precompute Constraints__: Precompute all hook spots and crossword letters to reduce branching factor 
-3. __Backtracking__: Prune your search by terminating as early in the prefix as possible 
+3. __Backtracking__: Prune search by terminating as early in the prefix as possible 
 
 I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by Steven A. Gordon. Since placed tiles must "hook" onto existing tiles, the GADDAG stores every reversed prefix of every word, so that the recursive search algorithm can build deterministically from each hook spot. Hence using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
 
-[Click here to begin playing Scrabble.](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login) Chrome is the optimal browser for this game.
+[Play my Scrabble game here on Chrome.](https://goo.gl/Y2wisi)
  
-<a href="http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:8000/login">
+<a href="https://goo.gl/Y2wisi">
 <img src="static/img/sample_scrabble.gif" alt="Scrabble gif"/>     
 </a>
 
@@ -104,7 +106,7 @@ I am currently working to rebuild this using ANTLR. After defining a grammar, I 
 [Click here to view the current code base.](https://github.com/danielmcheng1/ast-parser)
 
 ## Virtual AI Therapist
-I built a Facebook Messenger-like Javascript widget for users to speak to multiple virtual AI therapists. The backend is in Python. It uses the Python Natural Languate Tool Kit (NLTK) chat modules, then calls out to indico's emotion recognition API to tag emotions in the user's message. This allows the AI therapist to be more empathic in the response it generates.
+I built a Facebook Messenger-like Javascript widget for users to speak to multiple virtual AI therapists. The backend is in Python. It uses the Python Natural Languate Tool Kit (NLTK) chat modules, then calls Indico's emotion recognition API to tag emotions in the user's message. This allows the AI therapist to be more empathic in the response it generates.
 
 <a href="http://danielmcheng1-therapist.herokuapp.com/">
 <img src="static/img/sample_therapist.gif"  alt="AI therapist gif"/>
@@ -112,6 +114,6 @@ I built a Facebook Messenger-like Javascript widget for users to speak to multip
 
 Training a bot to recognize emotions is of particular interest to me, particularly with this latest "Emotional Chatting Machine" blurring the boundary between human and robot (see [_The Guardian_ news briefing](https://www.theguardian.com/technology/2017/may/05/human-robot-interactions-take-step-forward-with-emotional-chatting-machine-chatbot)). I'd like to improve this bot to blend more sophisticated emotion APIs, and ultimately apply this towards enhancing psychotherapy. Several companies have already started doing this. 
 
-**[You can chat with the AI therapist here](http://danielmcheng1-therapist.herokuapp.com/)**. I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
+**[You can chat with the AI therapist here on Chrome](http://danielmcheng1-therapist.herokuapp.com/)**. I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
 
 This bot is hosted on Heroku, using Flask-SocketIO to transmit messages between user and AI therapist. [Click here to view the code base.](https://github.com/danielmcheng1/therapist)
