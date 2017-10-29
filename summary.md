@@ -25,7 +25,7 @@ This service has two parts:
 1. Custom Android app that automates mission control via DJI's SDK, before compressing and pushing the photos to the backend
 2. AWS-hosted backend that stitches and cleans photos using OpenCV before displaying on the Flask website in realtime
 
-**[Click here to visit numerate.io](danielmcheng1.github.io/drone)** to see photos collected by previous drone missions.
+**[Click here to visit numerate.io](https://danielmcheng1.github.io/drone)** to see photos collected by previous drone missions.
 
 ### Technical Challenges: Multithreading and Synchronization 
 A significant challenge was in troubleshooting why realtime downloads of images would get corrupted after about 5 photos. After digging deep into the code, I found that triggering a download immediately after photo capture quickly saturated the limited radio bandwidth and caused dropped packets that corrupted the jepgs.
