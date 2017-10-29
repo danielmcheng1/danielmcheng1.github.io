@@ -95,7 +95,7 @@ Building this library required me to carefully think from the client's perspecti
 Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/sas-utility-library) provides thorough documentation as well as unit tests for each utility. 
 
 ## Abstract Syntax Tree
-I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of dataset dependencies within SAS codes executed in daily ETLs. 
+I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of transitive dataset dependencies within SAS codes executed in daily ETLs. 
 
 This allows clients to quickly identify which input data sets affect which output data sets across a series of SAS codes. So for instance, if you discover an error in one input data set and need to update this input, you would be able to quickly tell what output datasets would be affected.
 
