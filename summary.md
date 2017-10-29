@@ -10,14 +10,14 @@
 * [Virtual AI Therapist](#virtual-ai-therapist)
 
 ## Automated Drone Photo Service 
-[Numerate.io](https://goo.gl/3yVGLa) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting in line).
+[Numerate.io](https://danielmcheng1.github.io/drone) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting in line).
 Users of this service can request photos in two ways:
 1. Send a text message to trigger the drone to start its mission 
 2. Schedule the drone to fly every 10 minutes over the same area each day 
 
 _Click below to view the drone service in action_ 
 
-<a href="https://goo.gl/4taYny">
+<a href="https://www.youtube.com/watch?v=XzzE1z5jhvE">
 <img src="static/img/play_button2.jpg" width = 40% alt="Drone Overview Video"/>     
 </a>
 
@@ -25,7 +25,7 @@ This service has two parts:
 1. Custom Android app that automates mission control via DJI's SDK, before compressing and pushing the photos to the backend
 2. AWS-hosted backend that stitches and cleans photos using OpenCV before displaying on the Flask website in realtime
 
-**[Click here to visit numerate.io](https://goo.gl/3yVGLa)** to see photos collected by previous drone missions.
+**[Click here to visit numerate.io](danielmcheng1.github.io/drone)** to see photos collected by previous drone missions.
 
 ### Technical Challenges: Multithreading and Synchronization 
 A significant challenge was in troubleshooting why realtime downloads of images would get corrupted after about 5 photos. After digging deep into the code, I found that triggering a download immediately after photo capture quickly saturated the limited radio bandwidth and caused dropped packets that corrupted the jepgs.
@@ -34,7 +34,7 @@ The naive solution here is to add photos to a queue and download them in sequenc
 
 To solve this, I first maintained a queue of photos. I then implemented a lock to prevent a second download from running as long as one photo is downloading. While this slowed down the download process, this solution guaranteed reliability, a far more valuable feature for this drone service. 
 
-**[Read through my drone writeup](https://goo.gl/rLVcGm)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed greatly during the course of this project.
+**[Read through my drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed greatly during the course of this project.
 
 ### Architecture for Drone Service
 <img src="static/img/architecture_drone.png" width="80%" alt="Diagram of drone architecture"/>
@@ -53,9 +53,9 @@ The entire move algorithm was built from scratch based on the data structures ex
 
 I further sped up search performance by converting Appel & Jacobson's DAWG structure into the GADDAG proposed by Steven A. Gordon. Since placed tiles must "hook" onto existing tiles, the GADDAG stores every reversed prefix of every word, so that the recursive search algorithm can build deterministically from each hook spot. Hence using a GADDAG applies the classic tradeoff of space for time: the GADDAG is nearly five times larger than the DAWG, but generates moves twice as fast.
 
-[Play my Scrabble game here on Chrome.](https://goo.gl/Y2wisi)
+[Play my Scrabble game here on Chrome.](https://danielmcheng1.github.io/scrabble)
  
-<a href="https://goo.gl/Y2wisi">
+<a href="https://danielmcheng1.github.io/scrabble">
 <img src="static/img/sample_scrabble.gif" alt="Scrabble gif"/>     
 </a>
 
@@ -108,7 +108,7 @@ I am currently working to rebuild this using ANTLR. After defining a grammar, I 
 ## Virtual AI Therapist
 I built a Facebook Messenger-like Javascript widget for users to speak to multiple virtual AI therapists. The backend is in Python. It uses the Python Natural Languate Tool Kit (NLTK) chat modules, then calls Indico's emotion recognition API to tag emotions in the user's message. This allows the AI therapist to be more empathic in the response it generates.
 
-<a href="http://danielmcheng1-therapist.herokuapp.com/">
+<a href="https://github.com/danielmcheng1/therapist">
 <img src="static/img/sample_therapist.gif"  alt="AI therapist gif"/>
 </a>
 
