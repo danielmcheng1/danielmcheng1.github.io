@@ -101,7 +101,9 @@ This allows clients to quickly identify which input data sets affect which outpu
 
 I am currently working to rebuild this using ANTLR. After defining a grammar, I will use ANTLR to create a lexer and parser, ultimately generating an abstract syntax tree. After that, it would be a straightforward exercise to use a listener or visitor to walk down the abstract syntax tree and identify datasets and dependencies. This would then be transformed into a front-end interface for users to quickly drilldown into their code structure. 
 
+<a href="https://github.com/danielmcheng1/ast-parser">
 <img src="static/img/sample_parser.gif"  alt="SAS parser gif"/>
+</a>
 
 [Click here to view the current code base.](https://github.com/danielmcheng1/ast-parser)
 
