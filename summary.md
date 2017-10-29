@@ -110,12 +110,12 @@ I am currently working to rebuild this using ANTLR. After defining a grammar, I 
 ## Virtual AI Therapist
 I built a Facebook Messenger-like Javascript widget for users to speak to multiple virtual AI therapists. The backend is in Python. It uses the Python Natural Languate Tool Kit (NLTK) chat modules, then calls Indico's emotion recognition API to tag emotions in the user's message. This allows the AI therapist to be more empathic in the response it generates.
 
-<a href="https://github.com/danielmcheng1/therapist">
+<a href="https://danielmcheng1.github.io/therapist">
 <img src="static/img/sample_therapist.gif"  alt="AI therapist gif"/>
 </a>
 
 Training a bot to recognize emotions is of particular interest to me, particularly with this latest "Emotional Chatting Machine" blurring the boundary between human and robot (see [_The Guardian_ news briefing](https://www.theguardian.com/technology/2017/may/05/human-robot-interactions-take-step-forward-with-emotional-chatting-machine-chatbot)). I'd like to improve this bot to blend more sophisticated emotion APIs, and ultimately apply this towards enhancing psychotherapy. Several companies have already started doing this. 
 
-**[You can chat with the AI therapist here on Chrome](http://danielmcheng1-therapist.herokuapp.com/)**. I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
+**[You can chat with the AI therapist here on Chrome](https://danielmcheng1.github.io/therapist)**. I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
 
 This bot is hosted on Heroku, using Flask-SocketIO to transmit messages between user and AI therapist. [Click here to view the code base.](https://github.com/danielmcheng1/therapist)
