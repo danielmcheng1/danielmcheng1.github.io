@@ -3,7 +3,7 @@
 1. [Automated Drone Photo Service](#automated-drone-photo-service)
 2. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
 3. [Obstruct.io: A Javascript Game](#obstructio-a-javascript-game)
-4. [ETL Utility Library Suite](#library-of-sas-utilities-for-etls-and-qc)
+4. [Software Utility Library](#software-utility-library)
 
 ### In Progress 
 * [Abstract Syntax Tree](#abstract-syntax-tree)
@@ -83,8 +83,8 @@ I strove towards clean code by:
 
 [You can also view the code base here.](https://github.com/danielmcheng1/danielmcheng1.github.io/tree/master/obstructio)
 
-## Library of SAS utilities for ETLs and QC
-I wrote a [library of SAS utilities](https://github.com/danielmcheng1/sas-utility-library) to:
+## Software Utility Library
+I wrote a [software library of core utilities](https://github.com/danielmcheng1/sas-utility-library) to:
 * __Calculate Transformation Sequence__: How do two datasets differ? What sequence of update, delete, and insert commands will transform one dataset into the other? 
 * __Perform Validation__: Validate standard checks such as uniqueness check and null check 
 * __Perform Type Conversion__: Convert correctly and quickly between different data types to allow proper joins and comparisons 
