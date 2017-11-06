@@ -1,4 +1,4 @@
-# Scaling Systemsj
+# Scaling Systems
 When designing systems, one of the biggest questions is around scaling: How do I scale my system to handle an ever increasing amount of data and calls to my service? There are three potential solutions:
 1. Scale vertically 
 2. Shard your database 
