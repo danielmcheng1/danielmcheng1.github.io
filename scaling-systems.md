@@ -33,7 +33,7 @@ However, you can imagine that some services require high consistency rather than
 
 Such systems utilize Paxos, a family of protocols for ensuring consensus amongst all boxes. This typically involves exchanging a series of promises between slaves and master(s) to determine who has the latest version of the data--before this latest version is propagated across all boxes.
 
-Hence, we have arrived at the well-known CAP theorem, which states the following:
+Hence, we have arrived at the well-known __CAP theorem__, which states the following:
 1. Network failure is inevitable; hence, data will not always transfer successfully between machines 
 2. In the presence of network failure, a system can either be highly available, or highly consistent, but not both 
 
@@ -45,7 +45,7 @@ Despite the benefits of distributed systems, they come with increased overhead a
 _Slave Failure_<br> 
 First, what happens if a slave fails? Naively, you may think that this is easy to handle since you have additional slaves to serve reads. However, imagine that your service handles a billion calls a second, split up between two slave boxes. Now, if your first slave box goes down, your second slave box is hit with double the amount of queries that it normally handles. Consequently, _that_ doubled load then causes the second box to go down.  Hence, you need to have at least three boxes to ensure that the remaining boxes can continue serving the increased traffic.
 
-In addition, to boot up a new slave (replacing the failed slave), you would ideally boot this up from a backup. That is, for large databases, it would take far too long to read through the entire write log and run all those updates. Instead, every night, you would run backups off your database and offload the tar file to S3. This way, you can restart a new box off of that snapshot, then apply the latest writes over the past few hours. 
+In addition, to boot up a new slave (replacing the failed slave), you ideally boot this up from a backup. That is, for large databases, it would take far too long to read through the entire write log and run all those updates. Instead, every night, you run backups off your database and offload the tar file to S3. This way, you can quickly restart a new box off of that snapshot, then apply the latest writes over the past few hours. 
 
 _Master Failure_<br>
 Secondly, what happens if a master fails? One solution is to always have a separate parallel cluster running, allowing you to quickly switch over to the parallel system in the case of master failure. However, this solution could become prohibitively costly for the largest systems. 
@@ -63,4 +63,4 @@ Microservice architecture has several benefits:
 1. Each service can be scaled independently: If newsfeed is the most popular feature today, scale that service up (without incurring costs for the account microservice)
 2. Each feature can be deployed separately: If the Messenger teams wants to deploy a new photo sharing feature, they do not have to take down the entire system, which might happen in a monolithic system 
 
-Again, there are tradeoffs with having to coordinate between these microservices. Such a system may also make it harder to release features that span multiple services. All of these should be considered in designing the architecture for your system.
+Again, there are tradeoffs with having to coordinate between these microservices. This setup may also make it harder to release features that span multiple services. All of these should be considered in designing the architecture for your system.
