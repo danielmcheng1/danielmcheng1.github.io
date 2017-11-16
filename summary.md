@@ -81,7 +81,7 @@ I strove towards clean code by:
 
 [Click here to see if you can beat all 16 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html) Be sure to use your headphones!
 
-[You can also view the code base here.](https://github.com/danielmcheng1/danielmcheng1.github.io/tree/master/obstructio)
+You can also easily modify Obstruct.io with your own custom levels. [Click here](https://github.com/danielmcheng1/danielmcheng1.github.io/blob/master/obstructio/README.md) to try building your own levels.
 
 ## Software Utility Library
 I wrote a [software library of core utilities](https://github.com/danielmcheng1/sas-utility-library) to:

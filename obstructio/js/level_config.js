@@ -404,7 +404,6 @@ var hell = [
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ];
 
-
 var MASTER_DICT = {
     "Unit Test World": [unitTest, {}, ""],
     "Easy": [easy, {}, "bach_gigue_english.mp3"],
@@ -422,7 +421,7 @@ var MASTER_DICT = {
     "Bunny World": [bunnyWorld, {}, "grieg_hallofthemountainking.mp3"],
     "Fool's Gold": [foolsGold, {}, "grieg_hallofthemountainking.mp3"], 
     "Into the Mines": [intoTheMines, {"=": 4}, "grieg_hallofthemountainking.mp3"],
-    "Hell": [hell, {"=": 4, "-": 5}, "stravinsky_riteofspring.mp3"]
+    "Hell": [hell, {"=": 4, "-": 5}, "stravinsky_riteofspring.mp3"]	
 };
 /*final ordering of levels*/
 var ALL_NAMES = [ 
@@ -431,7 +430,7 @@ var ALL_NAMES = [
         "Bomb Away",  "To the Sky", "Weeping Angel",
         "Ice World", "Elevator", 
         "Bunny World", "Fool's Gold", "Into the Mines",
-        "Hell"  ];
+        "Hell"];
         
 var ALL_PLANS = [];
 var ALL_SPEED_MULTIPLIERS = [];
