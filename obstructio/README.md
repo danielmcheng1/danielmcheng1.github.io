@@ -3,7 +3,7 @@ Obstruct.io is a full-fledged JavaScript game complete with user editable levels
 
 [Click here to play the game](https://dmcheng2010.github.io/obstructio.html).
 
-Let me know if you beat all 16 levels! (Trust me...you'll hate me by the 16th level) For an immersive experience, be sure to use headphones, particularly on the later levels...
+Let me know if you beat all 16 levels! For an immersive experience, be sure to use headphones, particularly on the later levels...
 
 ## Building Your Own Levels
 You can easily modify Obstructio.io to build your own custom levels:
