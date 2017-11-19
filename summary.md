@@ -1,13 +1,16 @@
 ## Daniel M. Cheng
 ### Completed Projects 
 1. [Automated Drone Photo Service](#automated-drone-photo-service)
-2. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
-3. [Obstruct.io: A Javascript Game](#obstructio-a-javascript-game)
-4. [Software Utility Library](#software-utility-library)
+2. [Wikiracer](#wikiracer)
+3. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
+4. [Obstruct.io: A Javascript Game](#obstructio-a-javascript-game)
+5. [Software Utility Library](#software-utility-library)
 
 ### In Progress 
 * [Abstract Syntax Tree](#abstract-syntax-tree)
 * [Virtual AI Therapist](#virtual-ai-therapist)
+
+_If you'd like to learn more, click [here](https://github.com/danielmcheng1/danielmcheng1.github.io/blob/master/docs/Resume-Daniel-Cheng.pdf) to view my resume._
 
 ## Automated Drone Photo Service 
 [Numerate.io](https://danielmcheng1.github.io/drone) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting in line).
@@ -25,7 +28,7 @@ This service has two parts:
 1. Custom Android app that automates mission control via DJI's SDK, before compressing and pushing the photos to the backend
 2. AWS-hosted backend that stitches and cleans photos using OpenCV before displaying on the Flask website in realtime
 
-**[Click here to visit numerate.io](https://danielmcheng1.github.io/drone)** to see photos collected by previous drone missions.
+[Click here to visit numerate.io](https://danielmcheng1.github.io/drone) to see photos collected by previous drone missions.
 
 ### Technical Challenges: Multithreading and Synchronization 
 A significant challenge was in troubleshooting why realtime downloads of images would get corrupted after about 5 photos. After digging deep into the code, I found that triggering a download immediately after photo capture quickly saturated the limited radio bandwidth and caused dropped packets that corrupted the jepgs.
@@ -34,12 +37,39 @@ The naive solution here is to add photos to a queue and download them in sequenc
 
 To solve this, I first maintained a queue of photos. I then implemented a lock to prevent a second download from running as long as one photo is downloading. While this slowed down the download process, this solution guaranteed reliability, a far more valuable feature for this drone service. 
 
-**[Read through my drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md)** to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed greatly during the course of this project.
+[Read through my drone writeup](https://github.com/danielmcheng1/drone/blob/master/writeup.md) to learn more about these technical challenges, how I defined the MVP, broke down the tasks, estimated the time required for each, and adapted as that plan changed greatly during the course of this project.
 
 ### Architecture for Drone Service
 <img src="static/img/architecture_drone.png" width="80%" alt="Diagram of drone architecture"/>
 
 [Click here to view the code base.](https://github.com/danielmcheng1/drone)
+
+## Wikiracer 
+I built a Wikiracer to automatically find paths between any two Wikipedia pages. Below is a sample path from Programming to Happiness.
+
+![Demo Animation](static/img/wikiracer-animation-demo.gif "Wikiracer Demo Animation")
+
+To find this path, the Wikiracer prgram starts a breadth-first search at both the start page and destination page. As soon as it finds an intersection between the two searches, it returns the path. Both searches are run as multithreaded processes to improve performance.
+
+### Architecture
+The Wikiracer breaks down into the following well-defined components:
+* __Crawler__
+  * _Crawler Service_: REST service
+  * _Crawler Controller_: Orchestrates the bidirectional crawl from source and from destination 
+  * _Crawler State_: Maintains links seen so far in memory. Can be switched to a database in the future 
+  * _Crawler Result_: Stores path and stats
+* __Path__: Traces the path when the crawler finds an intersection between the two breadth-first searches 
+* __WikiRetriever__: Encapsulates calls to the [MediaWiki API](https://www.mediawiki.org/wiki/API:Query)
+* __WebNode__: Data structure encapsulating a link
+* __Visualizer__: Visualizes the path 
+
+Below is a diagram of how a GET call to the Wikiracer REST service is passed down through these components.
+
+![architecture-diagram](static/img/wikiracer-architecture.png)
+
+[Click here](http://ec2-52-39-21-29.us-west-2.compute.amazonaws.com:4567/crawl/apple/orange) to access the EC2 running the REST service.
+
+You can also view the source code, implementation details, and technical challenges on my [GitHub repository.](https://github.com/danielmcheng1/wikiracer)
 
 ## Scrabble AI
 I built a complete Scrabble application where players can play against the computer. The two main features are:
@@ -116,6 +146,6 @@ I built a Facebook Messenger-like Javascript widget for users to speak to multip
 
 Training a bot to recognize emotions is of particular interest to me, particularly with this latest "Emotional Chatting Machine" blurring the boundary between human and robot (see [_The Guardian_ news briefing](https://www.theguardian.com/technology/2017/may/05/human-robot-interactions-take-step-forward-with-emotional-chatting-machine-chatbot)). I'd like to improve this bot to blend more sophisticated emotion APIs, and ultimately apply this towards enhancing psychotherapy. Several companies have already started doing this. 
 
-**[You can chat with the AI therapist here on Chrome](https://danielmcheng1.github.io/therapist)**. I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
+[You can chat with the AI therapist here on Chrome](https://danielmcheng1.github.io/therapist). I included two additional bots (Olga and Ana) purely as entertainment to contrast their personalities with the actual AI therapist (Eliana).
 
 This bot is hosted on Heroku, using Flask-SocketIO to transmit messages between user and AI therapist. [Click here to view the code base.](https://github.com/danielmcheng1/therapist)
