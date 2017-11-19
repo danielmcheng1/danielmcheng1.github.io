@@ -45,7 +45,7 @@ To solve this, I first maintained a queue of photos. I then implemented a lock t
 [Click here to view the code base.](https://github.com/danielmcheng1/drone)
 
 ## Wikiracer 
-I built a Wikiracer to automatically find paths between any two Wikipedia pages. Below is a sample path from Programming to Happiness.
+I built a Wikiracer to automatically find paths between any two web pages. Below is a sample path from Programming to Happiness.
 
 ![Demo Animation](static/img/wikiracer-animation-demo.gif "Wikiracer Demo Animation")
 
