@@ -70,6 +70,8 @@ Below is a diagram of how a GET call to the Wikiracer REST service is passed dow
 [Click here](http://ec2-52-39-21-29.us-west-2.compute.amazonaws.com:4567/crawl/apple/orange) to access the EC2 running the REST service.
 
 You can also view the source code, implementation details, and technical challenges on my [GitHub repository.](https://github.com/danielmcheng1/wikiracer)
+consulted data pipliens and dashboards for large scale pharamceutical companies. sales data actionable
+Library of Data Pipeline Functions
 
 ## Scrabble AI
 I built a complete Scrabble application where players can play against the computer. The two main features are:
