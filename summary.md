@@ -4,7 +4,7 @@
 2. [Wikiracer](#wikiracer)
 3. [Scrabble AI (Greedy Search Algorithm)](#scrabble-ai)
 4. [Obstruct.io: A Javascript Game](#obstructio-a-javascript-game)
-5. [Software Utility Library](#software-utility-library)
+5. [Library of Data Pipeline Functions](#library-of-data-pipeline-functions)
 
 ### In Progress 
 * [Abstract Syntax Tree](#abstract-syntax-tree)
@@ -21,7 +21,7 @@ Users of this service can request photos in two ways:
 _Click below to view the drone service in action_ 
 
 <a href="https://www.youtube.com/watch?v=XzzE1z5jhvE">
-<img src="static/img/play_button2.jpg" width = 40% alt="Drone Overview Video"/>     
+<img src="static/img/drone_vide_screenshot.png" width = 40% alt="Drone Overview Video"/>     
 </a>
 
 This service has two parts: 
@@ -49,7 +49,7 @@ I built a Wikiracer to automatically find paths between any two Wikipedia pages.
 
 ![Demo Animation](static/img/wikiracer-animation-demo.gif "Wikiracer Demo Animation")
 
-To find this path, the Wikiracer prgram starts a breadth-first search at both the start page and destination page. As soon as it finds an intersection between the two searches, it returns the path. Both searches are run as multithreaded processes to improve performance.
+To find this path, the Wikiracer program starts a breadth-first search at both the start page and destination page. As soon as it finds an intersection between the two searches, it returns the path. Both searches are run as multithreaded processes to improve performance.
 
 ### Architecture
 The Wikiracer breaks down into the following well-defined components:
@@ -70,8 +70,6 @@ Below is a diagram of how a GET call to the Wikiracer REST service is passed dow
 [Click here](http://ec2-52-39-21-29.us-west-2.compute.amazonaws.com:4567/crawl/apple/orange) to access the EC2 running the REST service.
 
 You can also view the source code, implementation details, and technical challenges on my [GitHub repository.](https://github.com/danielmcheng1/wikiracer)
-consulted data pipliens and dashboards for large scale pharamceutical companies. sales data actionable
-Library of Data Pipeline Functions
 
 ## Scrabble AI
 I built a complete Scrabble application where players can play against the computer. The two main features are:
@@ -115,8 +113,8 @@ I strove towards clean code by:
 
 You can also easily modify Obstruct.io with your own custom levels. [Click here](https://github.com/danielmcheng1/danielmcheng1.github.io/blob/master/obstructio/README.md) to try building your own levels.
 
-## Software Utility Library
-I wrote a [software library of core utilities](https://github.com/danielmcheng1/sas-utility-library) to:
+## Library of Data Pipeline Functions
+I wrote a [library of data pipeline functions](https://github.com/danielmcheng1/sas-utility-library) to:
 * __Calculate Transformation Sequence__: How do two datasets differ? What sequence of update, delete, and insert commands will transform one dataset into the other? 
 * __Perform Validation__: Validate standard checks such as uniqueness check and null check 
 * __Perform Type Conversion__: Convert correctly and quickly between different data types to allow proper joins and comparisons 
