@@ -21,7 +21,7 @@ Users of this service can request photos in two ways:
 _Click below to view the drone service in action_ 
 
 <a href="https://www.youtube.com/watch?v=XzzE1z5jhvE">
-<img src="static/img/drone_vide_screenshot.png" width = 40% alt="Drone Overview Video"/>     
+<img src="static/img/drone_video_screenshot.png" alt="Drone Overview Video"/>     
 </a>
 
 This service has two parts: 
