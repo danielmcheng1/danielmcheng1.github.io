@@ -67,7 +67,7 @@ Below is a diagram of how a GET call to the Wikiracer REST service is passed dow
 
 ![architecture-diagram](static/img/wikiracer-architecture.png)
 
-[Click here](http://ec2-35-162-247-201.us-west-2.compute.amazonaws.com:4567/crawl/apple/orange) to access the EC2 running the REST service.
+[Click here](http://ec2-52-11-200-166.us-west-2.compute.amazonaws.com:4567/crawl/apple/orange) to access the EC2 running the REST service.
 
 You can also view the source code, implementation details, and technical challenges on my [GitHub repository.](https://github.com/danielmcheng1/wikiracer)
 
