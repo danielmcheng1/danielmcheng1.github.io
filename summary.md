@@ -114,15 +114,13 @@ I strove towards clean code by:
 You can also easily modify Obstruct.io with your own custom levels. [Click here](https://github.com/danielmcheng1/danielmcheng1.github.io/blob/master/obstructio/README.md) to try building your own levels.
 
 ## Library of Data Pipeline Functions
-I wrote a [library of data pipeline functions](https://github.com/danielmcheng1/sas-utility-library) to:
+I wrote a library of data pipeline functions, complete with documentation and unit tests, to achieve the following:
 * __Calculate Transformation Sequence__: How do two datasets differ? What sequence of update, delete, and insert commands will transform one dataset into the other? 
 * __Perform Validation__: Validate standard checks such as uniqueness check and null check 
 * __Perform Type Conversion__: Convert correctly and quickly between different data types to allow proper joins and comparisons 
 * __Optimize ETL Performance__: Speed up daily loads by selecting the optimal algorithm for the given datasets (e.g. hash lookup vs. binary search)
 
 Building this library required me to carefully think from the client's perspective to properly define an API. This produced a robust API where the calling client didn't need to know any details within my code base, but could still expect intuitive behavior. Hence to do this, I had to fulfill the API contract for a wide variety of input parameters.
-
-Furthermore, any production code must also be properly documented and thoroughly tested. My [repository](https://github.com/danielmcheng1/sas-utility-library) provides thorough documentation as well as unit tests for each utility. 
 
 ## Abstract Syntax Tree
 I built an initial prototype (using regex) to parse the SAS programming language. Aside from being a theoretical curiosity and software exercise, this parser also enabled automatic identification of transitive dataset dependencies within SAS codes executed in daily ETLs. 
