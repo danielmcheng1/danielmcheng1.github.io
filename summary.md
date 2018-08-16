@@ -10,7 +10,7 @@
 * [Abstract Syntax Tree](#abstract-syntax-tree)
 * [Virtual AI Therapist](#virtual-ai-therapist)
 
-_If you'd like to learn more, click [here](https://github.com/danielmcheng1/danielmcheng1.github.io/blob/master/docs/Resume-Daniel-Cheng.pdf) to view my resume._
+_NOTE: If you'd like to view some of the lives demos below, feel free to contact me at dcheng21@uchicago.edu, and I can restart the relevant EC2 instances._
 
 ## Automated Drone Photo Service 
 [Numerate.io](https://danielmcheng1.github.io/drone) is a completely automated drone photo service to count cars (to save time circling parking lots) and people (to save time waiting in line).
