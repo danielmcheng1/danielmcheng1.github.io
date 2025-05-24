@@ -13,7 +13,7 @@ relative position so that player can always be at the center
 .background  {
 	/*background: rgb(52, 166, 251);*/
 	/*background: rgb(116,204,244);*/
-	background: light blue;
+       background: #b0d8ff; /* light sky blue */
 	table-layout: fixed;
 	border-spacing: 0;
 }
@@ -27,7 +27,7 @@ relative position so that player can always be at the center
 	position: absolute; 
 }
 .player {
-	background: rgb(64, 64, 64);
+       background: #555555;
 }
 .lost .player {
 	background: rgb(160, 64, 64);
@@ -41,10 +41,10 @@ relative position so that player can always be at the center
 	background: white;
 }
 .lava {
-	background: rgb(255, 100, 100);
+       background: orangered;
 }
 .coin {
-	background: rgb(241, 229, 89); 
+       background: gold;
 }
 
 

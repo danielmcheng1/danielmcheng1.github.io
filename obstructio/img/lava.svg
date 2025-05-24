@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+  <rect width="20" height="20" fill="orange"/>
+  <path d="M0 15 C5 10 15 20 20 15 V20 H0 Z" fill="red"/>
+</svg>

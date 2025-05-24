@@ -1321,12 +1321,12 @@ cartesianBombSpraySprite.src = img_path + "cartesianBombSpray.png";
 cartesianBombSprite.src = img_path + "cartesianBomb.png";
 
 checkpointSprite.src = img_path + "checkpoint.png";
-coinSprite.src = img_path + "coin.png";
+coinSprite.src = img_path + "coin.svg";
 computerSprite.src = img_path + "computer.png";
 computerPausedSprite.src = img_path + "computerPaused.png";
 
 iceSprite.src = img_path + "ice.png";
-lavaSprite.src = img_path + "lava.png";
+lavaSprite.src = img_path + "lava.svg";
 
 playerCartesianBombPowerupSprite.src = img_path + "playerCartesianBombPowerup.png";
 playerLostSprite.src = img_path + "playerLost.png";
@@ -1435,7 +1435,7 @@ CanvasDisplay.prototype.clearDisplay = function() {
 	}
 	else {
 		//this.cx.fillStyle = "rgb(52, 166, 251)";
-		this.cx.fillStyle = "#add8e6";
+                this.cx.fillStyle = "#b0d8ff";
 	};
 	this.cx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 };
