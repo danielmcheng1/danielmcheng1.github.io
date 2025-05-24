@@ -29,7 +29,7 @@ function appendStats(data) {
     var canvasDiv = document.createElement("div");
     canvasDiv.setAttribute("id", "statsChartDiv");
     document.body.appendChild(canvasDiv);
-    if (data != {}) {
+    if (Object.keys(data).length > 0) {
         var canvasElement = document.createElement("canvas");
         canvasElement.setAttribute("id", "statsChart");
         canvasDiv.appendChild(canvasElement);
