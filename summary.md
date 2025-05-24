@@ -109,7 +109,7 @@ I strove towards clean code by:
 2. __Serialization__: I converted an object state into byte stream for transmission. This allows restarting at the last checkpoint.
 3. __Asynchronous Callbacks__: Callbacks enable interactivity in the game e.g. "When I click on this button, run this animation" 
 
-[Click here to see if you can beat all 16 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html) Be sure to use your headphones!
+[Click here to see if you can beat all 17 levels in this very fun game.](https://danielmcheng1.github.io/obstructio/obstructio.html) Be sure to use your headphones!
 
 You can also easily modify Obstruct.io with your own custom levels. [Click here](https://github.com/danielmcheng1/danielmcheng1.github.io/blob/master/obstructio/README.md) to try building your own levels.
 
