@@ -875,9 +875,9 @@ Bomb.prototype.act = function(step, level) {
 				//generate bomb spray expanding out in a circle 
 				var Actor = actorChars["b"];
 				//some randomnness in speed around the average expected value 
-				thisBombSpraySpeed = (Math.random() - 0.5) + avgBombSpraySpeed;
-				//scale based on difficulty 
-				thisBombSpraySpeed = thisBombSpraySpeed * this.spraySpeedMultiplier;
+                                var thisBombSpraySpeed = (Math.random() - 0.5) + avgBombSpraySpeed;
+                                //scale based on difficulty
+                                thisBombSpraySpeed = thisBombSpraySpeed * this.spraySpeedMultiplier;
 				for(var i = 0; i <= 2 * Math.PI; i+= Math.PI / 6) {
 					level.actors.push(new Actor(this.pos, {"subtype": "b", "speed": new Vector(Math.cos(i) * thisBombSpraySpeed, Math.sin(i) * thisBombSpraySpeed)}));
 				};
@@ -922,7 +922,7 @@ CartesianBomb.prototype.act = function(step, level) {
 		
 		//generate bomb spray expanding out in a circle 
 		var Actor = actorChars["c"];
-		thisBombSpraySpeed = 2;
+                var thisBombSpraySpeed = 2;
 		for(var i = 0; i <= Math.PI; i+= Math.PI) {
 			level.actors.push(new Actor(this.pos, {"subtype": "c", "speed": new Vector(Math.cos(i) * thisBombSpraySpeed, Math.sin(i) * thisBombSpraySpeed)}));
 		};
