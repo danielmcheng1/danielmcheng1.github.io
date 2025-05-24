@@ -18,7 +18,10 @@ var staticObstacles = {	"!": "lava", "x": "wall", "y": "wall", "z": "wall"};
 var hiddenActors = {"y": "p", "z": "="}
 var killingActors = ["lava", "bombSpray", "cartesianBombSpray", "computer"];
 var playerPowerups = ["waterPowerup", "cartesianBombPowerup"];
-var moveOnTopOfActors = ["ice"];
+var moveOnTopOfActors = ["ice"]; 
+
+//time limit in seconds for each level
+var LEVEL_TIME_LIMIT = 60;
 
 
 /*constructor that builds a level,
@@ -74,14 +77,18 @@ function Level(levelId, levelName, plan, speedMultipliers, livesUsed, checkpoint
 	//find the player object and save as a property of this level
 	this.player = this.findPlayer();
 	
-	this.coinsTotal = this.actors.filter(function(actor) {
-		return actor.type == "coin";
-	}).length;
-	this.coinsRemaining = this.coinsTotal;
-	
-	//track the status of the game
-	//finishDelay to allow lag before resetting level 
-	this.status = this.finishDelay = null;
+        this.coinsTotal = this.actors.filter(function(actor) {
+                return actor.type == "coin";
+        }).length;
+        this.coinsRemaining = this.coinsTotal;
+
+        this.timeLimit = LEVEL_TIME_LIMIT;
+        this.timeRemaining = this.timeLimit;
+        this.halfTimeTriggered = false;
+
+        //track the status of the game
+        //finishDelay to allow lag before resetting level
+        this.status = this.finishDelay = null;
 };
 
 //check whether to reset the level 
@@ -109,7 +116,10 @@ Level.prototype.updateStatus = function() {
         coinsStatusNode.setAttribute("id", "coinsStatus");
         document.getElementById("livesStatus").appendChild(coinsStatusNode);
     };*/      
-	coinsStatusNode.innerText = "Coins Remaining: " + this.coinsRemaining + " out of " + this.coinsTotal + " " + (this.coinsTotal == 1? "coin" : "coins");
+        coinsStatusNode.innerText = "Coins Remaining: " + this.coinsRemaining + " out of " + this.coinsTotal + " " + (this.coinsTotal == 1? "coin" : "coins");
+
+    var timerStatusNode = document.getElementById("timerStatus");
+    timerStatusNode.innerText = "Time Remaining: " + Math.ceil(this.timeRemaining);
 };
 
 //other level utility functions
@@ -538,14 +548,25 @@ var maxStep = defaultMaxStep;
 //step is the time interval
 //keys is the object containing the player's input
 Level.prototype.animate = function(step, keys) {
-	//decrement delay time for special case where player has won or lost 
-	if (this.status != null)
-		this.finishDelay -= step;
-	//animate each of the actors 
-	while (step > 0) {
-		var thisStep = Math.min(step, maxStep);
-		this.actors.forEach(function(actor) {
-			actor.act(thisStep, this, keys); //this = level object
+        //decrement delay time for special case where player has won or lost
+        if (this.status != null)
+                this.finishDelay -= step;
+
+        this.timeRemaining = Math.max(this.timeRemaining - step, 0);
+        if (!this.halfTimeTriggered && this.timeRemaining <= this.timeLimit / 2) {
+                this.halfTimeTriggered = true;
+                this.actors.forEach(function(actor) {
+                        if (actor.type == "lava" || actor.type == "computer") {
+                                if (actor.speed)
+                                        actor.speed = actor.speed.times(2);
+                        }
+                });
+        }
+        //animate each of the actors
+        while (step > 0) {
+                var thisStep = Math.min(step, maxStep);
+                this.actors.forEach(function(actor) {
+                        actor.act(thisStep, this, keys); //this = level object
 		}, this);
 		step -= thisStep;
 	};
